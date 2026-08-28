@@ -2,7 +2,7 @@
 
 ## Guiding rule
 
-Prove the core GTA 1 loop in a tiny clean-room test city before building full content.
+Prove the core GTA 1 loop in a clean-room playable sector before scaling content.
 
 ## Phase 1 — Driving slice
 
@@ -12,7 +12,7 @@ Prove the core GTA 1 loop in a tiny clean-room test city before building full co
 - [x] Arcade acceleration, braking, reverse, and steering
 - [x] Building/world collision
 - [x] Speed-sensitive camera zoom
-- [x] Placeholder procedural city blocks/roads
+- [x] Placeholder procedural city foundation
 - [ ] Tune vehicle feel against reference gameplay
 - [ ] Add broader vehicle-definition variety
 - [ ] Add skid/impact feedback
@@ -23,6 +23,7 @@ Prove the core GTA 1 loop in a tiny clean-room test city before building full co
 - [x] Civilian traffic spawning and route following
 - [x] Pedestrian spawning and roaming
 - [x] Panic/flee response
+- [x] Outer-neighborhood population layer
 - [ ] Entity pooling/despawn rules
 - [x] Vehicle health, smoke, fire/burnout state
 
@@ -58,19 +59,22 @@ Prove the core GTA 1 loop in a tiny clean-room test city before building full co
 
 - [x] Mission coordinates/rewards stored outside scene code
 - [x] Level target score displayed
-- [x] Save/load campaign checkpoint progress
-- [x] Persistent score and multiplier
-- [x] Persistent best score
+- [x] Save/load campaign progress
 - [x] Persistent unlock/progression state
-- [x] Level-completion / unlock flow
-- [ ] Replace procedural test layout with a content pipeline
-- [ ] Larger authored city sector
-- [ ] Mission selection/menu flow
+- [x] Authored city sector stored outside scene code
+- [x] Multiple neighborhood identities
+- [x] Parking lots / service alleys / shortcuts
+- [x] Outer traffic and pedestrian population from sector data
+- [ ] Sector streaming / entity pooling
+- [ ] Mission selection / campaign completion menu
 - [ ] HUD/menu/audio pass
+- [ ] Additional authored sector(s)
 
-## Build 9 persistence rule
+## Build 10 content pipeline
 
-Only stable progression is saved: score, multiplier, next campaign mission, best score, and unlock state. Active mission entities and timers are intentionally not serialized; restarting resumes at the latest safe mission checkpoint.
+`data/city_sector.json` is the current source of truth for world bounds, road axes, building footprints, parking lots, alleys, district labels, traffic routes/spawns, pedestrian routes, and major landmarks.
+
+The Godot `City` renderer/collision layer and `SectorPopulation` layer both read this file. The browser Build 10 loader reads the same file before patching the clean-room browser simulation.
 
 ## IP boundary
 
