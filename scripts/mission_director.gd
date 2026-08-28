@@ -12,7 +12,7 @@ var score := 0
 var multiplier := 1
 var last_lives := 3
 var phone_position := Vector2(260, 80)
-var vehicle_spawn := Vector2(900, -650)
+var vehicle_spawn := Vector2(900, -360)
 var delivery_rect := Rect2(-1025, 565, 250, 170)
 var base_reward := 1000
 var target_color := Color(0.10, 0.74, 0.82)
@@ -34,11 +34,11 @@ func _load_config() -> void:
     if file == null:
         return
     var parsed = JSON.parse_string(file.get_as_text())
-    if not parsed is Dictionary or not parsed.has("hot_property"):
+    if not (parsed is Dictionary) or not parsed.has("hot_property"):
         return
     config = parsed["hot_property"]
     var phone = config.get("phone", [260.0, 80.0])
-    var spawn = config.get("vehicle_spawn", [900.0, -650.0])
+    var spawn = config.get("vehicle_spawn", [900.0, -360.0])
     var delivery = config.get("delivery_rect", [-1025.0, 565.0, 250.0, 170.0])
     var color = config.get("target_color", [0.10, 0.74, 0.82])
     phone_position = Vector2(float(phone[0]), float(phone[1]))
@@ -77,7 +77,9 @@ func _process(delta: float) -> void:
 
     var current_lives := int(game.lives)
     if current_lives < last_lives and mission_state in ["steal", "deliver"]:
-        _fail_mission("MISSION FAILED — LOST A LIFE")
+        mission_state = "cooldown"
+        mission_cooldown = 3.0
+        mission_target_vehicle = null
     last_lives = current_lives
 
     if mission_cooldown > 0.0:
@@ -126,7 +128,7 @@ func _spawn_target_vehicle() -> void:
     car.add_child(collision)
     game.add_child(car)
     car.global_position = vehicle_spawn
-    car.rotation = PI * 0.5
+    car.rotation = 0.0
     car.set_body_color(target_color)
     car.set_parked()
     car.add_to_group("vehicles")
@@ -153,6 +155,8 @@ func _set_game_message(message: String, duration: float) -> void:
     game.status_message_timer = duration
 
 func _refresh_hud() -> void:
+    if game != null and game.hud_label != null:
+        game.hud_label.text = game.hud_label.text.replace("BUILD 6", "BUILD 7")
     if hud_label == null:
         return
     var title := str(config.get("title", "HOT PROPERTY"))
