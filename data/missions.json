@@ -1,0 +1,10 @@
+{
+  "hot_property": {
+    "title": "HOT PROPERTY",
+    "phone": [260.0, 80.0],
+    "vehicle_spawn": [900.0, -650.0],
+    "delivery_rect": [-1025.0, 565.0, 250.0, 170.0],
+    "base_reward": 1000,
+    "target_color": [0.10, 0.74, 0.82]
+  }
+}
