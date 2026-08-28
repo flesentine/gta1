@@ -48,9 +48,9 @@ See `docs/BUILD_PLAN.md` for the implementation checklist.
 
 Build 2 has a no-install browser preview that mirrors the current gameplay slice:
 
-**https://cdn.jsdelivr.net/gh/flesentine/gta1@4a4c57a1682d96ee27309311187f3da98d9412e9/web/index.html**
+**https://rawcdn.githack.com/flesentine/gta1/4a4c57a1682d96ee27309311187f3da98d9412e9/web/index.html**
 
-The browser build is intentionally asset-free placeholder art. The Godot project remains the main implementation.
+The browser build is intentionally asset-free placeholder art. The Godot project remains the main implementation. The first visit may show raw.githack's one-time confirmation screen before opening the HTML preview.
 
 ### Build 2
 - 10 moving traffic cars
