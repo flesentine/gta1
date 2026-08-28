@@ -13,6 +13,9 @@ func set_active(value: bool) -> void:
     velocity = Vector2.ZERO
     set_physics_process(value)
 
+func get_facing() -> Vector2:
+    return facing
+
 func _physics_process(_delta: float) -> void:
     if not active:
         return
