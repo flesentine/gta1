@@ -19,6 +19,8 @@ func _process(_delta: float) -> void:
     if director == null or game == null:
         return
 
+    call_deferred("_tag_build_11")
+
     var state := str(director.mission_state)
     var near_phone := not bool(game.in_vehicle) and game.player.global_position.distance_to(director.phone_position) <= 34.0
 
@@ -42,6 +44,10 @@ func _process(_delta: float) -> void:
 
     if not menu_open and not dismissed_until_leave:
         _open_menu()
+
+func _tag_build_11() -> void:
+    if director != null and director.hud_label != null:
+        director.hud_label.text = director.hud_label.text.replace("BUILD 9", "BUILD 11")
 
 func _build_overlay() -> void:
     var layer := CanvasLayer.new()
