@@ -3,6 +3,7 @@ extends Node2D
 const VEHICLE_SCRIPT = preload("res://scripts/vehicle.gd")
 const PEDESTRIAN_SCRIPT = preload("res://scripts/pedestrian.gd")
 const PICKUP_SCRIPT = preload("res://scripts/pickup.gd")
+const POLICE_SCRIPT = preload("res://scripts/police_car.gd")
 
 @onready var player: CharacterBody2D = $Player
 @onready var starter_car: CharacterBody2D = $Car
@@ -13,6 +14,7 @@ const PICKUP_SCRIPT = preload("res://scripts/pickup.gd")
 var vehicles: Array[CharacterBody2D] = []
 var pedestrians: Array[CharacterBody2D] = []
 var pickups: Array[Node2D] = []
+var police: Array[CharacterBody2D] = []
 var current_vehicle: CharacterBody2D = null
 var in_vehicle := false
 
@@ -20,6 +22,11 @@ var pistol_owned := false
 var pistol_ammo := 0
 var shot_cooldown := 0.0
 var tracers: Array[Dictionary] = []
+
+var wanted_level := 0
+var wanted_decay_timer := 0.0
+var police_spawn_cooldown := 0.0
+var stolen_vehicle_ids := {}
 
 var traffic_routes := [
     PackedVector2Array([
@@ -60,6 +67,7 @@ func _ready() -> void:
     starter_car.set_parked()
     starter_car.add_to_group("vehicles")
     vehicles.append(starter_car)
+    stolen_vehicle_ids[starter_car.get_instance_id()] = true
 
     _spawn_traffic()
     _spawn_pedestrians()
@@ -153,6 +161,7 @@ func _sidewalk_routes() -> Array[PackedVector2Array]:
 
 func _process(delta: float) -> void:
     shot_cooldown = max(shot_cooldown - delta, 0.0)
+    police_spawn_cooldown = max(police_spawn_cooldown - delta, 0.0)
     _update_tracers(delta)
     _check_pickups()
 
@@ -160,7 +169,10 @@ func _process(delta: float) -> void:
         if current_vehicle.has_method("is_destroyed") and current_vehicle.is_destroyed():
             _exit_vehicle()
 
-    var target: Node2D = current_vehicle if in_vehicle and is_instance_valid(current_vehicle) else player
+    _update_wanted(delta)
+    _update_police()
+
+    var target: Node2D = _player_target()
     var follow_weight := 1.0 - exp(-8.0 * delta)
     camera.global_position = camera.global_position.lerp(target.global_position, follow_weight)
 
@@ -186,6 +198,11 @@ func _unhandled_input(event: InputEvent) -> void:
             get_tree().reload_current_scene()
             get_viewport().set_input_as_handled()
 
+func _player_target() -> Node2D:
+    if in_vehicle and is_instance_valid(current_vehicle):
+        return current_vehicle
+    return player
+
 func _toggle_vehicle() -> void:
     if in_vehicle:
         _exit_vehicle()
@@ -210,6 +227,11 @@ func _nearest_vehicle() -> CharacterBody2D:
     return nearest
 
 func _enter_vehicle(car: CharacterBody2D) -> void:
+    var id := car.get_instance_id()
+    if not stolen_vehicle_ids.has(id):
+        stolen_vehicle_ids[id] = true
+        _raise_wanted(1)
+
     current_vehicle = car
     in_vehicle = true
     player.set_active(false)
@@ -274,8 +296,12 @@ func _shoot_pistol() -> void:
         if collider != null:
             if collider.is_in_group("pedestrians") and collider.has_method("take_damage"):
                 collider.take_damage(2)
+                _raise_wanted(1)
             elif collider.is_in_group("vehicles") and collider.has_method("take_damage"):
+                var was_destroyed := collider.is_destroyed() if collider.has_method("is_destroyed") else false
                 collider.take_damage(1)
+                if collider.has_method("is_destroyed") and not was_destroyed and collider.is_destroyed():
+                    _raise_wanted(1)
 
     for ped in pedestrians:
         if is_instance_valid(ped) and ped.has_method("react_to_gunshot"):
@@ -284,6 +310,74 @@ func _shoot_pistol() -> void:
 
     tracers.append({"start": origin, "end": end, "time": 0.09})
     queue_redraw()
+
+func _raise_wanted(amount: int) -> void:
+    wanted_level = clamp(wanted_level + amount, 0, 4)
+    wanted_decay_timer = 13.0 + float(wanted_level) * 2.0
+    police_spawn_cooldown = min(police_spawn_cooldown, 0.3)
+
+func _update_wanted(delta: float) -> void:
+    if wanted_level <= 0:
+        wanted_decay_timer = 0.0
+        return
+
+    var target := _player_target()
+    var nearest_police := INF
+    for cop in police:
+        if is_instance_valid(cop):
+            nearest_police = min(nearest_police, target.global_position.distance_to(cop.global_position))
+
+    if nearest_police <= 620.0:
+        wanted_decay_timer = max(wanted_decay_timer, 5.0)
+    else:
+        wanted_decay_timer -= delta
+        if wanted_decay_timer <= 0.0:
+            wanted_level = max(wanted_level - 1, 0)
+            wanted_decay_timer = 8.0 if wanted_level > 0 else 0.0
+
+func _update_police() -> void:
+    for i in range(police.size() - 1, -1, -1):
+        var cop = police[i]
+        if not is_instance_valid(cop):
+            police.remove_at(i)
+            continue
+        cop.set_target(_player_target())
+        if wanted_level <= 0:
+            cop.queue_free()
+            police.remove_at(i)
+
+    if wanted_level <= 0 or police_spawn_cooldown > 0.0:
+        return
+
+    var desired_count := wanted_level
+    if wanted_level >= 3:
+        desired_count += 1
+    desired_count = min(desired_count, 5)
+
+    if police.size() < desired_count:
+        _spawn_police_car(police.size())
+        police_spawn_cooldown = max(0.7, 2.0 - float(wanted_level) * 0.25)
+
+func _spawn_police_car(seed: int) -> void:
+    var target := _player_target()
+    var offsets := [
+        Vector2(0, -620), Vector2(620, 0), Vector2(0, 620), Vector2(-620, 0),
+        Vector2(430, -430), Vector2(-430, 430)
+    ]
+    var spawn_position := target.global_position + offsets[(seed + wanted_level) % offsets.size()]
+    spawn_position.x = clamp(spawn_position.x, -1500.0, 1500.0)
+    spawn_position.y = clamp(spawn_position.y, -1100.0, 1100.0)
+
+    var cop = POLICE_SCRIPT.new()
+    cop.name = "PoliceCar%02d" % (police.size() + 1)
+    var collision := CollisionShape2D.new()
+    var shape := RectangleShape2D.new()
+    shape.size = Vector2(36, 66)
+    collision.shape = shape
+    cop.add_child(collision)
+    add_child(cop)
+    cop.configure(spawn_position, target, wanted_level)
+    police.append(cop)
 
 func _update_tracers(delta: float) -> void:
     for i in range(tracers.size() - 1, -1, -1):
@@ -295,6 +389,12 @@ func _draw() -> void:
     for tracer in tracers:
         draw_line(tracer["start"], tracer["end"], Color(1.0, 0.88, 0.30, 0.92), 3.0, true)
         draw_circle(tracer["end"], 4.0, Color(1.0, 0.55, 0.16, 0.9))
+
+func _wanted_text() -> String:
+    var text := ""
+    for i in range(4):
+        text += "●" if i < wanted_level else "○"
+    return text
 
 func _update_hud() -> void:
     var mode := "DRIVING" if in_vehicle else "ON FOOT"
@@ -318,7 +418,8 @@ func _update_hud() -> void:
     if pistol_owned:
         weapon_text = "PISTOL %03d" % pistol_ammo
 
-    hud_label.text = "GTA1 REMAKE — BUILD 4\n%s%s\n%s   TRAFFIC %02d   PEDS %02d" % [
-        mode, extra, weapon_text, max(vehicles.size() - 1, 0), max(pedestrians.size() - down_count, 0)
+    hud_label.text = "GTA1 REMAKE — BUILD 5\n%s%s\n%s   WANTED %s\nTRAFFIC %02d   PEDS %02d   POLICE %02d" % [
+        mode, extra, weapon_text, _wanted_text(), max(vehicles.size() - 1, 0),
+        max(pedestrians.size() - down_count, 0), police.size()
     ]
     help_label.text = "WASD / Arrows: move or drive   E: enter/exit   Space/F: fire   R: reset"
