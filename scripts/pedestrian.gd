@@ -10,6 +10,8 @@ var route_index := 0
 var body_color := Color(0.22, 0.55, 0.82)
 var panic_timer := 0.0
 var down_timer := 0.0
+var dead_timer := 0.0
+var health := 2
 var facing := Vector2.DOWN
 var stride := 0.0
 
@@ -27,7 +29,37 @@ func configure(new_route: PackedVector2Array, start_index: int, color: Color) ->
     body_color = color
     queue_redraw()
 
+func take_damage(amount: int) -> void:
+    if dead_timer > 0.0:
+        return
+    health -= amount
+    if health <= 0:
+        dead_timer = 4.5
+        down_timer = 0.0
+        panic_timer = 0.0
+        velocity = Vector2.ZERO
+    else:
+        panic_timer = 2.0
+    queue_redraw()
+
+func react_to_gunshot(origin: Vector2) -> void:
+    if dead_timer > 0.0:
+        return
+    var away := (global_position - origin).normalized()
+    if away.length_squared() < 0.01:
+        away = Vector2.RIGHT
+    facing = away
+    panic_timer = max(panic_timer, 1.8)
+
 func _physics_process(delta: float) -> void:
+    if dead_timer > 0.0:
+        dead_timer = max(dead_timer - delta, 0.0)
+        velocity = Vector2.ZERO
+        if dead_timer <= 0.0:
+            health = 2
+        queue_redraw()
+        return
+
     if down_timer > 0.0:
         down_timer = max(down_timer - delta, 0.0)
         velocity = Vector2.ZERO
@@ -81,6 +113,8 @@ func _nearest_fast_vehicle() -> Node2D:
     for node in get_tree().get_nodes_in_group("vehicles"):
         if not is_instance_valid(node) or not node.has_method("get_forward_speed_abs"):
             continue
+        if node.has_method("is_destroyed") and node.is_destroyed():
+            continue
         if node.get_forward_speed_abs() < 65.0:
             continue
         var d := global_position.distance_squared_to(node.global_position)
@@ -90,9 +124,14 @@ func _nearest_fast_vehicle() -> Node2D:
     return nearest
 
 func is_down() -> bool:
-    return down_timer > 0.0
+    return down_timer > 0.0 or dead_timer > 0.0
 
 func _draw() -> void:
+    if dead_timer > 0.0:
+        draw_ellipse(Vector2.ZERO, Vector2(16.0, 7.0), Color(0.22, 0.16, 0.16, 0.78))
+        draw_circle(Vector2(12.0, 0.0), 5.0, Color(0.62, 0.51, 0.44))
+        return
+
     if down_timer > 0.0:
         draw_ellipse(Vector2.ZERO, Vector2(15.0, 7.0), Color(body_color, 0.72))
         draw_circle(Vector2(12.0, 0.0), 5.0, Color(0.89, 0.72, 0.56))
