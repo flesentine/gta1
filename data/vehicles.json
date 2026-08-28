@@ -1,0 +1,12 @@
+{
+  "prototype_sedan": {
+    "display_name": "Prototype Sedan",
+    "acceleration": 510.0,
+    "braking": 700.0,
+    "rolling_drag": 260.0,
+    "max_forward_speed": 520.0,
+    "max_reverse_speed": 180.0,
+    "turn_rate": 2.5,
+    "durability": 100
+  }
+}
