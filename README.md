@@ -43,3 +43,19 @@ Godot 4.x
 6. First complete level slice
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
+
+## Play in your browser
+
+Build 2 has a no-install browser preview that mirrors the current gameplay slice:
+
+**https://flesentine.github.io/gta1/**
+
+The browser build is intentionally asset-free placeholder art. The Godot project remains the main implementation.
+
+### Build 2
+- 10 moving traffic cars
+- steal any nearby vehicle with **E**
+- traffic follows simple road routes
+- speed-sensitive camera zoom
+- desktop keyboard controls
+- basic touch controls for mobile
