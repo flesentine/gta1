@@ -17,10 +17,15 @@ func _physics_process(_delta: float) -> void:
     if not active:
         return
 
-    var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+    var left := 1.0 if Input.is_action_pressed("ui_left") or Input.is_key_pressed(KEY_A) else 0.0
+    var right := 1.0 if Input.is_action_pressed("ui_right") or Input.is_key_pressed(KEY_D) else 0.0
+    var up := 1.0 if Input.is_action_pressed("ui_up") or Input.is_key_pressed(KEY_W) else 0.0
+    var down := 1.0 if Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_S) else 0.0
+    var input_dir := Vector2(right - left, down - up).normalized()
+
     velocity = input_dir * move_speed
     if input_dir.length_squared() > 0.01:
-        facing = input_dir.normalized()
+        facing = input_dir
         queue_redraw()
     move_and_slide()
 

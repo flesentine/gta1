@@ -36,8 +36,13 @@ func _physics_process(delta: float) -> void:
         forward_speed *= 0.72
 
 func _drive(delta: float) -> void:
-    var throttle := Input.get_axis("ui_down", "ui_up")
-    var steer := Input.get_axis("ui_left", "ui_right")
+    var gas := Input.is_action_pressed("ui_up") or Input.is_key_pressed(KEY_W)
+    var brake_reverse := Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_S)
+    var steer_left := Input.is_action_pressed("ui_left") or Input.is_key_pressed(KEY_A)
+    var steer_right := Input.is_action_pressed("ui_right") or Input.is_key_pressed(KEY_D)
+
+    var throttle := (1.0 if gas else 0.0) - (1.0 if brake_reverse else 0.0)
+    var steer := (1.0 if steer_right else 0.0) - (1.0 if steer_left else 0.0)
 
     if throttle > 0.0:
         forward_speed = move_toward(forward_speed, max_forward_speed, acceleration * throttle * delta)
