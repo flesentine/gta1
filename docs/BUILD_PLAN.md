@@ -14,51 +14,54 @@ Prove the core GTA 1 loop in a tiny clean-room test city before building full co
 - [x] Speed-sensitive camera zoom
 - [x] Placeholder procedural city blocks/roads
 - [ ] Tune vehicle feel against reference gameplay
-- [ ] Add multiple vehicle definitions and spawn points
+- [x] Add multiple vehicle spawn points
 - [ ] Add skid/impact feedback
 
 ## Phase 2 — Living city
 
-- [ ] Road graph
-- [ ] Civilian traffic spawning and lane following
-- [ ] Pedestrian spawning and roaming
-- [ ] Panic/flee response
+- [x] Simple road-route graph
+- [x] Civilian traffic spawning and lane following
+- [x] Pedestrian spawning and roaming
+- [x] Panic/flee response
 - [ ] Entity pooling/despawn rules
-- [ ] Vehicle health, smoke, fire, explosion
+- [x] Vehicle health, smoke, fire, explosion/burnout state
 
 ## Phase 3 — Crime loop
 
-- [ ] Weapon framework
-- [ ] Pistol prototype
-- [ ] Ammo/pickup framework
-- [ ] Crime event bus
-- [ ] Wanted stages 0–4
-- [ ] Police vehicle/officer spawning
-- [ ] Chase/intercept behavior
-- [ ] Arrest/death/respawn
-- [ ] Police bribe pickup
-- [ ] Respray garage
+- [x] Weapon framework
+- [x] Pistol prototype
+- [x] Ammo/pickup framework
+- [x] Crime-to-wanted hooks
+- [x] Wanted stages 0–4
+- [x] Police vehicle spawning
+- [x] Chase/ram behavior
+- [x] Arrest/death/respawn
+- [x] Police bribe pickup
+- [x] Respray garage
 
 ## Phase 4 — Mission loop
 
-- [ ] MissionDirector state machine
-- [ ] Phone/start trigger
-- [ ] Go-to objective
-- [ ] Enter/steal vehicle objective
+- [x] MissionDirector state machine
+- [x] Phone/start trigger
+- [x] Go-to objective
+- [x] Enter/steal vehicle objective
 - [ ] Destroy/kill target objective
-- [ ] Delivery objective
-- [ ] Timer and failure state
-- [ ] Score reward
-- [ ] Score multiplier increase
-- [ ] One complete replayable mission
+- [x] Delivery objective
+- [x] Failure state
+- [x] Score reward
+- [x] Score multiplier increase
+- [x] One complete replayable mission
+- [ ] Timed objective support
 
 ## Phase 5 — Full level slice
 
 - [ ] Replace procedural test layout with a content pipeline
-- [ ] Mission/pickup/garage markers stored outside scene code
+- [x] Mission definitions stored outside scene code
+- [ ] Pickup/garage definitions stored outside scene code
 - [ ] Level target score and completion flow
 - [ ] Save/load campaign progress
 - [ ] HUD/menu/audio pass
+- [ ] Multiple linked missions
 
 ## IP boundary
 
