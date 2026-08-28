@@ -1,6 +1,7 @@
 extends Node2D
 
 const VEHICLE_SCRIPT = preload("res://scripts/vehicle.gd")
+const PEDESTRIAN_SCRIPT = preload("res://scripts/pedestrian.gd")
 
 @onready var player: CharacterBody2D = $Player
 @onready var starter_car: CharacterBody2D = $Car
@@ -9,6 +10,7 @@ const VEHICLE_SCRIPT = preload("res://scripts/vehicle.gd")
 @onready var help_label: Label = $HUD/Help
 
 var vehicles: Array[CharacterBody2D] = []
+var pedestrians: Array[CharacterBody2D] = []
 var current_vehicle: CharacterBody2D = null
 var in_vehicle := false
 
@@ -31,14 +33,17 @@ var traffic_routes := [
 ]
 
 var traffic_colors := [
-    Color(0.16, 0.48, 0.82),
-    Color(0.91, 0.67, 0.16),
-    Color(0.20, 0.70, 0.42),
-    Color(0.72, 0.28, 0.72),
-    Color(0.86, 0.86, 0.82),
-    Color(0.18, 0.18, 0.20),
-    Color(0.82, 0.32, 0.20),
-    Color(0.34, 0.70, 0.75)
+    Color(0.16, 0.48, 0.82), Color(0.91, 0.67, 0.16),
+    Color(0.20, 0.70, 0.42), Color(0.72, 0.28, 0.72),
+    Color(0.86, 0.86, 0.82), Color(0.18, 0.18, 0.20),
+    Color(0.82, 0.32, 0.20), Color(0.34, 0.70, 0.75)
+]
+
+var pedestrian_colors := [
+    Color(0.20, 0.48, 0.82), Color(0.84, 0.29, 0.25),
+    Color(0.18, 0.64, 0.38), Color(0.72, 0.42, 0.74),
+    Color(0.88, 0.61, 0.19), Color(0.32, 0.32, 0.36),
+    Color(0.74, 0.70, 0.58), Color(0.18, 0.64, 0.68)
 ]
 
 func _ready() -> void:
@@ -46,9 +51,11 @@ func _ready() -> void:
 
     starter_car.set_body_color(Color(0.78, 0.16, 0.13))
     starter_car.set_parked()
+    starter_car.add_to_group("vehicles")
     vehicles.append(starter_car)
 
     _spawn_traffic()
+    _spawn_pedestrians()
     _update_hud()
 
 func _spawn_traffic() -> void:
@@ -71,6 +78,7 @@ func _spawn_traffic() -> void:
         car.add_child(collision)
 
         add_child(car)
+        car.add_to_group("vehicles")
         car.configure_ai(
             traffic_routes[route_index],
             point_index,
@@ -78,6 +86,45 @@ func _spawn_traffic() -> void:
             185.0 + float((i % 4) * 18)
         )
         vehicles.append(car)
+
+func _spawn_pedestrians() -> void:
+    var routes := _sidewalk_routes()
+    for i in range(28):
+        var route: PackedVector2Array = routes[i % routes.size()]
+        var ped = PEDESTRIAN_SCRIPT.new()
+        ped.name = "Pedestrian%02d" % i
+        ped.walk_speed = 52.0 + float((i % 5) * 5)
+
+        var collision := CollisionShape2D.new()
+        var shape := CircleShape2D.new()
+        shape.radius = 8.5
+        collision.shape = shape
+        ped.add_child(collision)
+
+        add_child(ped)
+        ped.configure(route, i % route.size(), pedestrian_colors[i % pedestrian_colors.size()])
+        pedestrians.append(ped)
+
+func _sidewalk_routes() -> Array[PackedVector2Array]:
+    var routes: Array[PackedVector2Array] = []
+    var x_spans := [
+        Vector2(-1540, -1040), Vector2(-760, -140),
+        Vector2(140, 760), Vector2(1040, 1540)
+    ]
+    var y_spans := [
+        Vector2(-1140, -790), Vector2(-510, -140),
+        Vector2(140, 510), Vector2(790, 1140)
+    ]
+    var margin := 38.0
+    for xs in x_spans:
+        for ys in y_spans:
+            routes.append(PackedVector2Array([
+                Vector2(xs.x - margin, ys.x - margin),
+                Vector2(xs.y + margin, ys.x - margin),
+                Vector2(xs.y + margin, ys.y + margin),
+                Vector2(xs.x - margin, ys.y + margin)
+            ]))
+    return routes
 
 func _process(delta: float) -> void:
     var target: Node2D = current_vehicle if in_vehicle and is_instance_valid(current_vehicle) else player
@@ -158,5 +205,12 @@ func _update_hud() -> void:
     elif is_instance_valid(current_vehicle):
         extra = "\nSPEED  %03d" % int(current_vehicle.get_forward_speed_abs())
 
-    hud_label.text = "GTA1 REMAKE — BUILD 2\n%s%s\nTRAFFIC  %02d" % [mode, extra, max(vehicles.size() - 1, 0)]
+    var down_count := 0
+    for ped in pedestrians:
+        if is_instance_valid(ped) and ped.has_method("is_down") and ped.is_down():
+            down_count += 1
+
+    hud_label.text = "GTA1 REMAKE — BUILD 3\n%s%s\nTRAFFIC %02d   PEDS %02d" % [
+        mode, extra, max(vehicles.size() - 1, 0), max(pedestrians.size() - down_count, 0)
+    ]
     help_label.text = "WASD / Arrows: move or drive   E: enter/exit   R: reset"
