@@ -2,6 +2,7 @@ extends Node2D
 
 const VEHICLE_SCRIPT = preload("res://scripts/vehicle.gd")
 const PEDESTRIAN_SCRIPT = preload("res://scripts/pedestrian.gd")
+const PICKUP_SCRIPT = preload("res://scripts/pickup.gd")
 
 @onready var player: CharacterBody2D = $Player
 @onready var starter_car: CharacterBody2D = $Car
@@ -11,8 +12,14 @@ const PEDESTRIAN_SCRIPT = preload("res://scripts/pedestrian.gd")
 
 var vehicles: Array[CharacterBody2D] = []
 var pedestrians: Array[CharacterBody2D] = []
+var pickups: Array[Node2D] = []
 var current_vehicle: CharacterBody2D = null
 var in_vehicle := false
+
+var pistol_owned := false
+var pistol_ammo := 0
+var shot_cooldown := 0.0
+var tracers: Array[Dictionary] = []
 
 var traffic_routes := [
     PackedVector2Array([
@@ -56,6 +63,7 @@ func _ready() -> void:
 
     _spawn_traffic()
     _spawn_pedestrians()
+    _spawn_pickups()
     _update_hud()
 
 func _spawn_traffic() -> void:
@@ -105,6 +113,23 @@ func _spawn_pedestrians() -> void:
         ped.configure(route, i % route.size(), pedestrian_colors[i % pedestrian_colors.size()])
         pedestrians.append(ped)
 
+func _spawn_pickups() -> void:
+    var pickup_plan := [
+        ["pistol", Vector2(125, 82), 12],
+        ["ammo", Vector2(-75, 82), 10],
+        ["ammo", Vector2(82, -120), 10],
+        ["ammo", Vector2(-900, -520), 10],
+        ["ammo", Vector2(900, 520), 10],
+        ["ammo", Vector2(900, -520), 10],
+        ["ammo", Vector2(-900, 520), 10]
+    ]
+
+    for item in pickup_plan:
+        var pickup = PICKUP_SCRIPT.new()
+        pickup.configure(str(item[0]), item[1], int(item[2]))
+        add_child(pickup)
+        pickups.append(pickup)
+
 func _sidewalk_routes() -> Array[PackedVector2Array]:
     var routes: Array[PackedVector2Array] = []
     var x_spans := [
@@ -127,6 +152,14 @@ func _sidewalk_routes() -> Array[PackedVector2Array]:
     return routes
 
 func _process(delta: float) -> void:
+    shot_cooldown = max(shot_cooldown - delta, 0.0)
+    _update_tracers(delta)
+    _check_pickups()
+
+    if in_vehicle and is_instance_valid(current_vehicle):
+        if current_vehicle.has_method("is_destroyed") and current_vehicle.is_destroyed():
+            _exit_vehicle()
+
     var target: Node2D = current_vehicle if in_vehicle and is_instance_valid(current_vehicle) else player
     var follow_weight := 1.0 - exp(-8.0 * delta)
     camera.global_position = camera.global_position.lerp(target.global_position, follow_weight)
@@ -138,11 +171,16 @@ func _process(delta: float) -> void:
     camera.zoom = camera.zoom.lerp(target_zoom, 1.0 - exp(-4.0 * delta))
 
     _update_hud()
+    if not tracers.is_empty():
+        queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo:
         if event.keycode == KEY_E:
             _toggle_vehicle()
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_SPACE or event.keycode == KEY_F:
+            _shoot_pistol()
             get_viewport().set_input_as_handled()
         elif event.keycode == KEY_R:
             get_tree().reload_current_scene()
@@ -163,6 +201,8 @@ func _nearest_vehicle() -> CharacterBody2D:
     for car in vehicles:
         if not is_instance_valid(car):
             continue
+        if car.has_method("is_destroyed") and car.is_destroyed():
+            continue
         var distance := player.global_position.distance_to(car.global_position)
         if distance < best_distance:
             best_distance = distance
@@ -181,6 +221,7 @@ func _exit_vehicle() -> void:
         in_vehicle = false
         player.visible = true
         player.set_active(true)
+        current_vehicle = null
         return
 
     var side := Vector2.RIGHT.rotated(current_vehicle.rotation) * 52.0
@@ -191,6 +232,69 @@ func _exit_vehicle() -> void:
     current_vehicle.set_parked()
     current_vehicle = null
     in_vehicle = false
+
+func _check_pickups() -> void:
+    if in_vehicle:
+        return
+
+    for pickup in pickups.duplicate():
+        if not is_instance_valid(pickup):
+            pickups.erase(pickup)
+            continue
+        if player.global_position.distance_to(pickup.global_position) > 31.0:
+            continue
+
+        if pickup.pickup_kind == "pistol":
+            pistol_owned = true
+            pistol_ammo += pickup.amount
+        elif pickup.pickup_kind == "ammo":
+            pistol_ammo += pickup.amount
+
+        pickups.erase(pickup)
+        pickup.queue_free()
+
+func _shoot_pistol() -> void:
+    if in_vehicle or not pistol_owned or pistol_ammo <= 0 or shot_cooldown > 0.0:
+        return
+
+    pistol_ammo -= 1
+    shot_cooldown = 0.24
+
+    var direction := player.get_facing().normalized()
+    var origin := player.global_position + direction * 24.0
+    var end := origin + direction * 560.0
+
+    var query := PhysicsRayQueryParameters2D.create(origin, end)
+    query.exclude = [player.get_rid()]
+    var result := get_world_2d().direct_space_state.intersect_ray(query)
+
+    if not result.is_empty():
+        end = result.position
+        var collider = result.collider
+        if collider != null:
+            if collider.is_in_group("pedestrians") and collider.has_method("take_damage"):
+                collider.take_damage(2)
+            elif collider.is_in_group("vehicles") and collider.has_method("take_damage"):
+                collider.take_damage(1)
+
+    for ped in pedestrians:
+        if is_instance_valid(ped) and ped.has_method("react_to_gunshot"):
+            if ped.global_position.distance_to(origin) <= 360.0:
+                ped.react_to_gunshot(origin)
+
+    tracers.append({"start": origin, "end": end, "time": 0.09})
+    queue_redraw()
+
+func _update_tracers(delta: float) -> void:
+    for i in range(tracers.size() - 1, -1, -1):
+        tracers[i]["time"] = float(tracers[i]["time"]) - delta
+        if float(tracers[i]["time"]) <= 0.0:
+            tracers.remove_at(i)
+
+func _draw() -> void:
+    for tracer in tracers:
+        draw_line(tracer["start"], tracer["end"], Color(1.0, 0.88, 0.30, 0.92), 3.0, true)
+        draw_circle(tracer["end"], 4.0, Color(1.0, 0.55, 0.16, 0.9))
 
 func _update_hud() -> void:
     var mode := "DRIVING" if in_vehicle else "ON FOOT"
@@ -210,7 +314,11 @@ func _update_hud() -> void:
         if is_instance_valid(ped) and ped.has_method("is_down") and ped.is_down():
             down_count += 1
 
-    hud_label.text = "GTA1 REMAKE — BUILD 3\n%s%s\nTRAFFIC %02d   PEDS %02d" % [
-        mode, extra, max(vehicles.size() - 1, 0), max(pedestrians.size() - down_count, 0)
+    var weapon_text := "PISTOL --"
+    if pistol_owned:
+        weapon_text = "PISTOL %03d" % pistol_ammo
+
+    hud_label.text = "GTA1 REMAKE — BUILD 4\n%s%s\n%s   TRAFFIC %02d   PEDS %02d" % [
+        mode, extra, weapon_text, max(vehicles.size() - 1, 0), max(pedestrians.size() - down_count, 0)
     ]
-    help_label.text = "WASD / Arrows: move or drive   E: enter/exit   R: reset"
+    help_label.text = "WASD / Arrows: move or drive   E: enter/exit   Space/F: fire   R: reset"
