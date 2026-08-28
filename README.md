@@ -19,7 +19,9 @@ Build a small playable vertical slice before attempting a full city:
 - four-stage wanted system and police pursuit
 - arrest/death/lives loop
 - police bribes and respray escape mechanics
-- later: missions, score, multiplier, and progression
+- data-driven mission definitions
+- first replayable phone → steal → deliver mission
+- score and multiplier progression
 
 ## Engine
 
@@ -37,6 +39,7 @@ Godot 4.x
 - **WASD / Arrow keys** — move on foot / drive
 - **E** — enter or exit the nearby vehicle
 - **Space / F** — fire pistol while on foot
+- Walk into the **blue phone** — start the current mission
 - **R** — reset the prototype
 
 ## Development order
@@ -59,18 +62,21 @@ The latest development build has a no-install browser preview:
 
 The browser build is intentionally asset-free placeholder art. The Godot project remains the main implementation. The first visit may show raw.githack's one-time confirmation screen before opening the HTML preview.
 
-### Build 6
+### Build 7 — HOT PROPERTY
 
-- everything from Build 5: traffic, pedestrians, pistol combat, vehicle damage, four wanted levels, and police pursuit
-- **3-life system** with HUD counter
-- police can **BUST** the player on foot when they maintain close contact
-- high-speed police impacts can **WASTE** the player
-- losing a life clears wanted level, removes the pistol/ammo, and respawns the player
-- after all three lives are lost, a short **GAME OVER** state resets the prototype
-- green **police bribe** pickups remove one wanted head when collected on foot
-- four bribe pickups are distributed around the test city
-- visible pink **RES-PRAY** bay on the western road
-- enter the respray bay in a car and slow below the threshold to clear the entire wanted level
-- respray immediately dismisses pursuing police
-- bust-progress feedback appears in the HUD as police close in
-- desktop keyboard and mobile touch controls
+Build 7 adds the first complete replayable mission loop on top of everything in Build 6.
+
+- blue phone mission trigger near the starting area
+- original prototype mission: **HOT PROPERTY**
+- mission target spawns as a marked teal sedan
+- animated yellow target ring/arrow identifies the required vehicle
+- stealing the target transitions the mission to delivery
+- yellow delivery bay appears across town
+- stop the correct vehicle in the delivery bay to complete the mission
+- base reward: **1,000 × current multiplier**
+- completing the mission increases the multiplier, up to x5
+- score and multiplier remain through ordinary life losses
+- mission fails if the target is destroyed or the player loses a life
+- mission phone reopens after a short cooldown so the loop is replayable
+- mission configuration lives in `data/missions.json`
+- all Build 6 police, lives, bribes, respray, combat, traffic, and pedestrians remain active during the mission
