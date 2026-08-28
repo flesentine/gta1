@@ -3,6 +3,7 @@ name: Deploy playable preview
 on:
   push:
     branches:
+      - main
       - bootstrap/playable-slice
     paths:
       - "web/**"
