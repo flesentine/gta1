@@ -15,7 +15,9 @@ Build a small playable vertical slice before attempting a full city:
 - basic collision/world bounds
 - moving traffic architecture
 - sidewalk pedestrians with car reactions
-- later: damage, weapons, wanted system, pickups, and one complete mission
+- pistol/ammo pickups and basic combat
+- vehicle damage/burnout states
+- later: wanted system, police response, missions, and progression
 
 ## Engine
 
@@ -32,6 +34,7 @@ Godot 4.x
 
 - **WASD / Arrow keys** — move on foot / drive
 - **E** — enter or exit the nearby vehicle
+- **Space / F** — fire pistol while on foot
 - **R** — reset the prototype
 
 ## Development order
@@ -53,12 +56,16 @@ The latest development build has a no-install browser preview:
 
 The browser build is intentionally asset-free placeholder art. The Godot project remains the main implementation. The first visit may show raw.githack's one-time confirmation screen before opening the HTML preview.
 
-### Build 3
+### Build 4
+
 - 10 moving traffic cars
-- steal any nearby vehicle with **E**
+- steal any nearby working vehicle with **E**
 - 28 pedestrians walking sidewalk loops
-- pedestrians flee from fast approaching vehicles
-- pedestrians can be temporarily knocked down by vehicle impacts
-- speed-sensitive camera zoom
+- pedestrians flee from fast cars and nearby gunshots
+- pistol pickup near the starting position
+- finite ammo plus refill pickups
+- **Space / F** to shoot while on foot
+- pedestrians can be hit by gunfire
+- vehicles take bullet damage, smoke, and burn out after repeated hits
 - desktop keyboard controls
-- basic touch controls for mobile
+- mobile touch controls including FIRE
