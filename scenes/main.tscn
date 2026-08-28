@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/city.gd" id="2_city"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://scripts/mission_director.gd" id="6_mission"]
 [ext_resource type="Script" path="res://scripts/mission_overlay.gd" id="7_mission_overlay"]
 [ext_resource type="Script" path="res://scripts/sector_population.gd" id="8_sector_population"]
+[ext_resource type="Script" path="res://scripts/mission_terminal.gd" id="9_mission_terminal"]
+[ext_resource type="Script" path="res://scripts/minimap.gd" id="10_minimap"]
 
 [sub_resource type="CircleShape2D" id="Circle_player"]
 radius = 14.0
@@ -33,6 +35,9 @@ script = ExtResource("6_mission")
 
 [node name="MissionOverlay" type="Node2D" parent="MissionDirector"]
 script = ExtResource("7_mission_overlay")
+
+[node name="MissionTerminal" type="Node" parent="MissionDirector"]
+script = ExtResource("9_mission_terminal")
 
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(60, 80)
@@ -69,15 +74,20 @@ offset_top = 10.0
 offset_right = 500.0
 offset_bottom = 116.0
 theme_override_font_sizes/font_size = 18
-text = "GTA1 REMAKE PROTOTYPE"
+text = "GTA1 REMAKE PROTOTYPE — BUILD 11"
+
+[node name="Minimap" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("10_minimap")
 
 [node name="Help" type="Label" parent="HUD"]
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 18.0
 offset_top = -52.0
-offset_right = 1050.0
+offset_right = 1150.0
 offset_bottom = -18.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.9)
 theme_override_font_sizes/font_size = 16
-text = "WASD / Arrows: move or drive   E: enter/exit   Space/F: fire   R: reset"
+text = "WASD / Arrows: move or drive   E: enter/exit   Space/F: fire   M: map   Blue phone: mission terminal   R: reset"
