@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/city.gd" id="2_city"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="3_player"]
 [ext_resource type="Script" path="res://scripts/vehicle.gd" id="4_vehicle"]
+[ext_resource type="Script" path="res://scripts/respray_zone.gd" id="5_respray"]
 
 [sub_resource type="CircleShape2D" id="Circle_player"]
 radius = 14.0
@@ -16,6 +17,10 @@ script = ExtResource("1_main")
 
 [node name="City" type="Node2D" parent="."]
 script = ExtResource("2_city")
+
+[node name="ResprayZone" type="Node2D" parent="."]
+position = Vector2(-900, -300)
+script = ExtResource("5_respray")
 
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(60, 80)
@@ -41,16 +46,16 @@ zoom = Vector2(1, 1)
 [node name="Panel" type="ColorRect" parent="HUD"]
 offset_left = 18.0
 offset_top = 18.0
-offset_right = 470.0
-offset_bottom = 104.0
+offset_right = 530.0
+offset_bottom = 142.0
 color = Color(0.04, 0.04, 0.04, 0.82)
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="HUD/Panel"]
 offset_left = 14.0
 offset_top = 10.0
-offset_right = 438.0
-offset_bottom = 76.0
+offset_right = 500.0
+offset_bottom = 116.0
 theme_override_font_sizes/font_size = 18
 text = "GTA1 REMAKE PROTOTYPE"
 
@@ -59,8 +64,8 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 18.0
 offset_top = -52.0
-offset_right = 650.0
+offset_right = 950.0
 offset_bottom = -18.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.9)
 theme_override_font_sizes/font_size = 16
-text = "Arrows: move/drive   E: enter/exit   R: reset"
+text = "WASD / Arrows: move or drive   E: enter/exit   Space/F: fire   R: reset"
