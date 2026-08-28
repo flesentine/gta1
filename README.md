@@ -12,12 +12,12 @@ Build a small playable vertical slice before attempting a full city:
 - enter/exit vehicles
 - arcade vehicle handling
 - speed-sensitive camera zoom
-- basic collision/world bounds
-- moving traffic architecture
-- sidewalk pedestrians with car reactions
-- pistol/ammo pickups and basic combat
+- moving traffic
+- sidewalk pedestrians with panic reactions
+- pistol/ammo pickups and combat
 - vehicle damage/burnout states
-- later: wanted system, police response, missions, and progression
+- four-stage wanted system and police pursuit
+- later: arrest/death loop, police bribes/respray, missions, score, and progression
 
 ## Engine
 
@@ -43,8 +43,9 @@ Godot 4.x
 2. Traffic + pedestrians
 3. Damage + weapons + pickups
 4. Wanted/police loop
-5. Mission state machine
-6. First complete level slice
+5. Arrest/death + escape tools
+6. Mission state machine
+7. First complete level slice
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
 
@@ -56,16 +57,19 @@ The latest development build has a no-install browser preview:
 
 The browser build is intentionally asset-free placeholder art. The Godot project remains the main implementation. The first visit may show raw.githack's one-time confirmation screen before opening the HTML preview.
 
-### Build 4
+### Build 5
 
-- 10 moving traffic cars
-- steal any nearby working vehicle with **E**
+- 10 moving civilian traffic cars
+- steal traffic vehicles with **E**; first theft raises wanted level
 - 28 pedestrians walking sidewalk loops
-- pedestrians flee from fast cars and nearby gunshots
-- pistol pickup near the starting position
-- finite ammo plus refill pickups
-- **Space / F** to shoot while on foot
-- pedestrians can be hit by gunfire
-- vehicles take bullet damage, smoke, and burn out after repeated hits
-- desktop keyboard controls
-- mobile touch controls including FIRE
+- pedestrians flee from fast cars and gunshots
+- pistol pickup and finite ammo/refill pickups
+- pedestrian and civilian-vehicle gun damage
+- damaged cars smoke and burn out
+- **four wanted levels** displayed as filled/empty heads
+- police cars spawn dynamically as wanted level rises
+- police pursue the player on foot or in whichever vehicle is being driven
+- police cars use flashing red/blue lightbars and aggressive pursuit speeds
+- higher wanted levels increase police count and pursuit speed
+- wanted level cools only when enough distance is opened from police
+- desktop keyboard and mobile touch controls
