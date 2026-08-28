@@ -58,12 +58,19 @@ Prove the core GTA 1 loop in a tiny clean-room test city before building full co
 
 - [x] Mission coordinates/rewards stored outside scene code
 - [x] Level target score displayed
+- [x] Save/load campaign checkpoint progress
+- [x] Persistent score and multiplier
+- [x] Persistent best score
+- [x] Persistent unlock/progression state
+- [x] Level-completion / unlock flow
 - [ ] Replace procedural test layout with a content pipeline
-- [ ] Save/load campaign progress
-- [ ] Persistent unlock/progression state
-- [ ] HUD/menu/audio pass
 - [ ] Larger authored city sector
-- [ ] Mission selection / campaign completion flow
+- [ ] Mission selection/menu flow
+- [ ] HUD/menu/audio pass
+
+## Build 9 persistence rule
+
+Only stable progression is saved: score, multiplier, next campaign mission, best score, and unlock state. Active mission entities and timers are intentionally not serialized; restarting resumes at the latest safe mission checkpoint.
 
 ## IP boundary
 

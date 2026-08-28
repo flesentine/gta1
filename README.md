@@ -4,31 +4,35 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 8 — mini campaign
+## Build 9 — persistent level progression
 
-The prototype now has a three-mission replayable campaign layered on top of the driving, traffic, pedestrian, combat, wanted, police, lives, bribe, and respray systems.
+Build 9 turns the Build 8 three-mission campaign into a persistent level loop.
 
-### Mission 1 — HOT PROPERTY
-- touch the blue phone near spawn
-- steal the marked teal sedan
-- deliver it to the yellow bay
-- slow below the delivery threshold to finish
+### Campaign
 
-### Mission 2 — SHORT FUSE
-- touch the phone again
-- destroy the marked orange car before the 35-second timer expires
-- the mission grants enough pistol ammo to make the objective immediately playable
-- destroying the target also creates police heat
+1. **HOT PROPERTY** — steal the marked teal sedan and deliver it to the yellow bay.
+2. **SHORT FUSE** — destroy the marked orange car before the 35-second timer expires.
+3. **CLEAN BREAK** — start at three wanted heads and clear all heat before the 45-second timer expires.
 
-### Mission 3 — CLEAN BREAK
-- touch the phone again
-- the mission immediately raises the player to three wanted heads
-- clear every wanted head before the 45-second timer expires
-- bribes, distance, and the respray bay all work as escape tools
+Successful missions still award `base reward × multiplier`, with the multiplier rising up to x5.
 
-Successful missions award `base reward × multiplier`. The multiplier rises after each success up to x5. The mini campaign loops after mission 3 while score and multiplier remain active for the current run. The current level target is **5,000 points**.
+### New in Build 9
 
-Mission definitions live in `data/missions.json`, so additional mission types and campaign sequences can be added without embedding their coordinates/rewards directly in the city scene.
+- mission progress checkpoints after each stable mission transition
+- persistent **score**
+- persistent **multiplier**
+- persistent **next campaign mission**
+- persistent **best score**
+- **5,000-point level target** now produces a real level-complete state
+- completing the campaign above the target unlocks **DOWNTOWN ACCESS**
+- first unlock displays a level-completion screen
+- Godot persistence uses `user://gta1_build9_progress.json`
+- browser persistence uses `localStorage`
+- browser **R** resets the current world but keeps progression
+- browser **Shift+R** deliberately clears saved progression
+- mid-mission cars/timers are not serialized; reloads resume from the last safe checkpoint
+
+Mission definitions remain data-driven in `data/missions.json`.
 
 ## Engine
 
@@ -46,7 +50,8 @@ Godot 4.x
 - **WASD / Arrow keys** — move on foot / drive
 - **E** — enter or exit a nearby vehicle
 - **Space / F** — fire pistol while on foot
-- **R** — reset
+- **R** — reset the current scene/world
+- **Shift+R** — browser only: clear Build 9 saved progression
 
 ## Browser preview
 
@@ -63,6 +68,8 @@ The browser build uses the same clean-room placeholder presentation and mirrors 
 5. Arrest/death + escape tools
 6. Mission state machine
 7. Mini campaign, scoring, timer objectives
-8. Full level progression / save state / content pipeline
+8. Persistent level progression and unlock state
+9. Larger authored city sector / content pipeline
+10. HUD, menus, audio, and broader mission variety
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
