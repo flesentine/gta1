@@ -6,6 +6,7 @@ extends CharacterBody2D
 @export var max_forward_speed := 520.0
 @export var max_reverse_speed := 180.0
 @export var turn_rate := 2.5
+@export var max_health := 4
 
 var controlled := false
 var ai_enabled := false
@@ -15,8 +16,13 @@ var ai_index := 0
 var ai_cruise_speed := 210.0
 var body_color := Color(0.78, 0.16, 0.13)
 var stuck_time := 0.0
+var health := 4
+var destroyed := false
+var hit_flash := 0.0
+var smoke_phase := 0.0
 
 func _ready() -> void:
+    health = max_health
     queue_redraw()
 
 func set_body_color(value: Color) -> void:
@@ -24,6 +30,9 @@ func set_body_color(value: Color) -> void:
     queue_redraw()
 
 func set_controlled(value: bool) -> void:
+    if destroyed:
+        controlled = false
+        return
     controlled = value
     if controlled:
         ai_enabled = false
@@ -38,6 +47,8 @@ func configure_ai(route: PackedVector2Array, start_index: int, color: Color, cru
     controlled = false
     ai_enabled = ai_route.size() >= 2
     forward_speed = ai_cruise_speed * 0.7
+    health = max_health
+    destroyed = false
 
     var safe_index := posmod(start_index, ai_route.size())
     global_position = ai_route[safe_index]
@@ -48,13 +59,40 @@ func configure_ai(route: PackedVector2Array, start_index: int, color: Color, cru
         rotation = direction.angle() + PI * 0.5
     queue_redraw()
 
+func take_damage(amount: int) -> void:
+    if destroyed:
+        return
+    health -= amount
+    hit_flash = 0.12
+    if health <= 0:
+        health = 0
+        destroyed = true
+        controlled = false
+        ai_enabled = false
+        forward_speed = 0.0
+        velocity = Vector2.ZERO
+    queue_redraw()
+
+func is_destroyed() -> bool:
+    return destroyed
+
 func get_speed_ratio() -> float:
+    if destroyed:
+        return 0.0
     return abs(forward_speed) / max_forward_speed
 
 func get_forward_speed_abs() -> float:
     return abs(forward_speed)
 
 func _physics_process(delta: float) -> void:
+    hit_flash = max(hit_flash - delta, 0.0)
+    smoke_phase += delta * 4.0
+
+    if destroyed:
+        velocity = Vector2.ZERO
+        queue_redraw()
+        return
+
     if controlled:
         _drive(delta)
     elif ai_enabled:
@@ -75,6 +113,9 @@ func _physics_process(delta: float) -> void:
         _skip_to_next_waypoint()
         forward_speed = ai_cruise_speed * 0.45
         stuck_time = 0.0
+
+    if health <= 2:
+        queue_redraw()
 
 func _drive(delta: float) -> void:
     var gas := Input.is_action_pressed("ui_up") or Input.is_key_pressed(KEY_W)
@@ -128,8 +169,11 @@ func _skip_to_next_waypoint() -> void:
     ai_index = (ai_index + 1) % ai_route.size()
 
 func _draw() -> void:
-    # Placeholder vector art: no original game assets are used.
-    draw_rect(Rect2(-17.0, -32.0, 34.0, 64.0), body_color, true)
+    var paint := Color(0.13, 0.13, 0.13) if destroyed else body_color
+    if hit_flash > 0.0:
+        paint = paint.lerp(Color.WHITE, 0.55)
+
+    draw_rect(Rect2(-17.0, -32.0, 34.0, 64.0), paint, true)
     draw_rect(Rect2(-13.0, -16.0, 26.0, 18.0), Color(0.18, 0.24, 0.28), true)
     draw_rect(Rect2(-13.0, 8.0, 26.0, 13.0), Color(0.12, 0.16, 0.18), true)
     draw_rect(Rect2(-18.0, -25.0, 4.0, 14.0), Color(0.04, 0.04, 0.04), true)
@@ -137,6 +181,13 @@ func _draw() -> void:
     draw_rect(Rect2(-18.0, 12.0, 4.0, 14.0), Color(0.04, 0.04, 0.04), true)
     draw_rect(Rect2(14.0, 12.0, 4.0, 14.0), Color(0.04, 0.04, 0.04), true)
 
-    # Tiny headlights make direction obvious while tuning traffic.
+    if destroyed:
+        draw_circle(Vector2(-7.0, -4.0), 8.0 + sin(smoke_phase) * 2.0, Color(0.95, 0.28, 0.08, 0.78))
+        draw_circle(Vector2(7.0, 4.0), 7.0 + cos(smoke_phase) * 2.0, Color(1.0, 0.62, 0.10, 0.72))
+        draw_circle(Vector2(0.0, -18.0), 9.0, Color(0.08, 0.08, 0.08, 0.70))
+    elif health <= 2:
+        draw_circle(Vector2(0.0, -30.0), 6.0 + sin(smoke_phase) * 1.4, Color(0.18, 0.18, 0.18, 0.55))
+        draw_circle(Vector2(4.0, -38.0), 4.5 + cos(smoke_phase) * 1.2, Color(0.22, 0.22, 0.22, 0.45))
+
     draw_circle(Vector2(-10.0, -30.0), 2.4, Color(1.0, 0.92, 0.55))
     draw_circle(Vector2(10.0, -30.0), 2.4, Color(1.0, 0.92, 0.55))
