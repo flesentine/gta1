@@ -13,7 +13,7 @@ Build a small playable vertical slice before attempting a full city:
 - arcade vehicle handling
 - speed-sensitive camera zoom
 - basic collision/world bounds
-- simple traffic-ready architecture
+- moving traffic architecture
 - later: pedestrians, wanted system, pickups, and one complete mission
 
 ## Engine
@@ -48,7 +48,7 @@ See `docs/BUILD_PLAN.md` for the implementation checklist.
 
 Build 2 has a no-install browser preview that mirrors the current gameplay slice:
 
-**https://flesentine.github.io/gta1/**
+**https://cdn.jsdelivr.net/gh/flesentine/gta1@4a4c57a1682d96ee27309311187f3da98d9412e9/web/index.html**
 
 The browser build is intentionally asset-free placeholder art. The Godot project remains the main implementation.
 
