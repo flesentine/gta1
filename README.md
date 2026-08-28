@@ -17,7 +17,9 @@ Build a small playable vertical slice before attempting a full city:
 - pistol/ammo pickups and combat
 - vehicle damage/burnout states
 - four-stage wanted system and police pursuit
-- later: arrest/death loop, police bribes/respray, missions, score, and progression
+- arrest/death/lives loop
+- police bribes and respray escape mechanics
+- later: missions, score, multiplier, and progression
 
 ## Engine
 
@@ -57,19 +59,18 @@ The latest development build has a no-install browser preview:
 
 The browser build is intentionally asset-free placeholder art. The Godot project remains the main implementation. The first visit may show raw.githack's one-time confirmation screen before opening the HTML preview.
 
-### Build 5
+### Build 6
 
-- 10 moving civilian traffic cars
-- steal traffic vehicles with **E**; first theft raises wanted level
-- 28 pedestrians walking sidewalk loops
-- pedestrians flee from fast cars and gunshots
-- pistol pickup and finite ammo/refill pickups
-- pedestrian and civilian-vehicle gun damage
-- damaged cars smoke and burn out
-- **four wanted levels** displayed as filled/empty heads
-- police cars spawn dynamically as wanted level rises
-- police pursue the player on foot or in whichever vehicle is being driven
-- police cars use flashing red/blue lightbars and aggressive pursuit speeds
-- higher wanted levels increase police count and pursuit speed
-- wanted level cools only when enough distance is opened from police
+- everything from Build 5: traffic, pedestrians, pistol combat, vehicle damage, four wanted levels, and police pursuit
+- **3-life system** with HUD counter
+- police can **BUST** the player on foot when they maintain close contact
+- high-speed police impacts can **WASTE** the player
+- losing a life clears wanted level, removes the pistol/ammo, and respawns the player
+- after all three lives are lost, a short **GAME OVER** state resets the prototype
+- green **police bribe** pickups remove one wanted head when collected on foot
+- four bribe pickups are distributed around the test city
+- visible pink **RES-PRAY** bay on the western road
+- enter the respray bay in a car and slow below the threshold to clear the entire wanted level
+- respray immediately dismisses pursuing police
+- bust-progress feedback appears in the HUD as police close in
 - desktop keyboard and mobile touch controls
