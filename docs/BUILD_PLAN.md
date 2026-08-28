@@ -8,60 +8,62 @@ Prove the core GTA 1 loop in a tiny clean-room test city before building full co
 
 - [x] Godot project boots into a top-down scene
 - [x] On-foot movement
-- [x] Enter/exit one vehicle
+- [x] Enter/exit vehicles
 - [x] Arcade acceleration, braking, reverse, and steering
 - [x] Building/world collision
 - [x] Speed-sensitive camera zoom
 - [x] Placeholder procedural city blocks/roads
 - [ ] Tune vehicle feel against reference gameplay
-- [x] Add multiple vehicle spawn points
+- [ ] Add broader vehicle-definition variety
 - [ ] Add skid/impact feedback
 
 ## Phase 2 — Living city
 
-- [x] Simple road-route graph
-- [x] Civilian traffic spawning and lane following
+- [x] Basic traffic route graph
+- [x] Civilian traffic spawning and route following
 - [x] Pedestrian spawning and roaming
 - [x] Panic/flee response
 - [ ] Entity pooling/despawn rules
-- [x] Vehicle health, smoke, fire, explosion/burnout state
+- [x] Vehicle health, smoke, fire/burnout state
 
 ## Phase 3 — Crime loop
 
 - [x] Weapon framework
 - [x] Pistol prototype
 - [x] Ammo/pickup framework
-- [x] Crime-to-wanted hooks
+- [x] Crime events raise wanted state
 - [x] Wanted stages 0–4
 - [x] Police vehicle spawning
-- [x] Chase/ram behavior
+- [x] Chase/intercept behavior
 - [x] Arrest/death/respawn
 - [x] Police bribe pickup
 - [x] Respray garage
 
 ## Phase 4 — Mission loop
 
-- [x] MissionDirector state machine
+- [x] Data-driven MissionDirector state machine
 - [x] Phone/start trigger
-- [x] Go-to objective
 - [x] Enter/steal vehicle objective
-- [ ] Destroy/kill target objective
 - [x] Delivery objective
-- [x] Failure state
+- [x] Destroy-target objective
+- [x] Lose-wanted / getaway objective
+- [x] Mission timer and failure state
 - [x] Score reward
 - [x] Score multiplier increase
-- [x] One complete replayable mission
-- [ ] Timed objective support
+- [x] Three-mission replayable mini campaign
+- [ ] Pedestrian/character target objective
+- [ ] More objective chaining inside one mission
 
 ## Phase 5 — Full level slice
 
+- [x] Mission coordinates/rewards stored outside scene code
+- [x] Level target score displayed
 - [ ] Replace procedural test layout with a content pipeline
-- [x] Mission definitions stored outside scene code
-- [ ] Pickup/garage definitions stored outside scene code
-- [ ] Level target score and completion flow
 - [ ] Save/load campaign progress
+- [ ] Persistent unlock/progression state
 - [ ] HUD/menu/audio pass
-- [ ] Multiple linked missions
+- [ ] Larger authored city sector
+- [ ] Mission selection / campaign completion flow
 
 ## IP boundary
 
