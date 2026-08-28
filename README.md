@@ -14,7 +14,8 @@ Build a small playable vertical slice before attempting a full city:
 - speed-sensitive camera zoom
 - basic collision/world bounds
 - moving traffic architecture
-- later: pedestrians, wanted system, pickups, and one complete mission
+- sidewalk pedestrians with car reactions
+- later: damage, weapons, wanted system, pickups, and one complete mission
 
 ## Engine
 
@@ -46,16 +47,18 @@ See `docs/BUILD_PLAN.md` for the implementation checklist.
 
 ## Play in your browser
 
-Build 2 has a no-install browser preview that mirrors the current gameplay slice:
+The latest development build has a no-install browser preview:
 
-**https://rawcdn.githack.com/flesentine/gta1/4a4c57a1682d96ee27309311187f3da98d9412e9/web/index.html**
+**https://raw.githack.com/flesentine/gta1/bootstrap/playable-slice/web/index.html**
 
 The browser build is intentionally asset-free placeholder art. The Godot project remains the main implementation. The first visit may show raw.githack's one-time confirmation screen before opening the HTML preview.
 
-### Build 2
+### Build 3
 - 10 moving traffic cars
 - steal any nearby vehicle with **E**
-- traffic follows simple road routes
+- 28 pedestrians walking sidewalk loops
+- pedestrians flee from fast approaching vehicles
+- pedestrians can be temporarily knocked down by vehicle impacts
 - speed-sensitive camera zoom
 - desktop keyboard controls
 - basic touch controls for mobile
