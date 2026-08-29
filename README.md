@@ -4,43 +4,36 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 18 — Harbor East expansion
+## Build 19 — traffic signals + Harbor content
 
-Build 18 keeps the complete Build 17 city, seven missions, CROSSROADS branching, living-city cleanup, traffic pacing, pedestrian archetypes, four vehicle classes, procedural audio, minimap/navigation, persistent progression, police/wanted loop, combat, bribes, and respray.
+Build 19 keeps the complete Build 18 two-sector city, Harbor East/Docklands expansion, eight previous missions, CROSSROADS branching, living-city cleanup, pedestrian archetypes, four vehicle classes, procedural audio, minimap/navigation, persistent progression, police/wanted loop, combat, bribes, and respray.
 
-### Second authored sector — HARBOR EAST
+### Intersection right-of-way
 
-The playable world now expands east from the original 5,200 × 3,400 sector into a second authored area stored separately in `data/harbor_east.json`.
+Civilian traffic now combines Build 16 vehicle-spacing behavior with intersection signal control.
 
-Harbor East adds:
+- major road crossings receive deterministic alternating signal phases
+- east/west traffic and north/south traffic get separate green windows
+- short all-red transition windows reduce opposing traffic entering together
+- AI detects the next intersection ahead and progressively slows toward a red signal
+- close cars can nearly stop at the line instead of driving through the crossing
+- the existing car-ahead spacing factor remains active at the same time
+- visible red/green signal indicators are drawn at nearby intersections
+- the same logic operates in the original city and Harbor East because it uses the shared road axes
 
-- **29** authored building footprints
-- **4** parking/service lots
-- **4** service alleys
-- **3** new north/south road axes
-- **4** new civilian traffic loops with **10** initial traffic spawns
-- **15** pedestrian loops
-- two local identities: **HARBOR EAST** and **DOCKLANDS**
-- a seamless expanded world boundary; there is no level-loading transition between sectors
-- Harbor traffic routes participate in Build 16 cleanup and replacement-traffic logic
-- the minimap expands to include the complete second sector
+### New mission — NIGHT SHIFT
 
-The original horizontal roads continue into Harbor East, creating direct cross-city routes from Market West/Central/Downtown into the new sector.
+NIGHT SHIFT is post-clear job #9 and stays entirely inside Harbor East / Docklands:
 
-### New mission — EASTBOUND
+1. steal the marked yellow dock van in Harbor East
+2. hit four ordered dock stops
+3. slow below **115** to register each stop
+4. the first three completed stops add police heat
+5. finish the route before the **110-second** timer expires
 
-EASTBOUND is post-clear job #8:
+Base reward: **6,500 × multiplier**.
 
-1. steal the marked blue harbor car near the eastern edge of the original sector
-2. hit the Harbor Gate checkpoint
-3. cross the Container Yard checkpoint
-4. reach the Docklands checkpoint
-5. each of the first two checkpoints adds police heat
-6. finish all three checkpoints before the **95-second** timer expires
-
-Base reward: **5,500 × multiplier**.
-
-The mission terminal now supports keys **1–8**.
+The mission terminal now supports keys **1–9**.
 
 ## Current missions
 
@@ -52,16 +45,17 @@ The mission terminal now supports keys **1–8**.
 6. **RED FLAG** — moving character target + police escape
 7. **CROSSROADS** — choose a quiet or hot branching route
 8. **EASTBOUND** — timed run into Harbor East / Docklands
+9. **NIGHT SHIFT** — four-stop Harbor East / Docklands pressure run
 
-The first three form the core level path. Clearing the core level unlocks the five advanced jobs.
+The first three form the core level path. Clearing the core level unlocks the six advanced jobs.
 
 ## Validation
 
-- `data/harbor_east.json` and `data/missions.json` parse cleanly
-- `web/game18.js` passes `node --check`
-- `web/sector18_runtime.js` passes `node --check`
-- the Build 18 loader anchor matches the committed Build 17 runtime chain
-- new Build 18 Godot scripts and scene passed delimiter/structure sanity checks
+- `data/missions.json` parses cleanly with nine missions
+- `web/game19.js` passes `node --check`
+- `web/traffic19_runtime.js` passes `node --check`
+- the Build 19 loader anchor matches the committed Build 18 runtime chain
+- new Build 19 Godot scripts and scene passed delimiter/structure sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -75,7 +69,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–8** — select an unlocked mission
+- **1–9** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
@@ -105,6 +99,7 @@ The browser build mirrors the clean-room gameplay prototype. The first visit may
 15. Population behavior + entity cleanup
 16. Branching mission logic
 17. Second authored sector / Harbor East expansion
-18. Intersection right-of-way, lane behavior, and additional sector missions
+18. Intersection right-of-way + additional Harbor mission
+19. Optional objectives, lane refinement, and deeper police/traffic interaction
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
