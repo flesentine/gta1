@@ -26,8 +26,9 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Expanded-sector traffic and pedestrian population
 - [x] Vehicle health, smoke, fire/burnout state
 - [x] Additional pedestrian visual variety in browser build
+- [x] Mission NPC with proximity/gunshot flee behavior
 - [ ] Entity pooling/despawn rules
-- [ ] Broader pedestrian behavior/archetypes
+- [ ] Broader civilian pedestrian archetypes
 
 ## Phase 3 — Crime loop
 
@@ -51,7 +52,8 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Mission unlock/replay flow
 - [x] Multi-stage checkpoint chaining
 - [x] Mixed vehicle → on-foot → escape objective
-- [ ] Character target/combat objective
+- [x] Character target/combat objective
+- [x] Moving target → wanted escape chaining
 - [ ] More branching mission logic
 
 ## Phase 5 — Full level slice
@@ -62,31 +64,31 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Level-completion / Downtown unlock flow
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
-- [x] Post-clear advanced missions
+- [x] Three post-clear advanced missions
 - [x] Procedural audio pass
 - [x] HUD / mission-state presentation polish
 - [x] Broader vehicle variety
 - [x] Initial pedestrian visual variety
-- [ ] Character-target/combat mission
+- [x] Character-target/combat mission
 - [ ] Additional mission content
 - [ ] Second authored sector
 
-## Build 14 polish layer
+## Build 15 — RED FLAG
 
-- four vehicle archetypes: Compact, Sedan, Muscle, Van
-- distinct body dimensions, acceleration, braking, turn rate, top speed, and HP
-- tire-skid visuals and sound cues
-- collision sparks / impact feedback
-- browser screen shake
-- browser engine and police tones generated with Web Audio
-- Godot event tones generated at runtime with `AudioStreamWAV`
-- mission start / completion / failure banners
-- bottom-center vehicle class / speed / HP HUD
-- no imported or copied game audio assets
+- sixth mission slot in the terminal
+- post-clear moving character target
+- higher target health than ordinary pedestrians
+- proximity-triggered fleeing and gunshot reaction
+- live world/minimap tracking while the target moves
+- 90-second objective timer
+- guaranteed pistol + minimum 16 rounds at mission start
+- target takedown escalates to three wanted heads
+- escape stage completes only after all heat is cleared
+- 5,000 base reward multiplied by the active score multiplier
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, mixed-objective stage, and timers intentionally restart from the latest safe checkpoint.
+Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, target state, mixed-objective stage, and timers intentionally restart from the latest safe checkpoint.
 
 ## IP boundary
 
