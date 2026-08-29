@@ -19,7 +19,7 @@ func _process(_delta: float) -> void:
     if director == null or game == null:
         return
 
-    call_deferred("_tag_build_11")
+    call_deferred("_tag_build_12")
 
     var state := str(director.mission_state)
     var near_phone := not bool(game.in_vehicle) and game.player.global_position.distance_to(director.phone_position) <= 34.0
@@ -45,9 +45,9 @@ func _process(_delta: float) -> void:
     if not menu_open and not dismissed_until_leave:
         _open_menu()
 
-func _tag_build_11() -> void:
+func _tag_build_12() -> void:
     if director != null and director.hud_label != null:
-        director.hud_label.text = director.hud_label.text.replace("BUILD 9", "BUILD 11")
+        director.hud_label.text = director.hud_label.text.replace("BUILD 9", "BUILD 12").replace("BUILD 11", "BUILD 12")
 
 func _build_overlay() -> void:
     var layer := CanvasLayer.new()
@@ -79,18 +79,18 @@ func _populate_menu() -> void:
     panel.anchor_top = 0.5
     panel.anchor_right = 0.5
     panel.anchor_bottom = 0.5
-    panel.offset_left = -285.0
-    panel.offset_top = -220.0
-    panel.offset_right = 285.0
-    panel.offset_bottom = 220.0
+    panel.offset_left = -300.0
+    panel.offset_top = -275.0
+    panel.offset_right = 300.0
+    panel.offset_bottom = 275.0
     panel.color = Color(0.04, 0.055, 0.07, 0.98)
     panel.mouse_filter = Control.MOUSE_FILTER_STOP
     overlay.add_child(panel)
 
     var title := Label.new()
     title.position = Vector2(24, 20)
-    title.size = Vector2(520, 64)
-    title.text = "BUILD 11 — MISSION TERMINAL\nCHOOSE A JOB"
+    title.size = Vector2(550, 64)
+    title.text = "BUILD 12 — MISSION TERMINAL\nCHOOSE A JOB"
     title.add_theme_font_size_override("font_size", 24)
     panel.add_child(title)
 
@@ -100,7 +100,7 @@ func _populate_menu() -> void:
         var mission: Dictionary = director.campaign[i]
         var button := Button.new()
         button.position = Vector2(24, y)
-        button.size = Vector2(520, 66)
+        button.size = Vector2(550, 66)
         var mission_title := str(mission.get("title", "MISSION"))
         var mission_type := str(mission.get("type", "mission"))
         var reward := int(mission.get("base_reward", 0))
@@ -116,9 +116,9 @@ func _populate_menu() -> void:
         y += 76.0
 
     var help := Label.new()
-    help.position = Vector2(24, 340)
-    help.size = Vector2(520, 58)
-    help.text = "1–3: select    Esc: close\nComplete jobs to unlock more."
+    help.position = Vector2(24, 416)
+    help.size = Vector2(550, 64)
+    help.text = "1–4: select    Esc: close\nCROSSTOWN unlocks after clearing the level."
     help.add_theme_font_size_override("font_size", 14)
     panel.add_child(help)
 
@@ -140,6 +140,8 @@ func _type_label(value: String) -> String:
             return "TIMED DESTRUCTION"
         "lose_wanted":
             return "GETAWAY"
+        "checkpoint_run":
+            return "3-STAGE COURIER RUN"
         _:
             return value.to_upper()
 
@@ -151,6 +153,7 @@ func _select_mission(index: int) -> void:
     director.mission_cooldown = 0.0
     director.mission_timer = 0.0
     director.mission_target_vehicle = null
+    director.chain_index = 0
     director._load_current_mission()
     director._save_progress()
     _close_menu(false)
@@ -174,7 +177,7 @@ func _unhandled_input(event: InputEvent) -> void:
         get_viewport().set_input_as_handled()
         _close_menu(true)
         return
-    if key.keycode >= KEY_1 and key.keycode <= KEY_3:
+    if key.keycode >= KEY_1 and key.keycode <= KEY_4:
         var index := int(key.keycode - KEY_1)
         get_viewport().set_input_as_handled()
         _select_mission(index)
