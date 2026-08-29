@@ -39,44 +39,36 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 ## Phase 4 — Mission loop
 
 - [x] Data-driven MissionDirector
-- [x] Phone mission trigger
+- [x] Mission-selection terminal
 - [x] Steal/deliver objective
 - [x] Destroy-target objective
 - [x] Lose-wanted objective
 - [x] Timers and failure states
 - [x] Score + multiplier rewards
-- [x] Three-mission core campaign
-- [x] Mission selection terminal
 - [x] Mission unlock/replay flow
-- [x] Multi-stage objective chaining inside one mission
-- [x] Timed checkpoint-run objective
-- [x] Checkpoint heat escalation
-- [ ] Character target objective
-- [ ] Mixed on-foot + vehicle objective chain
+- [x] Multi-stage checkpoint chaining
+- [x] Mixed vehicle → on-foot → escape objective
+- [ ] Character target/combat objective
+- [ ] More branching mission logic
 
 ## Phase 5 — Full level slice
 
-- [x] City-sector content file (`data/city_sector.json`)
-- [x] 5,200 × 3,400 authored sector
-- [x] Central / Market West / Warehouse Row / Downtown identities
-- [x] Parking lots, alleys, and shortcuts
+- [x] Authored 5,200 × 3,400 city sector
+- [x] District identities, parking lots, alleys, and shortcuts
 - [x] Persistent campaign checkpoint, score, multiplier, best score, and unlock state
 - [x] Level-completion / Downtown unlock flow
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
-- [x] Advanced post-clear mission unlock
-- [ ] Mission briefing/menu polish
+- [x] Post-clear advanced missions
 - [ ] Audio pass
-- [ ] Additional chained missions
+- [ ] HUD/menu visual polish
+- [ ] Broader vehicle/pedestrian variety
+- [ ] Additional mission content
 - [ ] Second authored sector
-
-## Build 12 chained mission rule
-
-`CROSSTOWN` is the first advanced post-clear job. It uses one mission state with several ordered checkpoints rather than separate mission entries. The target vehicle must remain alive, the timer persists across every stage, and the first two checkpoint captures raise wanted heat. Minimap/world navigation advances to the next checkpoint immediately after each capture.
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next campaign mission, best score, and unlock state. Active mission entities, checkpoint stage, and timers intentionally restart from the latest safe mission checkpoint.
+Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, mixed-objective stage, and timers intentionally restart from the latest safe checkpoint.
 
 ## IP boundary
 
