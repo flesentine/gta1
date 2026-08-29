@@ -1,17 +1,17 @@
 [gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/city_build18.gd" id="2_city"]
+[ext_resource type="Script" path="res://scripts/city_build19.gd" id="2_city"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="3_player"]
 [ext_resource type="Script" path="res://scripts/vehicle.gd" id="4_vehicle"]
 [ext_resource type="Script" path="res://scripts/respray_zone.gd" id="5_respray"]
-[ext_resource type="Script" path="res://scripts/mission_director_build18.gd" id="6_mission"]
+[ext_resource type="Script" path="res://scripts/mission_director_build19.gd" id="6_mission"]
 [ext_resource type="Script" path="res://scripts/mission_overlay_build17.gd" id="7_mission_overlay"]
 [ext_resource type="Script" path="res://scripts/sector_population_build18.gd" id="8_sector_population"]
-[ext_resource type="Script" path="res://scripts/mission_terminal_build18.gd" id="9_mission_terminal"]
+[ext_resource type="Script" path="res://scripts/mission_terminal_build19.gd" id="9_mission_terminal"]
 [ext_resource type="Script" path="res://scripts/minimap_build18.gd" id="10_minimap"]
-[ext_resource type="Script" path="res://scripts/polish_build18.gd" id="11_polish"]
-[ext_resource type="Script" path="res://scripts/world_manager_build18.gd" id="12_world_manager"]
+[ext_resource type="Script" path="res://scripts/polish_build19.gd" id="11_polish"]
+[ext_resource type="Script" path="res://scripts/world_manager_build19.gd" id="12_world_manager"]
 
 [sub_resource type="CircleShape2D" id="Circle_player"]
 radius = 14.0
@@ -79,7 +79,7 @@ offset_top = 10.0
 offset_right = 500.0
 offset_bottom = 116.0
 theme_override_font_sizes/font_size = 18
-text = "GTA1 REMAKE PROTOTYPE — BUILD 18"
+text = "GTA1 REMAKE PROTOTYPE — BUILD 19"
 
 [node name="Minimap" type="Control" parent="HUD"]
 layout_mode = 3
@@ -105,4 +105,4 @@ offset_right = 1240.0
 offset_bottom = -18.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.9)
 theme_override_font_sizes/font_size = 16
-text = "WASD / Arrows: move or drive   E: enter/exit   Space/F: fire   M: map   Blue phone: mission terminal   1-8: jobs   R: reset"
+text = "WASD / Arrows: move or drive   E: enter/exit   Space/F: fire   M: map   Blue phone: mission terminal   1-9: jobs   R: reset"
