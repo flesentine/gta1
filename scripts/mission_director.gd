@@ -355,6 +355,7 @@ func _spawn_target_vehicle() -> void:
     mission_target_vehicle = car
 
 func _complete_mission() -> void:
+    var completed_id := str(current_mission.get("id", ""))
     var reward := base_reward * multiplier
     score += reward
     multiplier = mini(multiplier + 1, 5)
@@ -362,8 +363,7 @@ func _complete_mission() -> void:
     mission_timer = 0.0
     chain_index = 0
 
-    campaign_index += 1
-    if campaign_index >= campaign.size():
+    if completed_id == "clean_break":
         var first_clear := not level_complete and score >= level_target_score
         if score >= level_target_score:
             level_complete = true
@@ -375,9 +375,18 @@ func _complete_mission() -> void:
         _save_progress()
         if first_clear:
             _show_unlock_overlay()
-        var target_note := " — LEVEL CLEARED" if level_complete else ""
-        _set_game_message("CAMPAIGN COMPLETE  +%d%s" % [reward, target_note], 4.0)
+        var target_note := " — LEVEL CLEARED" if level_complete else " — REACH %d" % level_target_score
+        _set_game_message("CORE CAMPAIGN COMPLETE  +%d%s" % [reward, target_note], 4.0)
+    elif completed_id == "crosstown":
+        campaign_index = 0
+        _load_current_mission()
+        mission_state = "cooldown"
+        mission_cooldown = 3.0
+        _save_progress()
+        _set_game_message("CROSSTOWN COMPLETE  +%d" % reward, 3.0)
     else:
+        var last_core_index := maxi(campaign.size() - 2, 0)
+        campaign_index = mini(campaign_index + 1, last_core_index)
         _load_current_mission()
         mission_state = "cooldown"
         mission_cooldown = 3.0
