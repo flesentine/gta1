@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/city.gd" id="2_city"]
@@ -8,8 +8,9 @@
 [ext_resource type="Script" path="res://scripts/mission_director_build13.gd" id="6_mission"]
 [ext_resource type="Script" path="res://scripts/mission_overlay_build13.gd" id="7_mission_overlay"]
 [ext_resource type="Script" path="res://scripts/sector_population.gd" id="8_sector_population"]
-[ext_resource type="Script" path="res://scripts/mission_terminal_build13.gd" id="9_mission_terminal"]
+[ext_resource type="Script" path="res://scripts/mission_terminal_build14.gd" id="9_mission_terminal"]
 [ext_resource type="Script" path="res://scripts/minimap_build13.gd" id="10_minimap"]
+[ext_resource type="Script" path="res://scripts/polish_build14.gd" id="11_polish"]
 
 [sub_resource type="CircleShape2D" id="Circle_player"]
 radius = 14.0
@@ -74,12 +75,22 @@ offset_top = 10.0
 offset_right = 500.0
 offset_bottom = 116.0
 theme_override_font_sizes/font_size = 18
-text = "GTA1 REMAKE PROTOTYPE — BUILD 13"
+text = "GTA1 REMAKE PROTOTYPE — BUILD 14"
 
 [node name="Minimap" type="Control" parent="HUD"]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("10_minimap")
+
+[node name="Polish" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_polish")
 
 [node name="Help" type="Label" parent="HUD"]
 anchor_top = 1.0
