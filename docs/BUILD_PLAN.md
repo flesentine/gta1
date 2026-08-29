@@ -25,15 +25,19 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Panic/flee response
 - [x] Expanded-sector traffic and pedestrian population
 - [x] Vehicle health, smoke, fire/burnout state
+- [x] Additional pedestrian visual variety in browser build
 - [x] Mission NPC with proximity/gunshot flee behavior
 - [x] Entity cleanup/despawn rules
 - [x] Replacement traffic after cleanup
 - [x] Traffic spacing / obstruction pacing
 - [x] Civilian pedestrian behavior archetypes
 - [x] Second-sector traffic/pedestrian population
-- [x] Intersection right-of-way / signal phases
-- [ ] Lane offset / lane-change refinement
-- [ ] Police and civilian traffic coordination at intersections
+- [x] Intersection right-of-way / traffic signals
+- [x] Two-lane road offsets
+- [x] Lane-aware following distance
+- [x] Safe adjacent-lane checks and lane-change cooldown
+- [x] Police signal behavior by pursuit level
+- [ ] Turn lanes / dedicated turning pockets
 
 ## Phase 3 — Crime loop
 
@@ -61,8 +65,8 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Moving target → wanted escape chaining
 - [x] Branching mission choice with route-dependent payout/consequences
 - [x] Cross-sector checkpoint mission
-- [x] Harbor-only multi-stop pressure mission
-- [ ] Optional bonus objectives / secondary mission goals
+- [x] Optional bonus objective / secondary mission goal
+- [ ] Multiple optional objectives in one mission
 
 ## Phase 5 — Full level slice
 
@@ -72,7 +76,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Level-completion / Downtown unlock flow
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
-- [x] Six post-clear advanced missions
+- [x] Seven post-clear advanced missions
 - [x] Procedural audio pass
 - [x] HUD / mission-state presentation polish
 - [x] Broader vehicle variety
@@ -82,26 +86,27 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Branching mission logic
 - [x] Second authored sector: Harbor East / Docklands
 - [x] Seamless world-boundary and minimap expansion
-- [x] Additional Harbor East mission content
+- [x] Harbor East mission content
 - [ ] Third authored district/sector
 
-## Build 19 — signals + NIGHT SHIFT
+## Build 20 — lane intelligence + GREEN WAVE
 
-- deterministic 12-second traffic-signal cycle at major road crossings
-- separate horizontal and vertical green phases with short all-red transitions
-- AI looks ahead for the next crossing and progressively brakes on red
-- signal factor combines with Build 16 car-following / spacing logic
-- visible red/green signal indicators in Godot and browser builds
-- intersection system automatically covers both original city and Harbor East road axes
-- NIGHT SHIFT adds mission #9
-- 110-second four-stop route entirely within Harbor East / Docklands
-- first three stops increase police heat
-- 6,500 base reward multiplied by active multiplier
-- mission terminal supports keys 1–9
+- two civilian lane centers instead of shared centerline targets
+- lane-aware traffic following
+- blocked AI can change lanes when the adjacent lane is clear
+- lane changes are suppressed near intersections and rate-limited by cooldown
+- low-level police respect red lights
+- wanted level 3+ police use emergency signal priority
+- GREEN WAVE adds job #10
+- GREEN WAVE has four checkpoints and a 105-second timer
+- base reward 7,000 × multiplier
+- optional +2,500 clean-driving bonus before multiplier
+- red-light violation at speed removes the bonus but does not fail the mission
+- mission terminal uses keys 1–9 and 0
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, target state, mixed-objective stage, and timers intentionally restart from the latest safe checkpoint.
+Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, target state, mixed-objective stage, and timers intentionally restart from the latest safe checkpoint.
 
 ## IP boundary
 
