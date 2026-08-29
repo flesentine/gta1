@@ -32,6 +32,11 @@ func _draw() -> void:
             _draw_target(target.global_position, Color(1.0, 0.28, 0.12, 0.96))
     elif state == "escape":
         _draw_escape(controller.get_escape_target_position())
+    elif state == "chain_steal":
+        if is_instance_valid(target):
+            _draw_target(target.global_position, Color(0.24, 0.95, 0.48, 0.96))
+    elif state == "chain_drive":
+        _draw_checkpoint(controller.get_chain_checkpoint_position())
 
 func _draw_phone(position: Vector2) -> void:
     var pulse := 1.0 + sin(phase) * 0.08
@@ -67,3 +72,9 @@ func _draw_escape(position: Vector2) -> void:
     var pulse := 1.0 + sin(phase * 1.7) * 0.12
     draw_arc(position, 52.0 * pulse, 0.0, TAU, 36, Color(1.0, 0.30, 0.16, 0.72), 4.0, true)
     draw_arc(position, 66.0 * pulse, 0.0, TAU, 36, Color(0.20, 0.55, 1.0, 0.42), 3.0, true)
+
+func _draw_checkpoint(position: Vector2) -> void:
+    var pulse := 1.0 + sin(phase * 1.8) * 0.10
+    draw_circle(position, 62.0 * pulse, Color(0.20, 0.92, 0.92, 0.12), true)
+    draw_arc(position, 55.0 * pulse, 0.0, TAU, 40, Color(0.22, 0.95, 0.95, 0.95), 5.0, true)
+    draw_arc(position, 38.0 * pulse, 0.0, TAU, 32, Color(1.0, 0.90, 0.28, 0.78), 3.0, true)
