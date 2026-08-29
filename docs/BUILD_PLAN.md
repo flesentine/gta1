@@ -13,9 +13,9 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Building/world collision
 - [x] Speed-sensitive camera zoom
 - [x] Authored city roads/buildings loaded from data
-- [ ] Tune vehicle feel further
-- [ ] Broader vehicle-definition variety
-- [ ] Skid/impact feedback
+- [x] Vehicle feel differentiated by class
+- [x] Broader vehicle-definition variety
+- [x] Skid/impact feedback
 
 ## Phase 2 — Living city
 
@@ -25,7 +25,9 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Panic/flee response
 - [x] Expanded-sector traffic and pedestrian population
 - [x] Vehicle health, smoke, fire/burnout state
+- [x] Additional pedestrian visual variety in browser build
 - [ ] Entity pooling/despawn rules
+- [ ] Broader pedestrian behavior/archetypes
 
 ## Phase 3 — Crime loop
 
@@ -35,6 +37,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Arrest/death/respawn
 - [x] Police bribe pickup
 - [x] Respray garage
+- [x] Procedural feedback for gunfire, wanted state, impacts, and escape events
 
 ## Phase 4 — Mission loop
 
@@ -60,11 +63,26 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
 - [x] Post-clear advanced missions
-- [ ] Audio pass
-- [ ] HUD/menu visual polish
-- [ ] Broader vehicle/pedestrian variety
+- [x] Procedural audio pass
+- [x] HUD / mission-state presentation polish
+- [x] Broader vehicle variety
+- [x] Initial pedestrian visual variety
+- [ ] Character-target/combat mission
 - [ ] Additional mission content
 - [ ] Second authored sector
+
+## Build 14 polish layer
+
+- four vehicle archetypes: Compact, Sedan, Muscle, Van
+- distinct body dimensions, acceleration, braking, turn rate, top speed, and HP
+- tire-skid visuals and sound cues
+- collision sparks / impact feedback
+- browser screen shake
+- browser engine and police tones generated with Web Audio
+- Godot event tones generated at runtime with `AudioStreamWAV`
+- mission start / completion / failure banners
+- bottom-center vehicle class / speed / HP HUD
+- no imported or copied game audio assets
 
 ## Persistence rule
 
