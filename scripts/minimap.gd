@@ -124,10 +124,16 @@ func _navigation_info() -> Dictionary:
     var state := str(director.mission_state)
     if state in ["available", "menu", "menu_wait"]:
         return {"label": "MISSION PHONE", "position": director.phone_position}
-    if state in ["steal", "destroy"] and is_instance_valid(director.mission_target_vehicle):
-        return {"label": "TARGET CAR", "position": director.mission_target_vehicle.global_position}
+    if state in ["steal", "destroy", "chain_steal"] and is_instance_valid(director.mission_target_vehicle):
+        var label := "COURIER CAR" if state == "chain_steal" else "TARGET CAR"
+        return {"label": label, "position": director.mission_target_vehicle.global_position}
     if state == "deliver":
         return {"label": "DELIVERY", "position": director.delivery_rect.get_center()}
     if state == "escape":
         return {"label": "RES-PRAY", "position": RESPRAY_RECT.get_center()}
+    if state == "chain_drive":
+        return {
+            "label": "CHECKPOINT %d/%d" % [director.get_chain_checkpoint_number(), director.get_chain_checkpoint_count()],
+            "position": director.get_chain_checkpoint_position()
+        }
     return {}
