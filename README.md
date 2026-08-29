@@ -4,43 +4,39 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 16 — living city + entity cleanup
+## Build 17 — branching mission logic
 
-Build 16 keeps the complete Build 15 city, six missions, four vehicle classes, procedural audio, HUD polish, minimap/navigation, persistent progression, police/wanted loop, combat, traffic, pedestrians, bribes, and respray.
+Build 17 keeps the complete Build 16 living-city systems, entity cleanup, six previous missions, four vehicle classes, procedural audio, HUD polish, minimap/navigation, persistent progression, police/wanted loop, combat, traffic, pedestrians, bribes, and respray.
 
-### Entity cleanup
+### New mission — CROSSROADS
 
-Long-running sessions no longer accumulate every mission car and wreck forever.
+CROSSROADS is the first mission where a player choice changes the remaining objective path.
 
-- completed/failed mission vehicles are retired after a short grace period
-- the active mission vehicle is always protected
-- the player's current vehicle is always protected, even after its mission ends
-- mission cars driven by the player retire only after the player abandons them
-- distant destroyed vehicles retire after a longer delay
-- distant abandoned stolen vehicles eventually retire
-- stale references are removed from the active vehicle list
-- replacement civilian traffic spawns away from the player when traffic density falls below the city floor
+1. steal the marked orange runner car in Central
+2. drive south to the route split
+3. choose **GREEN / QUIET** or **RED / HOT** by driving through one of the two route gates below the speed threshold
+4. the minimap and world markers immediately switch to the selected branch
 
-### Smarter traffic
+#### Green / quiet route
 
-Civilian AI now checks the lane space ahead and changes cruise speed when another vehicle is in front of it. Cars progressively slow as spacing closes instead of simply driving at full cruise speed until collision. Browser traffic also shows brake lights while yielding.
+- deliver the runner to Warehouse Row
+- no extra forced police escalation from the branch
+- mission completes on delivery
+- reward: **4,500 × multiplier**
 
-### Pedestrian archetypes
+#### Red / hot route
 
-Ordinary pedestrians now receive simple behavior profiles:
+- immediately escalate to **3 wanted heads**
+- deliver the runner to a different Downtown lot
+- delivery reasserts the three-head response
+- lose all police heat after the drop to finish
+- reward: **6,500 × multiplier** (4,500 base + 2,000 hot-route bonus)
 
-- **COMMUTER** — faster purposeful walking
-- **CAUTIOUS** — reacts to moving vehicles from farther away
-- **STROLLER** — slower movement with occasional pauses
-- **JOGGER** — fastest normal pedestrian movement
+CROSSROADS has a **105-second** overall timer. Both choice gates are visible simultaneously in the world and on the minimap before the player commits.
 
-Mission targets keep their dedicated mission behavior and are not overwritten by the civilian archetype system.
+### Mission terminal
 
-### Live-city HUD
-
-The bottom vehicle/on-foot strip now identifies Build 16 and shows current live civilian traffic and pedestrian counts.
-
-## Current missions
+Seven jobs are now available across progression:
 
 1. **HOT PROPERTY** — steal + deliver
 2. **SHORT FUSE** — timed destruction
@@ -48,14 +44,26 @@ The bottom vehicle/on-foot strip now identifies Build 16 and shows current live 
 4. **CROSSTOWN** — three-stage courier checkpoint run
 5. **DEAD DROP** — drive + on-foot package pickup + police escape
 6. **RED FLAG** — moving character target + police escape
+7. **CROSSROADS** — branching quiet/hot delivery
 
-The first three form the core level path. Clearing CLEAN BREAK at the score target unlocks CROSSTOWN, DEAD DROP, and RED FLAG. Keys **1–6** select unlocked jobs.
+The first three form the core level path. Clearing CLEAN BREAK at the score target unlocks all four post-clear jobs. Keys **1–7** select unlocked jobs.
+
+### Build 16 living-city systems retained
+
+- completed/failed mission vehicles retire safely instead of accumulating forever
+- active mission and player vehicles are protected from cleanup
+- distant wrecks and abandoned stolen vehicles eventually despawn
+- civilian traffic replenishes away from the player
+- traffic paces vehicles ahead instead of constantly rear-ending them
+- civilian pedestrian archetypes: Commuter, Cautious, Stroller, and Jogger
+- live traffic/pedestrian counts in the lower HUD
 
 ## Validation
 
-- `web/game16.js` passes `node --check`
-- `web/city16_runtime.js` passes `node --check`
-- new Build 16 Godot scripts and scene passed delimiter sanity checks
+- `web/game17.js` passes `node --check`
+- `web/branch17_runtime.js` passes `node --check`
+- Build 17 loader anchor is based on the committed Build 16 runtime chain
+- new Build 17 Godot scripts and scene passed delimiter sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -69,7 +77,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–6** — select an unlocked mission
+- **1–7** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
@@ -97,6 +105,7 @@ The browser build mirrors the clean-room gameplay prototype. The first visit may
 13. Audio/HUD polish + vehicle and pedestrian variety
 14. Character-target/combat mission
 15. Population behavior + entity cleanup
-16. Branching mission logic / second authored sector
+16. Branching mission logic
+17. Second authored sector / stronger intersection behavior
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
