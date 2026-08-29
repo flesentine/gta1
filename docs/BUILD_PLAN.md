@@ -25,14 +25,15 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Panic/flee response
 - [x] Expanded-sector traffic and pedestrian population
 - [x] Vehicle health, smoke, fire/burnout state
-- [x] Additional pedestrian visual variety in browser build
 - [x] Mission NPC with proximity/gunshot flee behavior
 - [x] Entity cleanup/despawn rules
 - [x] Replacement traffic after cleanup
 - [x] Traffic spacing / obstruction pacing
 - [x] Civilian pedestrian behavior archetypes
 - [x] Second-sector traffic/pedestrian population
-- [ ] Intersection right-of-way / lane-change behavior
+- [x] Intersection right-of-way / signal phases
+- [ ] Lane offset / lane-change refinement
+- [ ] Police and civilian traffic coordination at intersections
 
 ## Phase 3 — Crime loop
 
@@ -60,6 +61,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Moving target → wanted escape chaining
 - [x] Branching mission choice with route-dependent payout/consequences
 - [x] Cross-sector checkpoint mission
+- [x] Harbor-only multi-stop pressure mission
 - [ ] Optional bonus objectives / secondary mission goals
 
 ## Phase 5 — Full level slice
@@ -70,7 +72,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Level-completion / Downtown unlock flow
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
-- [x] Five post-clear advanced missions
+- [x] Six post-clear advanced missions
 - [x] Procedural audio pass
 - [x] HUD / mission-state presentation polish
 - [x] Broader vehicle variety
@@ -80,24 +82,22 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Branching mission logic
 - [x] Second authored sector: Harbor East / Docklands
 - [x] Seamless world-boundary and minimap expansion
-- [ ] More Harbor East mission content
+- [x] Additional Harbor East mission content
 - [ ] Third authored district/sector
 
-## Build 18 — Harbor East
+## Build 19 — signals + NIGHT SHIFT
 
-- second sector stored in `data/harbor_east.json`
-- 2,600 × 3,400 eastward expansion
-- 29 building footprints
-- 4 parking lots and 4 service alleys
-- 3 new road axes
-- Harbor East + Docklands identities
-- 4 traffic loops / 10 initial traffic vehicles
-- 15 pedestrian loops
-- traffic cleanup/replenishment extended into the new sector
-- minimap bounds and geometry expand seamlessly
-- EASTBOUND adds an eighth mission and a 95-second three-checkpoint run into the new sector
-- first two EASTBOUND checkpoints add police heat
-- 5,500 base reward multiplied by active multiplier
+- deterministic 12-second traffic-signal cycle at major road crossings
+- separate horizontal and vertical green phases with short all-red transitions
+- AI looks ahead for the next crossing and progressively brakes on red
+- signal factor combines with Build 16 car-following / spacing logic
+- visible red/green signal indicators in Godot and browser builds
+- intersection system automatically covers both original city and Harbor East road axes
+- NIGHT SHIFT adds mission #9
+- 110-second four-stop route entirely within Harbor East / Docklands
+- first three stops increase police heat
+- 6,500 base reward multiplied by active multiplier
+- mission terminal supports keys 1–9
 
 ## Persistence rule
 
