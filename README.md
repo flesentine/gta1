@@ -4,29 +4,43 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 15 — character target + pursuit
+## Build 16 — living city + entity cleanup
 
-Build 15 keeps the complete Build 14 city, vehicle classes, procedural audio, HUD polish, minimap/navigation, persistent progression, police/wanted loop, traffic, pedestrians, bribes, respray, and all five previous missions.
+Build 16 keeps the complete Build 15 city, six missions, four vehicle classes, procedural audio, HUD polish, minimap/navigation, persistent progression, police/wanted loop, combat, traffic, pedestrians, bribes, and respray.
 
-### New mission — RED FLAG
+### Entity cleanup
 
-RED FLAG is the first dedicated character-target mission:
+Long-running sessions no longer accumulate every mission car and wreck forever.
 
-1. select RED FLAG from the mission terminal after clearing the core level
-2. receive a pistol and at least 16 rounds
-3. track the marked red target through a Downtown sidewalk loop
-4. the target begins fleeing when the player gets close and also reacts to gunfire
-5. take down the higher-health target before the 90-second timer expires
-6. immediately face a three-head wanted response
-7. lose all police heat to complete the job
+- completed/failed mission vehicles are retired after a short grace period
+- the active mission vehicle is always protected
+- the player's current vehicle is always protected, even after its mission ends
+- mission cars driven by the player retire only after the player abandons them
+- distant destroyed vehicles retire after a longer delay
+- distant abandoned stolen vehicles eventually retire
+- stale references are removed from the active vehicle list
+- replacement civilian traffic spawns away from the player when traffic density falls below the city floor
 
-RED FLAG has a **90-second** timer and a **5,000 × multiplier** base reward.
+### Smarter traffic
 
-The minimap and world marker track the target while they move, then switch to escape guidance after the target is down.
+Civilian AI now checks the lane space ahead and changes cruise speed when another vehicle is in front of it. Cars progressively slow as spacing closes instead of simply driving at full cruise speed until collision. Browser traffic also shows brake lights while yielding.
 
-### Mission terminal
+### Pedestrian archetypes
 
-Six jobs are now available across progression:
+Ordinary pedestrians now receive simple behavior profiles:
+
+- **COMMUTER** — faster purposeful walking
+- **CAUTIOUS** — reacts to moving vehicles from farther away
+- **STROLLER** — slower movement with occasional pauses
+- **JOGGER** — fastest normal pedestrian movement
+
+Mission targets keep their dedicated mission behavior and are not overwritten by the civilian archetype system.
+
+### Live-city HUD
+
+The bottom vehicle/on-foot strip now identifies Build 16 and shows current live civilian traffic and pedestrian counts.
+
+## Current missions
 
 1. **HOT PROPERTY** — steal + deliver
 2. **SHORT FUSE** — timed destruction
@@ -35,22 +49,13 @@ Six jobs are now available across progression:
 5. **DEAD DROP** — drive + on-foot package pickup + police escape
 6. **RED FLAG** — moving character target + police escape
 
-The first three form the core level path. Clearing CLEAN BREAK at the score target unlocks all three post-clear jobs: CROSSTOWN, DEAD DROP, and RED FLAG. Keys **1–6** select unlocked jobs.
-
-### Build 14 polish retained
-
-- Compact, Sedan, Muscle, and Van vehicle classes
-- class-specific handling, body size, speed, turning, braking, and HP
-- procedural engine/police/event audio
-- skid marks, impact sparks, and browser screen shake
-- bottom-center class/speed/HP HUD
-- stronger mission banners and pedestrian visual variety
+The first three form the core level path. Clearing CLEAN BREAK at the score target unlocks CROSSTOWN, DEAD DROP, and RED FLAG. Keys **1–6** select unlocked jobs.
 
 ## Validation
 
-- `web/game15.js` passes `node --check`
-- `web/mission15_runtime.js` passes `node --check`
-- new Build 15 Godot scripts passed delimiter sanity checks
+- `web/game16.js` passes `node --check`
+- `web/city16_runtime.js` passes `node --check`
+- new Build 16 Godot scripts and scene passed delimiter sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -91,6 +96,7 @@ The browser build mirrors the clean-room gameplay prototype. The first visit may
 12. Mixed vehicle/on-foot mission flow
 13. Audio/HUD polish + vehicle and pedestrian variety
 14. Character-target/combat mission
-15. Deeper population behavior, entity cleanup, and additional mission content
+15. Population behavior + entity cleanup
+16. Branching mission logic / second authored sector
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
