@@ -68,6 +68,13 @@ Browser pedestrians now use several different body proportions, hair treatments,
 
 The first three form the core level path. Clearing CLEAN BREAK at the score target unlocks CROSSTOWN and DEAD DROP. Keys **1–5** select unlocked jobs.
 
+## Validation
+
+- `web/game14.js` passes `node --check`
+- `web/polish14_runtime.js` passes `node --check`
+- Build 14 Godot scripts/scenes passed delimiter sanity checks
+- Godot runtime was not executed in this environment because a Godot binary is not installed
+
 ## Engine
 
 Godot 4.x
