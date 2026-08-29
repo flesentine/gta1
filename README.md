@@ -4,39 +4,45 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 17 — branching mission logic
+## Build 18 — Harbor East expansion
 
-Build 17 keeps the complete Build 16 living-city systems, entity cleanup, six previous missions, four vehicle classes, procedural audio, HUD polish, minimap/navigation, persistent progression, police/wanted loop, combat, traffic, pedestrians, bribes, and respray.
+Build 18 keeps the complete Build 17 city, seven missions, CROSSROADS branching, living-city cleanup, traffic pacing, pedestrian archetypes, four vehicle classes, procedural audio, minimap/navigation, persistent progression, police/wanted loop, combat, bribes, and respray.
 
-### New mission — CROSSROADS
+### Second authored sector — HARBOR EAST
 
-CROSSROADS is the first mission where a player choice changes the remaining objective path.
+The playable world now expands east from the original 5,200 × 3,400 sector into a second authored area stored separately in `data/harbor_east.json`.
 
-1. steal the marked orange runner car in Central
-2. drive south to the route split
-3. choose **GREEN / QUIET** or **RED / HOT** by driving through one of the two route gates below the speed threshold
-4. the minimap and world markers immediately switch to the selected branch
+Harbor East adds:
 
-#### Green / quiet route
+- **29** authored building footprints
+- **4** parking/service lots
+- **4** service alleys
+- **3** new north/south road axes
+- **4** new civilian traffic loops with **10** initial traffic spawns
+- **15** pedestrian loops
+- two local identities: **HARBOR EAST** and **DOCKLANDS**
+- a seamless expanded world boundary; there is no level-loading transition between sectors
+- Harbor traffic routes participate in Build 16 cleanup and replacement-traffic logic
+- the minimap expands to include the complete second sector
 
-- deliver the runner to Warehouse Row
-- no extra forced police escalation from the branch
-- mission completes on delivery
-- reward: **4,500 × multiplier**
+The original horizontal roads continue into Harbor East, creating direct cross-city routes from Market West/Central/Downtown into the new sector.
 
-#### Red / hot route
+### New mission — EASTBOUND
 
-- immediately escalate to **3 wanted heads**
-- deliver the runner to a different Downtown lot
-- delivery reasserts the three-head response
-- lose all police heat after the drop to finish
-- reward: **6,500 × multiplier** (4,500 base + 2,000 hot-route bonus)
+EASTBOUND is post-clear job #8:
 
-CROSSROADS has a **105-second** overall timer. Both choice gates are visible simultaneously in the world and on the minimap before the player commits.
+1. steal the marked blue harbor car near the eastern edge of the original sector
+2. hit the Harbor Gate checkpoint
+3. cross the Container Yard checkpoint
+4. reach the Docklands checkpoint
+5. each of the first two checkpoints adds police heat
+6. finish all three checkpoints before the **95-second** timer expires
 
-### Mission terminal
+Base reward: **5,500 × multiplier**.
 
-Seven jobs are now available across progression:
+The mission terminal now supports keys **1–8**.
+
+## Current missions
 
 1. **HOT PROPERTY** — steal + deliver
 2. **SHORT FUSE** — timed destruction
@@ -44,26 +50,18 @@ Seven jobs are now available across progression:
 4. **CROSSTOWN** — three-stage courier checkpoint run
 5. **DEAD DROP** — drive + on-foot package pickup + police escape
 6. **RED FLAG** — moving character target + police escape
-7. **CROSSROADS** — branching quiet/hot delivery
+7. **CROSSROADS** — choose a quiet or hot branching route
+8. **EASTBOUND** — timed run into Harbor East / Docklands
 
-The first three form the core level path. Clearing CLEAN BREAK at the score target unlocks all four post-clear jobs. Keys **1–7** select unlocked jobs.
-
-### Build 16 living-city systems retained
-
-- completed/failed mission vehicles retire safely instead of accumulating forever
-- active mission and player vehicles are protected from cleanup
-- distant wrecks and abandoned stolen vehicles eventually despawn
-- civilian traffic replenishes away from the player
-- traffic paces vehicles ahead instead of constantly rear-ending them
-- civilian pedestrian archetypes: Commuter, Cautious, Stroller, and Jogger
-- live traffic/pedestrian counts in the lower HUD
+The first three form the core level path. Clearing the core level unlocks the five advanced jobs.
 
 ## Validation
 
-- `web/game17.js` passes `node --check`
-- `web/branch17_runtime.js` passes `node --check`
-- Build 17 loader anchor is based on the committed Build 16 runtime chain
-- new Build 17 Godot scripts and scene passed delimiter sanity checks
+- `data/harbor_east.json` and `data/missions.json` parse cleanly
+- `web/game18.js` passes `node --check`
+- `web/sector18_runtime.js` passes `node --check`
+- the Build 18 loader anchor matches the committed Build 17 runtime chain
+- new Build 18 Godot scripts and scene passed delimiter/structure sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -77,7 +75,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–7** — select an unlocked mission
+- **1–8** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
@@ -106,6 +104,7 @@ The browser build mirrors the clean-room gameplay prototype. The first visit may
 14. Character-target/combat mission
 15. Population behavior + entity cleanup
 16. Branching mission logic
-17. Second authored sector / stronger intersection behavior
+17. Second authored sector / Harbor East expansion
+18. Intersection right-of-way, lane behavior, and additional sector missions
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
