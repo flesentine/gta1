@@ -4,27 +4,61 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 13 — mixed on-foot + vehicle mission
+## Build 14 — audio, handling, and presentation polish
 
-Build 13 keeps the authored city, minimap, mission terminal, persistent progression, police/wanted loop, combat, traffic, pedestrians, bribes, respray, and all four Build 12 jobs.
+Build 14 keeps the complete Build 13 city, five-job mission terminal, minimap/navigation, persistent progression, police/wanted loop, combat, traffic, pedestrians, bribes, respray, CROSSTOWN, and DEAD DROP.
 
-### New mission — DEAD DROP
+### Vehicle classes
 
-DEAD DROP is the first mission that deliberately switches between vehicle and on-foot play:
+Civilian and mission vehicles now rotate through four handling/visual archetypes:
 
-1. steal the marked purple getaway car in Market West
-2. drive it across the city to the purple Downtown drop lot
-3. park below the speed threshold
-4. get out of the car
-5. collect the marked package on foot
-6. immediately take three wanted heads
-7. lose all police heat to complete the job
+- **COMPACT** — smallest, quickest steering, lightest health pool
+- **SEDAN** — balanced baseline
+- **MUSCLE** — fastest acceleration/top speed with heavier steering and more health
+- **VAN** — largest and toughest, but slower and less agile
 
-DEAD DROP has a **110-second** mission timer and a **4,000 × multiplier** base reward.
+Vehicle body size, cabin treatment, acceleration, top speed, braking, turning, and health now differ by class. The lower HUD shows the class, speed, and HP of the current vehicle.
 
-### Mission terminal
+### Driving feedback
 
-Five jobs are now available across progression:
+- visible tire-skid marks during hard high-speed steering
+- collision spark feedback
+- impact screen shake in the browser build
+- speed-sensitive engine tone in the browser build
+- collision and skid sound cues
+- class-specific silhouettes instead of every civilian car sharing the same rectangle
+
+### Procedural audio
+
+Build 14 adds an original procedural audio pass rather than imported audio assets.
+
+Sound cues cover:
+
+- pistol fire
+- pickups and bribes
+- entering/exiting vehicles
+- tire skid
+- vehicle impacts
+- wanted/police alert tone
+- mission start
+- mission completion
+- mission failure / BUSTED / WASTED states
+
+Browser audio activates after the first pointer or keyboard interaction because of normal browser autoplay restrictions.
+
+### HUD / mission presentation
+
+- bottom-center vehicle/on-foot status bar
+- vehicle class, speed, and health readout
+- stronger mission-start, mission-complete, mission-failure, and objective banners
+- Build 14 mission-terminal labeling
+- Build 13's five missions and navigation markers remain unchanged
+
+### Pedestrian variety
+
+Browser pedestrians now use several different body proportions, hair treatments, and skin-tone palettes while retaining their existing panic, roam, and knockdown behavior.
+
+## Current missions
 
 1. **HOT PROPERTY** — steal + deliver
 2. **SHORT FUSE** — timed destruction
@@ -32,11 +66,7 @@ Five jobs are now available across progression:
 4. **CROSSTOWN** — three-stage courier checkpoint run
 5. **DEAD DROP** — drive + on-foot package pickup + police escape
 
-The first three form the core level path. Clearing CLEAN BREAK at the score target unlocks both post-clear jobs, CROSSTOWN and DEAD DROP. Keys **1–5** select unlocked jobs.
-
-### Navigation
-
-The minimap and world markers now advance through DEAD DROP's stages: getaway car → drop lot → package → escape route.
+The first three form the core level path. Clearing CLEAN BREAK at the score target unlocks CROSSTOWN and DEAD DROP. Keys **1–5** select unlocked jobs.
 
 ## Engine
 
@@ -74,6 +104,7 @@ The browser build mirrors the clean-room gameplay prototype. The first visit may
 10. Navigation + mission selection
 11. Chained checkpoint objectives
 12. Mixed vehicle/on-foot mission flow
-13. Audio/HUD polish, vehicle variety, and additional mission content
+13. Audio/HUD polish + vehicle and pedestrian variety
+14. Character-target/combat missions + deeper city population
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
