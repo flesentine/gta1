@@ -31,6 +31,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Replacement traffic after cleanup
 - [x] Traffic spacing / obstruction pacing
 - [x] Civilian pedestrian behavior archetypes
+- [x] Second-sector traffic/pedestrian population
 - [ ] Intersection right-of-way / lane-change behavior
 
 ## Phase 3 — Crime loop
@@ -57,44 +58,50 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Mixed vehicle → on-foot → escape objective
 - [x] Character target/combat objective
 - [x] Moving target → wanted escape chaining
-- [x] Branching mission path with different objectives/rewards
-- [x] Choice-dependent police escalation
-- [ ] More branch combinations and optional objectives
+- [x] Branching mission choice with route-dependent payout/consequences
+- [x] Cross-sector checkpoint mission
+- [ ] Optional bonus objectives / secondary mission goals
 
 ## Phase 5 — Full level slice
 
-- [x] Authored 5,200 × 3,400 city sector
+- [x] Original authored 5,200 × 3,400 city sector
 - [x] District identities, parking lots, alleys, and shortcuts
 - [x] Persistent campaign checkpoint, score, multiplier, best score, and unlock state
 - [x] Level-completion / Downtown unlock flow
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
-- [x] Four post-clear advanced missions
+- [x] Five post-clear advanced missions
 - [x] Procedural audio pass
 - [x] HUD / mission-state presentation polish
 - [x] Broader vehicle variety
 - [x] Civilian pedestrian archetypes
 - [x] Character-target/combat mission
 - [x] Long-session vehicle cleanup and population replenishment
-- [x] Initial branching mission content
-- [ ] Second authored sector
+- [x] Branching mission logic
+- [x] Second authored sector: Harbor East / Docklands
+- [x] Seamless world-boundary and minimap expansion
+- [ ] More Harbor East mission content
+- [ ] Third authored district/sector
 
-## Build 17 — CROSSROADS
+## Build 18 — Harbor East
 
-- seventh mission slot in the mission terminal
-- orange runner vehicle starts in Central
-- 105-second overall timer
-- simultaneous green and red route-choice gates
-- choice gates appear in the world and minimap
-- **quiet branch:** Warehouse Row delivery, 4,500 base reward × multiplier, completes at drop
-- **hot branch:** Downtown delivery, forced three-head wanted response, 2,000 bonus before multiplier, then mandatory escape
-- selected branch changes navigation target, objective text, completion rules, and payout
-- Build 16 entity cleanup protects the active runner and retires it safely after mission completion/failure
-- browser mission-menu click handlers are rebound after Build 16 label rewriting
+- second sector stored in `data/harbor_east.json`
+- 2,600 × 3,400 eastward expansion
+- 29 building footprints
+- 4 parking lots and 4 service alleys
+- 3 new road axes
+- Harbor East + Docklands identities
+- 4 traffic loops / 10 initial traffic vehicles
+- 15 pedestrian loops
+- traffic cleanup/replenishment extended into the new sector
+- minimap bounds and geometry expand seamlessly
+- EASTBOUND adds an eighth mission and a 95-second three-checkpoint run into the new sector
+- first two EASTBOUND checkpoints add police heat
+- 5,500 base reward multiplied by active multiplier
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, branch selection, target state, mixed-objective stage, and timers intentionally restart from the latest safe checkpoint.
+Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, target state, mixed-objective stage, and timers intentionally restart from the latest safe checkpoint.
 
 ## IP boundary
 
