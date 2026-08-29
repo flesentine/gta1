@@ -27,8 +27,11 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Vehicle health, smoke, fire/burnout state
 - [x] Additional pedestrian visual variety in browser build
 - [x] Mission NPC with proximity/gunshot flee behavior
-- [ ] Entity pooling/despawn rules
-- [ ] Broader civilian pedestrian archetypes
+- [x] Entity cleanup/despawn rules
+- [x] Replacement traffic after cleanup
+- [x] Traffic spacing / obstruction pacing
+- [x] Civilian pedestrian behavior archetypes
+- [ ] Intersection right-of-way / lane-change behavior
 
 ## Phase 3 — Crime loop
 
@@ -68,23 +71,22 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Procedural audio pass
 - [x] HUD / mission-state presentation polish
 - [x] Broader vehicle variety
-- [x] Initial pedestrian visual variety
+- [x] Civilian pedestrian archetypes
 - [x] Character-target/combat mission
-- [ ] Additional mission content
+- [x] Long-session vehicle cleanup and population replenishment
+- [ ] Additional branching mission content
 - [ ] Second authored sector
 
-## Build 15 — RED FLAG
+## Build 16 — living city cleanup
 
-- sixth mission slot in the terminal
-- post-clear moving character target
-- higher target health than ordinary pedestrians
-- proximity-triggered fleeing and gunshot reaction
-- live world/minimap tracking while the target moves
-- 90-second objective timer
-- guaranteed pistol + minimum 16 rounds at mission start
-- target takedown escalates to three wanted heads
-- escape stage completes only after all heat is cleared
-- 5,000 base reward multiplied by the active score multiplier
+- active mission/current-player vehicles are protected from cleanup
+- completed or failed mission cars retire after a short grace period
+- distant wrecks and abandoned stolen vehicles eventually retire
+- civilian traffic is replenished away from the player when density drops
+- AI traffic slows progressively for cars ahead instead of driving full-speed into them
+- civilian pedestrians rotate through commuter, cautious, stroller, and jogger profiles
+- strollers occasionally pause while cautious pedestrians react earlier to traffic
+- Build 16 HUD reports live traffic/pedestrian population
 
 ## Persistence rule
 
