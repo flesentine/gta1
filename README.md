@@ -4,38 +4,39 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 11 — navigation + mission terminal
+## Build 12 — chained mission objectives
 
-Build 11 makes the expanded Build 10 city easier to play and turns the blue phone into a mission-selection terminal.
+Build 12 keeps the Build 11 minimap and mission terminal, then adds the first mission with several objectives inside one continuous job.
 
-### Navigation
+### New mission — CROSSTOWN
 
-- live minimap of the authored 5,200 × 3,400 city sector
-- road/building/parking-lot overview
-- player position
-- police positions
-- active mission objective marker
-- objective label + approximate distance
-- **M** toggles the minimap
-- current district remains visible while driving around Central, Market West, Warehouse Row, and Downtown
+CROSSTOWN unlocks after the core level has been cleared.
+
+1. steal the marked green courier car from Downtown
+2. reach checkpoint 1 on the north cross-town road
+3. reach checkpoint 2 in Central
+4. reach checkpoint 3 near Warehouse Row before the 80-second timer expires
+
+The driver must slow below the checkpoint capture speed inside each marker. The first two checkpoints each add police heat, so the route gets progressively more dangerous instead of behaving like three unrelated delivery zones.
+
+CROSSTOWN has a **3,000 point base reward**, which is still multiplied by the current score multiplier.
 
 ### Mission terminal
 
-Walk to the blue phone while on foot to open the mission terminal instead of automatically starting the next job.
+The terminal now supports four jobs:
 
-- **HOT PROPERTY** is available on a fresh save
-- completing it unlocks **SHORT FUSE**
-- further progress unlocks **CLEAN BREAK**
-- cleared saves can replay any mission
-- keyboard shortcuts **1–3** select unlocked missions in the browser/Godot terminal
-- **Esc** closes the selector
-- selecting a mission becomes the new stable progression checkpoint
+1. **HOT PROPERTY** — steal + deliver
+2. **SHORT FUSE** — timed destruction
+3. **CLEAN BREAK** — getaway / clear wanted
+4. **CROSSTOWN** — three-stage courier run
 
-The existing scoring, multiplier, best score, level target, Downtown unlock, police/wanted loop, combat, traffic, pedestrians, bribes, respray, and persistent Build 9 save data are retained.
+Use **1–4** while the terminal is open. CROSSTOWN remains locked until the level-complete state has been earned; cleared saves can replay all four jobs.
 
-### Browser front end
+### Navigation
 
-The no-install browser build now opens with a compact Build 11 city-sector screen showing best score, unlocked mission count, and navigation controls before entering the city.
+The minimap and world markers understand each chained CROSSTOWN stage. The active checkpoint number and distance update automatically when a checkpoint is captured.
+
+The existing 5,200 × 3,400 authored city, district identities, traffic, pedestrians, combat, wanted/police system, BUSTED/WASTED loop, bribes, respray, score, multiplier, best score, persistent checkpoints, and Downtown unlock remain intact.
 
 ## Engine
 
@@ -55,7 +56,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–3** — select an unlocked mission while terminal is open
+- **1–4** — select an unlocked mission while terminal is open
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
@@ -78,6 +79,7 @@ The browser build mirrors the clean-room gameplay prototype. The first visit may
 8. Persistent level progression and unlock state
 9. Authored city sector / content pipeline
 10. Navigation + mission selection/front-end flow
-11. Chained mission objectives, audio, and HUD/menu polish
+11. Multi-stage chained mission objectives
+12. Audio, HUD/menu polish, character-target missions, and additional content
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
