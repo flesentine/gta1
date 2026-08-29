@@ -57,7 +57,9 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Mixed vehicle → on-foot → escape objective
 - [x] Character target/combat objective
 - [x] Moving target → wanted escape chaining
-- [ ] More branching mission logic
+- [x] Branching mission path with different objectives/rewards
+- [x] Choice-dependent police escalation
+- [ ] More branch combinations and optional objectives
 
 ## Phase 5 — Full level slice
 
@@ -67,30 +69,32 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Level-completion / Downtown unlock flow
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
-- [x] Three post-clear advanced missions
+- [x] Four post-clear advanced missions
 - [x] Procedural audio pass
 - [x] HUD / mission-state presentation polish
 - [x] Broader vehicle variety
 - [x] Civilian pedestrian archetypes
 - [x] Character-target/combat mission
 - [x] Long-session vehicle cleanup and population replenishment
-- [ ] Additional branching mission content
+- [x] Initial branching mission content
 - [ ] Second authored sector
 
-## Build 16 — living city cleanup
+## Build 17 — CROSSROADS
 
-- active mission/current-player vehicles are protected from cleanup
-- completed or failed mission cars retire after a short grace period
-- distant wrecks and abandoned stolen vehicles eventually retire
-- civilian traffic is replenished away from the player when density drops
-- AI traffic slows progressively for cars ahead instead of driving full-speed into them
-- civilian pedestrians rotate through commuter, cautious, stroller, and jogger profiles
-- strollers occasionally pause while cautious pedestrians react earlier to traffic
-- Build 16 HUD reports live traffic/pedestrian population
+- seventh mission slot in the mission terminal
+- orange runner vehicle starts in Central
+- 105-second overall timer
+- simultaneous green and red route-choice gates
+- choice gates appear in the world and minimap
+- **quiet branch:** Warehouse Row delivery, 4,500 base reward × multiplier, completes at drop
+- **hot branch:** Downtown delivery, forced three-head wanted response, 2,000 bonus before multiplier, then mandatory escape
+- selected branch changes navigation target, objective text, completion rules, and payout
+- Build 16 entity cleanup protects the active runner and retires it safely after mission completion/failure
+- browser mission-menu click handlers are rebound after Build 16 label rewriting
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, target state, mixed-objective stage, and timers intentionally restart from the latest safe checkpoint.
+Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, branch selection, target state, mixed-objective stage, and timers intentionally restart from the latest safe checkpoint.
 
 ## IP boundary
 
