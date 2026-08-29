@@ -45,11 +45,14 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Lose-wanted objective
 - [x] Timers and failure states
 - [x] Score + multiplier rewards
-- [x] Three-mission campaign
+- [x] Three-mission core campaign
 - [x] Mission selection terminal
 - [x] Mission unlock/replay flow
+- [x] Multi-stage objective chaining inside one mission
+- [x] Timed checkpoint-run objective
+- [x] Checkpoint heat escalation
 - [ ] Character target objective
-- [ ] Multi-stage objective chaining inside one mission
+- [ ] Mixed on-foot + vehicle objective chain
 
 ## Phase 5 — Full level slice
 
@@ -61,14 +64,19 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Level-completion / Downtown unlock flow
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
+- [x] Advanced post-clear mission unlock
 - [ ] Mission briefing/menu polish
 - [ ] Audio pass
 - [ ] Additional chained missions
 - [ ] Second authored sector
 
+## Build 12 chained mission rule
+
+`CROSSTOWN` is the first advanced post-clear job. It uses one mission state with several ordered checkpoints rather than separate mission entries. The target vehicle must remain alive, the timer persists across every stage, and the first two checkpoint captures raise wanted heat. Minimap/world navigation advances to the next checkpoint immediately after each capture.
+
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next campaign mission, best score, and unlock state. Active mission entities and timers intentionally restart from the latest safe checkpoint.
+Only stable progression is saved: score, multiplier, selected/next campaign mission, best score, and unlock state. Active mission entities, checkpoint stage, and timers intentionally restart from the latest safe mission checkpoint.
 
 ## IP boundary
 
