@@ -4,50 +4,43 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 12 — chained mission objectives
+## Build 13 — mixed on-foot + vehicle mission
 
-Build 12 keeps the Build 11 minimap and mission terminal, then adds the first mission with several objectives inside one continuous job.
+Build 13 keeps the authored city, minimap, mission terminal, persistent progression, police/wanted loop, combat, traffic, pedestrians, bribes, respray, and all four Build 12 jobs.
 
-### New mission — CROSSTOWN
+### New mission — DEAD DROP
 
-CROSSTOWN unlocks after the core level has been cleared.
+DEAD DROP is the first mission that deliberately switches between vehicle and on-foot play:
 
-1. steal the marked green courier car from Downtown
-2. reach checkpoint 1 on the north cross-town road
-3. reach checkpoint 2 in Central
-4. reach checkpoint 3 near Warehouse Row before the 80-second timer expires
+1. steal the marked purple getaway car in Market West
+2. drive it across the city to the purple Downtown drop lot
+3. park below the speed threshold
+4. get out of the car
+5. collect the marked package on foot
+6. immediately take three wanted heads
+7. lose all police heat to complete the job
 
-The driver must slow below the checkpoint capture speed inside each marker. The first two checkpoints each add police heat, so the route gets progressively more dangerous instead of behaving like three unrelated delivery zones.
-
-CROSSTOWN has a **3,000 point base reward**, which is still multiplied by the current score multiplier.
+DEAD DROP has a **110-second** mission timer and a **4,000 × multiplier** base reward.
 
 ### Mission terminal
 
-The terminal now supports four jobs:
+Five jobs are now available across progression:
 
 1. **HOT PROPERTY** — steal + deliver
 2. **SHORT FUSE** — timed destruction
-3. **CLEAN BREAK** — getaway / clear wanted
-4. **CROSSTOWN** — three-stage courier run
+3. **CLEAN BREAK** — getaway / clear heat
+4. **CROSSTOWN** — three-stage courier checkpoint run
+5. **DEAD DROP** — drive + on-foot package pickup + police escape
 
-Use **1–4** while the terminal is open. CROSSTOWN remains locked until the level-complete state has been earned; cleared saves can replay all four jobs.
+The first three form the core level path. Clearing CLEAN BREAK at the score target unlocks both post-clear jobs, CROSSTOWN and DEAD DROP. Keys **1–5** select unlocked jobs.
 
 ### Navigation
 
-The minimap and world markers understand each chained CROSSTOWN stage. The active checkpoint number and distance update automatically when a checkpoint is captured.
-
-The existing 5,200 × 3,400 authored city, district identities, traffic, pedestrians, combat, wanted/police system, BUSTED/WASTED loop, bribes, respray, score, multiplier, best score, persistent checkpoints, and Downtown unlock remain intact.
+The minimap and world markers now advance through DEAD DROP's stages: getaway car → drop lot → package → escape route.
 
 ## Engine
 
 Godot 4.x
-
-## Run locally
-
-1. Install Godot 4.x.
-2. Clone this repository.
-3. Open `project.godot`.
-4. Press **F6/F5**.
 
 ## Controls
 
@@ -56,7 +49,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–4** — select an unlocked mission while terminal is open
+- **1–5** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
@@ -76,10 +69,11 @@ The browser build mirrors the clean-room gameplay prototype. The first visit may
 5. Arrest/death + escape tools
 6. Mission state machine
 7. Mini campaign, scoring, timer objectives
-8. Persistent level progression and unlock state
+8. Persistent progression and unlocks
 9. Authored city sector / content pipeline
-10. Navigation + mission selection/front-end flow
-11. Multi-stage chained mission objectives
-12. Audio, HUD/menu polish, character-target missions, and additional content
+10. Navigation + mission selection
+11. Chained checkpoint objectives
+12. Mixed vehicle/on-foot mission flow
+13. Audio/HUD polish, vehicle variety, and additional mission content
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
