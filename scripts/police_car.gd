@@ -10,6 +10,7 @@ var forward_speed := 0.0
 var pursuit_level := 1
 var siren_phase := 0.0
 var stuck_time := 0.0
+var signal_speed_factor := 1.0
 
 func _ready() -> void:
     add_to_group("police")
@@ -23,10 +24,14 @@ func configure(spawn_position: Vector2, new_target: Node2D, level: int) -> void:
     max_speed = 350.0 + float(pursuit_level) * 38.0
     acceleration = 520.0 + float(pursuit_level) * 55.0
     forward_speed = max_speed * 0.42
+    signal_speed_factor = 1.0
     queue_redraw()
 
 func set_target(new_target: Node2D) -> void:
     target = new_target
+
+func set_signal_speed_factor(value: float) -> void:
+    signal_speed_factor = clamp(value, 0.06, 1.0)
 
 func get_forward_speed_abs() -> float:
     return abs(forward_speed)
@@ -51,9 +56,9 @@ func _physics_process(delta: float) -> void:
         var desired_rotation := to_target.normalized().angle() + PI * 0.5
         var angle_error := wrapf(desired_rotation - rotation, -PI, PI)
         var slowdown := clamp(1.0 - abs(angle_error) / 2.4, 0.42, 1.0)
-        var chase_speed := max_speed * slowdown
+        var chase_speed := max_speed * slowdown * signal_speed_factor
         if to_target.length() < ram_distance:
-            chase_speed = max_speed
+            chase_speed = max_speed * max(signal_speed_factor, 0.65)
         forward_speed = move_toward(forward_speed, chase_speed, acceleration * delta)
         rotation = rotate_toward(rotation, desired_rotation, turn_rate * delta)
 
