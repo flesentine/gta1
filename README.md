@@ -4,36 +4,45 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 19 — traffic signals + Harbor content
+## Build 20 — lane intelligence + optional objectives
 
-Build 19 keeps the complete Build 18 two-sector city, Harbor East/Docklands expansion, eight previous missions, CROSSROADS branching, living-city cleanup, pedestrian archetypes, four vehicle classes, procedural audio, minimap/navigation, persistent progression, police/wanted loop, combat, bribes, and respray.
+Build 20 keeps the complete two-sector Build 19 world, traffic signals, Harbor East / Docklands, living-city cleanup, pedestrian archetypes, vehicle classes, procedural audio, minimap/navigation, persistent progression, police/wanted loop, combat, bribes, respray, branching missions, and all nine previous jobs.
 
-### Intersection right-of-way
+### Two-lane civilian traffic
 
-Civilian traffic now combines Build 16 vehicle-spacing behavior with intersection signal control.
+Civilian traffic now uses actual lane offsets instead of every car targeting the same road centerline.
 
-- major road crossings receive deterministic alternating signal phases
-- east/west traffic and north/south traffic get separate green windows
-- short all-red transition windows reduce opposing traffic entering together
-- AI detects the next intersection ahead and progressively slows toward a red signal
-- close cars can nearly stop at the line instead of driving through the crossing
-- the existing car-ahead spacing factor remains active at the same time
-- visible red/green signal indicators are drawn at nearby intersections
-- the same logic operates in the original city and Harbor East because it uses the shared road axes
+- AI cars alternate between two lane centers
+- car-following checks traffic in the same lane instead of braking for vehicles beside it
+- blocked traffic can request a lane change
+- a lane change only starts when adjacent space is clear
+- cars avoid starting lane changes close to intersections
+- lane changes use a cooldown to prevent constant weaving
+- Build 19 red-light behavior remains active at the same time
 
-### New mission — NIGHT SHIFT
+### Police + traffic signals
 
-NIGHT SHIFT is post-clear job #9 and stays entirely inside Harbor East / Docklands:
+Police now coordinate with the signal system.
 
-1. steal the marked yellow dock van in Harbor East
-2. hit four ordered dock stops
-3. slow below **115** to register each stop
-4. the first three completed stops add police heat
-5. finish the route before the **110-second** timer expires
+- at wanted levels **1–2**, police reduce speed for red lights
+- at wanted levels **3–4**, pursuit switches to emergency priority and ignores traffic signals
+- this keeps low-level pursuit more believable without making high-level chases too easy
 
-Base reward: **6,500 × multiplier**.
+### New mission — GREEN WAVE
 
-The mission terminal now supports keys **1–9**.
+GREEN WAVE is post-clear job #10 and introduces the first optional mission bonus.
+
+1. steal the marked green courier in Harbor East
+2. hit four ordered checkpoints before the **105-second** timer expires
+3. the mission can always be completed normally
+4. the optional clean-driving bonus remains active as long as you do not blast through a red signal at speed
+5. a red-light violation permanently removes the bonus for that run
+
+Base reward: **7,000 × multiplier**.
+
+Clean-driving bonus: **+2,500 before multiplier**.
+
+The mission terminal now supports **1–9 and 0** for job #10.
 
 ## Current missions
 
@@ -45,17 +54,18 @@ The mission terminal now supports keys **1–9**.
 6. **RED FLAG** — moving character target + police escape
 7. **CROSSROADS** — choose a quiet or hot branching route
 8. **EASTBOUND** — timed run into Harbor East / Docklands
-9. **NIGHT SHIFT** — four-stop Harbor East / Docklands pressure run
+9. **NIGHT SHIFT** — four-stop Docklands pressure run
+10. **GREEN WAVE** — signal-aware checkpoint run with optional clean bonus
 
-The first three form the core level path. Clearing the core level unlocks the six advanced jobs.
+The first three form the core level path. Clearing the core level unlocks the seven advanced jobs.
 
 ## Validation
 
-- `data/missions.json` parses cleanly with nine missions
-- `web/game19.js` passes `node --check`
-- `web/traffic19_runtime.js` passes `node --check`
-- the Build 19 loader anchor matches the committed Build 18 runtime chain
-- new Build 19 Godot scripts and scene passed delimiter/structure sanity checks
+- `data/missions.json` parses cleanly with ten missions
+- `web/game20.js` passes `node --check`
+- `web/traffic20_runtime.js` passes `node --check`
+- Build 20 loader anchor targets the committed Build 19 runtime chain
+- Build 20 Godot scripts and scene pass structural/delimiter sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -69,7 +79,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–9** — select an unlocked mission
+- **1–9 / 0** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
@@ -100,6 +110,6 @@ The browser build mirrors the clean-room gameplay prototype. The first visit may
 16. Branching mission logic
 17. Second authored sector / Harbor East expansion
 18. Intersection right-of-way + additional Harbor mission
-19. Optional objectives, lane refinement, and deeper police/traffic interaction
+19. Lane intelligence, police signal behavior, optional mission objectives
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
