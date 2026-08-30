@@ -4,53 +4,37 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 23 — movement conflict matrix + predictive pursuit
+## Build 24 — coordinated pursuit + TWIN STRIKE
 
-Build 23 keeps the complete two-sector world, Harbor East / Docklands, traffic signals, two-lane traffic, turn pockets, smooth turn arcs, mission systems, police/wanted loop, vehicle classes, pedestrian archetypes, procedural audio, minimap/navigation, persistence, branching missions, optional bonuses, cleanup/repopulation, combat, bribes, respray, and all twelve jobs.
+Build 24 keeps the complete two-sector world, Harbor East / Docklands, traffic signals, two-lane traffic, turn pockets, smooth turn arcs, movement-aware intersection reservations, predictive pursuit, HOT SWAP recovery, vehicle classes, pedestrian archetypes, procedural audio, minimap/navigation, persistence, branching missions, optional bonuses, cleanup/repopulation, combat, bribes, respray, and all prior jobs.
 
-### Per-movement intersection conflicts
+### Coordinated police tactics
 
-Build 22's one-car-per-junction reservation has been replaced by a movement-aware reservation layer.
+High-heat police now coordinate instead of all aiming at the same intercept point:
 
-- reservations identify approach direction plus straight / left / right movement
-- compatible movements can reserve the same intersection simultaneously
-- opposing straight-through movements are allowed together
-- compatible right-turn combinations can proceed together
-- conflicting movements still hold outside the junction
-- signal stopping and same-lane spacing remain active
-- nearby active movement reservations show cyan feedback in the browser
+- pursuit units rotate through **CHASE**, **FLANK A**, and **FLANK B** roles
+- flank units target lateral intercept positions around the predicted player path
+- Build 23 predictive targeting and multi-hop street routing remain active
+- wanted level 3+ can deploy a temporary two-car roadblock ahead of the predicted route
+- roadblocks expire automatically and clear when heat drops below three heads
+- browser roadblocks are physical collision zones; Godot roadblocks are parked collision-enabled vehicle bodies
+- HUD shows when a roadblock is active
 
-### Predictive police interception
+### New mission — TWIN STRIKE
 
-Police no longer route only toward the player's current coordinates.
+TWIN STRIKE is post-clear job #13 and the first choose-order mission.
 
-- cruisers estimate a short future intercept point from the player's motion
-- prediction lead increases during higher wanted levels
-- block routing targets the predicted intercept rather than the stale current position
-- multi-hop street-grid routing from Build 22 remains active
-- close wanted-level 3–4 pursuit still switches to aggressive direct interception
+1. steal the orange runner
+2. clear the **West Cache** and **Harbor Cache** in either order
+3. both objectives remain marked until completed
+4. each cache adds police pressure
+5. after both caches are cleared, the player is pushed to at least three wanted heads
+6. lose all heat
+7. return the same runner to the Downtown safehouse
 
-### HOT SWAP recovery checkpoint
+Timer: **140 seconds**.
 
-HOT SWAP remains the seven-stage job introduced in Build 22, but parking in the handoff lot now arms one late-run recovery checkpoint.
-
-- checkpoint arms when the courier reaches the handoff/package stage
-- one late failure can restore the player to the package handoff instead of restarting the whole mission
-- recovery clears police heat, removes the failed escape car, and restores the package stage
-- recovery restarts the late run with at least **70 seconds** remaining
-- losing a life still causes the normal full mission failure
-- the HUD reports **RECOVERY READY** or **RECOVERY USED**
-
-### Browser runtime reliability
-
-Build 23 also repairs a latent browser-module scope issue. Builds 14–22 loaded runtime layers through separate strict-mode `eval()` calls, which meant helper declarations were not guaranteed to be visible to later modules. Build 23 now:
-
-1. boots from the stable Build 14 injector
-2. preloads Harbor East data
-3. fetches the Build 14→23 runtime modules in order
-4. evaluates the ordered module bundle once so their build-suffixed helpers share one runtime scope
-
-Pinned older builds remain unchanged.
+Base reward: **10,500 × multiplier**.
 
 ## Current missions
 
@@ -66,16 +50,21 @@ Pinned older builds remain unchanged.
 10. **GREEN WAVE** — signal-aware checkpoint run with optional clean bonus
 11. **PERFECT LINE** — courier run with two independent bonuses
 12. **HOT SWAP** — seven-stage courier / package / escape-car chain with one handoff recovery
+13. **TWIN STRIKE** — two caches in either order, police escape, runner return
 
-The first three form the core level path. Clearing the core level unlocks the nine advanced jobs.
+The first three form the core level path. Clearing the core level unlocks the ten advanced jobs.
+
+## Browser runtime
+
+Build 23 replaced the fragile separated runtime eval chain with an ordered shared-scope bundle. Build 24 extends that bundle through `traffic24_runtime.js`, so the build-specific traffic and police helpers intentionally share one scope while pinned older builds remain unchanged.
 
 ## Validation
 
-- `web/game23.js` passes `node --check`
-- `web/runtime23_bundle.js` passes `node --check`
-- `web/traffic23_runtime.js` passes `node --check`
-- Build 23 bootstrap explicitly replaces the Build 14 runtime injection with the ordered Build 23 bundle
-- new Build 23 Godot scripts passed delimiter/structure sanity checks
+- `data/missions.json` contains thirteen missions and parses as JSON
+- `web/game24.js` passes `node --check`
+- `web/runtime24_bundle.js` passes `node --check`
+- `web/traffic24_runtime.js` passes `node --check`
+- Build 24 Godot scripts and scene passed delimiter/structure sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -89,7 +78,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–9 / 0 / - / =** — select an unlocked mission
+- **1–9 / 0 / - / = / ]** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
