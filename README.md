@@ -4,41 +4,37 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 25 — WEST RIDGE + AIRMAIL
+## Build 26 — spike strips + level-4 box pursuit
 
-Build 25 keeps the complete Build 24 traffic, police, mission, persistence, audio, combat, minimap, vehicle-class, pedestrian, cleanup, branching, bonus, recovery, parallel-objective, and roadblock systems, then expands the world west with a third authored sector.
+Build 26 keeps the full three-sector Build 25 world: the original city, Harbor East / Docklands, and West Ridge / Airfield. Traffic signals, two-lane traffic, turn pockets, movement-aware intersection reservations, coordinated police, roadblocks, vehicle classes, pedestrian archetypes, procedural audio, minimap/navigation, persistence, branching missions, optional bonuses, mission recovery, cleanup/repopulation, combat, bribes, and respray are retained.
 
-### Third authored sector — WEST RIDGE / AIRFIELD
+### Level-4 pursuit escalation
 
-The seamless city now spans roughly **10,800 × 3,400** world units from West Ridge through the original city to Harbor East.
+Wanted level 4 now changes police tactics instead of only increasing pursuit pressure:
 
-West Ridge adds:
+- temporary spike strips deploy ahead of the player's predicted route
+- crossing a strip damages one or two tires depending on speed
+- tire damage persists on that vehicle and progressively reduces top speed, acceleration, braking, and steering authority
+- vehicles with multiple damaged tires develop high-speed steering wobble
+- the HUD shows tire damage from 0/4 to 4/4
+- level-4 police switch from CHASE / FLANK roles to **BOX FRONT / BOX LEFT / BOX RIGHT / BOX REAR**
+- box units tighten around a slower target and spread farther ahead around a faster target
+- Build 24 two-car roadblocks remain active, so level 4 can combine roadblocks, spike strips, predictive pursuit, and box-in units
 
-- **29** authored building footprints
-- **4** parking/service lots
-- **4** service alleys
-- **3** new major vertical road axes
-- **4** traffic loops
-- **10** initial civilian traffic spawns
-- **15** pedestrian loops
-- a southwest **AIRFIELD** district with runway markings
-- seamless road, collision, district-label, minimap, signal, lane, turn-pocket, intersection-reservation, police-routing, and roadblock coverage
+### New mission — LOCKDOWN
 
-Build 25 also extends the long-session traffic manager so replacement traffic can use the original city, Harbor East, **and West Ridge** route graphs.
+LOCKDOWN is post-clear job #15 and is built around the new level-4 systems.
 
-### New mission — AIRMAIL
+1. steal the black West Ridge runner
+2. wanted level rises to two heads
+3. clear three West Ridge / Airfield gates while police pressure increases
+4. clearing the final gate forces wanted level 4
+5. survive spike strips, roadblocks, and box-in pursuit until the heat is gone
+6. return the same runner to the Airfield service lot
 
-AIRMAIL is post-clear job #14 and the first mission deliberately built around the full three-sector width.
+Timer: **165 seconds**.
 
-1. steal the white courier in Harbor East
-2. cross four gated checkpoints through Harbor East, Downtown/Central, and West Ridge
-3. police pressure rises during the cross-city run
-4. keep the same courier alive
-5. deliver it to the West Ridge Airfield
-
-Timer: **150 seconds**.
-
-Base reward: **11,500 × multiplier**.
+Base reward: **12,500 × multiplier**.
 
 ## Current missions
 
@@ -55,22 +51,22 @@ Base reward: **11,500 × multiplier**.
 11. **PERFECT LINE** — courier run with two independent bonuses
 12. **HOT SWAP** — seven-stage courier / package / escape-car chain with one handoff recovery
 13. **TWIN STRIKE** — two caches in either order, police escape, runner return
-14. **AIRMAIL** — Harbor East-to-West Ridge full-city courier run
+14. **AIRMAIL** — full three-sector Harbor East → West Ridge airfield run
+15. **LOCKDOWN** — West Ridge level-4 pursuit with spike strips and box units
 
-The first three form the core level path. Clearing the core level unlocks the eleven advanced jobs.
+The first three form the core level path. Clearing the core level unlocks the twelve advanced jobs.
 
 ## Browser runtime
 
-Build 23 replaced the fragile separated runtime eval chain with an ordered shared-scope bundle. Build 25 extends that bundle through `sector25_runtime.js`. The Build 25 loader also preloads `west_ridge.json` before the runtime bundle executes so the western world boundary, roads, collisions, population, and mission content arrive atomically.
+Build 23 replaced the fragile separated runtime-eval chain with one ordered shared-scope runtime bundle. Build 26 extends that bundle through `traffic26_runtime.js`; pinned older builds remain unchanged.
 
 ## Validation
 
-- `data/west_ridge.json` parses as JSON
-- `data/missions.json` contains fourteen missions and parses as JSON
-- `web/game25.js` passes `node --check`
-- `web/runtime25_bundle.js` passes `node --check`
-- `web/sector25_runtime.js` passes `node --check`
-- Build 25 Godot scripts and scene passed delimiter/structure sanity checks
+- `data/missions.json` contains fifteen missions and parses as JSON
+- `web/game26.js` passes `node --check`
+- `web/runtime26_bundle.js` passes `node --check`
+- `web/traffic26_runtime.js` passes `node --check`
+- new Build 26 Godot scripts and scene passed delimiter/structure sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -84,7 +80,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–9 / 0 / - / = / ] / [** — select an unlocked mission
+- **1–9 / 0 / - / = / ] / [ / \\** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
