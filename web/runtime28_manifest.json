@@ -3,7 +3,9 @@
   "core": "game8.js",
   "mode": "flat-shared-scope",
   "modules": [
-    "core28_runtime.js",
+    "core28_data_runtime.js",
+    "core28_ui_runtime.js",
+    "core28_missions_runtime.js",
     "polish14_runtime.js",
     "mission15_runtime.js",
     "city16_runtime.js",
@@ -18,6 +20,7 @@
     "sector25_runtime.js",
     "traffic26_runtime.js",
     "combat27_runtime.js",
-    "combat28_runtime.js"
+    "combat28_weapons_runtime.js",
+    "combat28_mission_runtime.js"
   ]
 }
