@@ -4,38 +4,68 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 27 — shotgun combat + direct manifest boot
+## Build 28 — flat browser core + SMG + THREE FRONTS
 
-Build 27 keeps the full three-sector world (original city, Harbor East / Docklands, and West Ridge / Airfield), Build 26 tire damage / spike strips / box pursuit, coordinated police, traffic simulation, mission recovery, branching objectives, vehicle classes, procedural audio, minimap/navigation, persistence, cleanup/repopulation, bribes, and respray.
+Build 28 keeps the complete three-sector world from Builds 25–27: the original city, Harbor East / Docklands, and West Ridge / Airfield. Vehicle classes, traffic signals, movement-aware intersections, coordinated police, roadblocks, spike strips, tire damage, BOX pursuit, pedestrian behavior, procedural audio, persistence, minimap/navigation, mission recovery, branching missions, bonuses, pistol combat, shotgun combat, and all previous missions remain available.
 
-### Shotgun combat
+### Browser core flattening
 
-The pistol is no longer the only weapon:
+Build 28 removes the nested browser bootstrap chain from the live build.
 
-- **Q** switches between pistol and shotgun when both are owned
-- shotgun uses **6 pellets per blast**
-- short effective range with a wide spread
-- slower 0.72-second firing cadence
-- one blast can hit multiple targets
-- vehicle pellet damage is capped per blast
-- shotgun and shell pickups are placed around West Ridge / Airfield
-- nearby pedestrians react to the louder blast
-- weapon and shell count are shown in the HUD
+The browser now boots from:
 
-### New mission — RUNWAY RAID
+1. `game8.js` as the small raw engine core
+2. authored city / Harbor East / West Ridge / mission JSON data
+3. `runtime28_manifest.json`
+4. one flattened, ordered runtime source containing explicit Build 28 core modules plus Builds 14–28
 
-RUNWAY RAID is post-clear job #16 and the first mission built specifically around the shotgun.
+`game14.js`, `game13.js`, `game12.js`, and the other historical loaders remain in the repository only so pinned older builds still work. Build 28 does **not** execute them.
 
-1. reach the Airfield armory on foot
-2. acquire the shotgun and mission shells
-3. clear three marked West Ridge / Airfield targets in any order
-4. each target is tougher than a normal pedestrian
-5. clearing all three forces wanted level 4
-6. survive spike strips, roadblocks, predictive box units, and lose all heat
+The Build 28 runtime bundler also removes each known runtime module's outer guard block before the modules are joined. That means build-suffixed `let`, `const`, and function helpers now actually share one lexical runtime scope. The final flattened source is syntax-checked with `new Function(...)` before execution.
 
-Timer: **150 seconds**.
+`core28_data_runtime.js`, `core28_ui_runtime.js`, and `core28_missions_runtime.js` replace the old Build 9–13 string-patch layer with explicit code for:
 
-Base reward: **13,500 × multiplier**.
+- authored base city data
+- save/load progression
+- level unlock overlay
+- mission terminal
+- minimap/navigation
+- CROSSTOWN chained checkpoints
+- DEAD DROP mixed vehicle/on-foot flow
+
+### Third weapon — SMG
+
+Build 28 adds an original compact SMG archetype:
+
+- Q cycles among every owned weapon
+- three-round burst per trigger
+- 520-unit effective range
+- tight three-ray spread
+- one damage per bullet against pedestrians/mission targets
+- vehicle damage capped to one point per burst
+- 0.22-second trigger cadence
+- stronger nearby pedestrian suppression/panic than the pistol
+- dedicated SMG and ammo pickups in Harbor East
+- browser and Godot HUDs show current weapon/ammo
+
+The shotgun remains the high-damage short-range option while the pistol remains the precise single-shot baseline.
+
+### New mission — THREE FRONTS
+
+THREE FRONTS is post-clear job #17 and is the first combat mission deliberately sequenced across all three sectors.
+
+1. travel to the Harbor East armory
+2. receive the SMG and 90 rounds
+3. clear the Harbor target
+4. cross the city and clear the Central target
+5. cross into West Ridge and clear the final target
+6. police pressure increases as each front falls
+7. the third target forces wanted level 4
+8. lose all heat to complete the job
+
+Timer: **190 seconds**.
+
+Base reward: **15,000 × multiplier**.
 
 ## Current missions
 
@@ -54,32 +84,21 @@ Base reward: **13,500 × multiplier**.
 13. **TWIN STRIKE** — two caches in either order, police escape, runner return
 14. **AIRMAIL** — full three-sector Harbor East → West Ridge airfield run
 15. **LOCKDOWN** — West Ridge level-4 pursuit with spike strips and box units
-16. **RUNWAY RAID** — shotgun armory, three combat targets, level-4 escape
+16. **RUNWAY RAID** — shotgun combat sweep + four-head escape
+17. **THREE FRONTS** — SMG combat sequenced Harbor → Central → West Ridge + four-head escape
 
-The first three form the core level path. Clearing the core level unlocks the thirteen advanced jobs.
-
-## Browser runtime
-
-Build 27 begins the browser-bootstrap cleanup.
-
-Instead of loading Build 26 → Build 25 → Build 24 to discover the latest runtime, `game27.js` now:
-
-1. loads the stable Build 14 core bootstrap directly
-2. preloads Harbor East and West Ridge data
-3. loads `runtime27_manifest.json`
-4. replaces only the stable runtime injection point
-5. executes the manifest's ordered runtime list through `runtime27_bundle.js`
-
-This is **phase 1** of flattening, not a complete rewrite: the stable Build 14 core still contains the older core-resolution chain. New Build 27 runtime composition is now explicit and data-driven, making the next flattening step much safer.
+The first three form the core level path. Clearing the core level unlocks the fourteen advanced jobs.
 
 ## Validation
 
-- `data/missions.json` contains sixteen missions and parses as JSON
-- `web/runtime27_manifest.json` parses as JSON and lists the Build 14→27 runtime modules explicitly
-- `web/game27.js` passes `node --check`
-- `web/runtime27_bundle.js` passes `node --check`
-- `web/combat27_runtime.js` passes `node --check`
-- new Build 27 Godot scripts and scene passed delimiter/structure sanity checks
+- `data/missions.json` contains seventeen missions and parses as JSON
+- `web/runtime28_manifest.json` parses as JSON
+- `web/game28.js` passes `node --check`
+- `web/runtime28_bundle.js` passes `node --check`
+- `web/core28_data_runtime.js`, `web/core28_ui_runtime.js`, and `web/core28_missions_runtime.js` pass `node --check`
+- `web/combat28_weapons_runtime.js` and `web/combat28_mission_runtime.js` pass `node --check`
+- new Build 28 Godot scripts and scene passed delimiter/structure sanity checks
+- the flattened runtime performs an additional browser-time syntax check before evaluation
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -91,10 +110,10 @@ Godot 4.x
 - **WASD / Arrow keys** — move on foot / drive
 - **E** — enter or exit a nearby vehicle
 - **Space / F** — fire current weapon while on foot
-- **Q** — switch pistol / shotgun
+- **Q** — cycle owned weapons
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–9 / 0 / - / = / ] / [ / \\ / /** — select an unlocked mission
+- **1–9 / 0 / - / = / ] / [ / \\ / / / .** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
@@ -103,4 +122,4 @@ Godot 4.x
 
 **https://raw.githack.com/flesentine/gta1/bootstrap/playable-slice/web/index.html**
 
-The browser build mirrors the clean-room gameplay prototype. The first visit may show raw.githack's one-time confirmation page.
+The first visit may show raw.githack's one-time confirmation page.
