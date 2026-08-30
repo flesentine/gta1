@@ -79,7 +79,7 @@ routePolice21=function(dt){
 function spawnHotSwapEscape22(){
   const m=mission();
   const c=car(m.escapeSpawn.x,m.escapeSpawn.y,Math.PI/2,m.escapeColor,false,null,0,0,false);
-  c.mission=true;c._hotSwapEscape22=true;cars.push(c);hotSwapEscape22=c;return c;
+  c.mission=true;c._hotSwapEscape22=true;cars.push(c);hotSwapEscape22=c;missionCar=c;return c;
 }
 function hotSwapActive22(){return mission().id==='hot_swap'&&['swap_steal','swap_drive','swap_handoff','swap_package','swap_escape_steal','swap_escape','swap_deliver'].includes(missionState);}
 
