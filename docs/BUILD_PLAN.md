@@ -41,8 +41,9 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Forward-look turning arcs
 - [x] Intersection reservation / conflict holding
 - [x] Multi-waypoint police block routing
-- [ ] True per-movement intersection conflict matrix
-- [ ] Police predictive intercept / coordinated units
+- [x] Per-movement intersection conflict matrix
+- [x] Police predictive intercept point
+- [ ] Coordinated multi-unit police interception / roadblocks
 
 ## Phase 3 — Crime loop
 
@@ -73,7 +74,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Optional bonus objective / secondary mission goal
 - [x] Multiple optional objectives in one mission
 - [x] Long multi-part mission with vehicle swap and on-foot handoff
-- [ ] Mission fail/retry checkpoint inside a long job
+- [x] Mission fail/retry checkpoint inside a long job
 - [ ] Parallel objectives / choose-order mission
 
 ## Phase 5 — Full level slice
@@ -95,30 +96,28 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Second authored sector: Harbor East / Docklands
 - [x] Seamless world-boundary and minimap expansion
 - [x] Harbor East mission content
+- [x] Browser runtime layers execute in one ordered shared-scope bundle
 - [ ] Third authored district/sector
 
-## Build 22 — reservations + HOT SWAP
+## Build 23 — conflict matrix + predictive pursuit + HOT SWAP recovery
 
-- approaching civilian traffic reserves green intersections before entering
-- conflicting cars hold outside the junction until the reservation expires
-- reservation braking stacks with lane spacing and signal logic
-- turn-pocket vehicles receive a forward-look corner target for smoother steering arcs
-- reserved intersections receive cyan visual feedback
-- police can follow multiple street-grid waypoints around blocked direct routes
-- police compare horizontal-first and vertical-first detours and penalize blocked segments
-- close high-heat pursuit still switches back to direct attack
-- HOT SWAP adds job #12
-- HOT SWAP has seven stages and a 150-second timer
-- first courier crosses two Harbor gates and parks in a handoff lot
-- player collects the package on foot and switches to a second escape vehicle
-- package pickup creates three wanted heads
-- after losing heat, the escape vehicle must return to a Downtown safehouse
-- base reward 9,500 × multiplier
-- mission terminal uses keys 1–9, 0, -, and =
+- intersection reservations identify approach direction and straight / left / right movement
+- compatible movements can reserve the same junction simultaneously
+- opposing straight-through traffic and compatible right turns no longer block each other unnecessarily
+- incompatible movement combinations continue to hold outside the intersection
+- traffic lights, same-lane spacing, turn pockets, and smooth turn arcs remain active
+- police predict a short future player position from motion before choosing an intercept route
+- prediction lead increases during higher wanted levels
+- Build 22 multi-hop block routing now targets the predicted intercept point
+- HOT SWAP arms one recovery checkpoint when the first courier reaches the handoff/package stage
+- one late non-life-loss failure restores the package stage instead of restarting all seven stages
+- recovery clears heat, removes the failed escape car, and restores at least 70 seconds
+- HUD reports recovery availability/consumption
+- browser loader now boots from Build 14 and evaluates runtime modules 14→23 as one ordered bundle to avoid strict-eval helper isolation
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, target state, mixed-objective stage, vehicle-swap stage, and timers intentionally restart from the latest safe checkpoint.
+Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, target state, mixed-objective stage, vehicle-swap stage, retry-checkpoint consumption, and timers intentionally restart from the latest safe checkpoint.
 
 ## IP boundary
 
