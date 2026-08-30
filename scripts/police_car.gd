@@ -11,6 +11,8 @@ var pursuit_level := 1
 var siren_phase := 0.0
 var stuck_time := 0.0
 var signal_speed_factor := 1.0
+var pursuit_waypoint := Vector2.ZERO
+var pursuit_waypoint_active := false
 
 func _ready() -> void:
     add_to_group("police")
@@ -25,6 +27,7 @@ func configure(spawn_position: Vector2, new_target: Node2D, level: int) -> void:
     acceleration = 520.0 + float(pursuit_level) * 55.0
     forward_speed = max_speed * 0.42
     signal_speed_factor = 1.0
+    pursuit_waypoint_active = false
     queue_redraw()
 
 func set_target(new_target: Node2D) -> void:
@@ -32,6 +35,10 @@ func set_target(new_target: Node2D) -> void:
 
 func set_signal_speed_factor(value: float) -> void:
     signal_speed_factor = clamp(value, 0.06, 1.0)
+
+func set_pursuit_waypoint(point: Vector2, enabled: bool) -> void:
+    pursuit_waypoint = point
+    pursuit_waypoint_active = enabled
 
 func get_forward_speed_abs() -> float:
     return abs(forward_speed)
@@ -51,13 +58,20 @@ func _physics_process(delta: float) -> void:
         queue_redraw()
         return
 
-    var to_target := target.global_position - global_position
+    var goal := target.global_position
+    if pursuit_waypoint_active:
+        if global_position.distance_to(pursuit_waypoint) <= 82.0:
+            pursuit_waypoint_active = false
+        else:
+            goal = pursuit_waypoint
+
+    var to_target := goal - global_position
     if to_target.length_squared() > 0.001:
         var desired_rotation := to_target.normalized().angle() + PI * 0.5
         var angle_error := wrapf(desired_rotation - rotation, -PI, PI)
         var slowdown := clamp(1.0 - abs(angle_error) / 2.4, 0.42, 1.0)
         var chase_speed := max_speed * slowdown * signal_speed_factor
-        if to_target.length() < ram_distance:
+        if not pursuit_waypoint_active and global_position.distance_to(target.global_position) < ram_distance:
             chase_speed = max_speed * max(signal_speed_factor, 0.65)
         forward_speed = move_toward(forward_speed, chase_speed, acceleration * delta)
         rotation = rotate_toward(rotation, desired_rotation, turn_rate * delta)
@@ -72,6 +86,7 @@ func _physics_process(delta: float) -> void:
         stuck_time = max(stuck_time - delta * 2.0, 0.0)
 
     if stuck_time > 1.0:
+        pursuit_waypoint_active = false
         rotation += PI * 0.42
         forward_speed = max_speed * 0.38
         stuck_time = 0.0
@@ -86,7 +101,6 @@ func _draw() -> void:
     draw_rect(Rect2(14.0, -26.0, 4.0, 14.0), Color(0.03, 0.03, 0.04), true)
     draw_rect(Rect2(-18.0, 13.0, 4.0, 14.0), Color(0.03, 0.03, 0.04), true)
     draw_rect(Rect2(14.0, 13.0, 4.0, 14.0), Color(0.03, 0.03, 0.04), true)
-
     var flash := sin(siren_phase) > 0.0
     draw_rect(Rect2(-11.0, -5.0, 10.0, 5.0), Color(0.95, 0.12, 0.12) if flash else Color(0.18, 0.28, 0.70), true)
     draw_rect(Rect2(1.0, -5.0, 10.0, 5.0), Color(0.18, 0.28, 0.90) if flash else Color(0.95, 0.12, 0.12), true)
