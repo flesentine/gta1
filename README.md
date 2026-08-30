@@ -4,37 +4,41 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 24 — coordinated pursuit + TWIN STRIKE
+## Build 25 — WEST RIDGE + AIRMAIL
 
-Build 24 keeps the complete two-sector world, Harbor East / Docklands, traffic signals, two-lane traffic, turn pockets, smooth turn arcs, movement-aware intersection reservations, predictive pursuit, HOT SWAP recovery, vehicle classes, pedestrian archetypes, procedural audio, minimap/navigation, persistence, branching missions, optional bonuses, cleanup/repopulation, combat, bribes, respray, and all prior jobs.
+Build 25 keeps the complete Build 24 traffic, police, mission, persistence, audio, combat, minimap, vehicle-class, pedestrian, cleanup, branching, bonus, recovery, parallel-objective, and roadblock systems, then expands the world west with a third authored sector.
 
-### Coordinated police tactics
+### Third authored sector — WEST RIDGE / AIRFIELD
 
-High-heat police now coordinate instead of all aiming at the same intercept point:
+The seamless city now spans roughly **10,800 × 3,400** world units from West Ridge through the original city to Harbor East.
 
-- pursuit units rotate through **CHASE**, **FLANK A**, and **FLANK B** roles
-- flank units target lateral intercept positions around the predicted player path
-- Build 23 predictive targeting and multi-hop street routing remain active
-- wanted level 3+ can deploy a temporary two-car roadblock ahead of the predicted route
-- roadblocks expire automatically and clear when heat drops below three heads
-- browser roadblocks are physical collision zones; Godot roadblocks are parked collision-enabled vehicle bodies
-- HUD shows when a roadblock is active
+West Ridge adds:
 
-### New mission — TWIN STRIKE
+- **29** authored building footprints
+- **4** parking/service lots
+- **4** service alleys
+- **3** new major vertical road axes
+- **4** traffic loops
+- **10** initial civilian traffic spawns
+- **15** pedestrian loops
+- a southwest **AIRFIELD** district with runway markings
+- seamless road, collision, district-label, minimap, signal, lane, turn-pocket, intersection-reservation, police-routing, and roadblock coverage
 
-TWIN STRIKE is post-clear job #13 and the first choose-order mission.
+Build 25 also extends the long-session traffic manager so replacement traffic can use the original city, Harbor East, **and West Ridge** route graphs.
 
-1. steal the orange runner
-2. clear the **West Cache** and **Harbor Cache** in either order
-3. both objectives remain marked until completed
-4. each cache adds police pressure
-5. after both caches are cleared, the player is pushed to at least three wanted heads
-6. lose all heat
-7. return the same runner to the Downtown safehouse
+### New mission — AIRMAIL
 
-Timer: **140 seconds**.
+AIRMAIL is post-clear job #14 and the first mission deliberately built around the full three-sector width.
 
-Base reward: **10,500 × multiplier**.
+1. steal the white courier in Harbor East
+2. cross four gated checkpoints through Harbor East, Downtown/Central, and West Ridge
+3. police pressure rises during the cross-city run
+4. keep the same courier alive
+5. deliver it to the West Ridge Airfield
+
+Timer: **150 seconds**.
+
+Base reward: **11,500 × multiplier**.
 
 ## Current missions
 
@@ -51,20 +55,22 @@ Base reward: **10,500 × multiplier**.
 11. **PERFECT LINE** — courier run with two independent bonuses
 12. **HOT SWAP** — seven-stage courier / package / escape-car chain with one handoff recovery
 13. **TWIN STRIKE** — two caches in either order, police escape, runner return
+14. **AIRMAIL** — Harbor East-to-West Ridge full-city courier run
 
-The first three form the core level path. Clearing the core level unlocks the ten advanced jobs.
+The first three form the core level path. Clearing the core level unlocks the eleven advanced jobs.
 
 ## Browser runtime
 
-Build 23 replaced the fragile separated runtime eval chain with an ordered shared-scope bundle. Build 24 extends that bundle through `traffic24_runtime.js`, so the build-specific traffic and police helpers intentionally share one scope while pinned older builds remain unchanged.
+Build 23 replaced the fragile separated runtime eval chain with an ordered shared-scope bundle. Build 25 extends that bundle through `sector25_runtime.js`. The Build 25 loader also preloads `west_ridge.json` before the runtime bundle executes so the western world boundary, roads, collisions, population, and mission content arrive atomically.
 
 ## Validation
 
-- `data/missions.json` contains thirteen missions and parses as JSON
-- `web/game24.js` passes `node --check`
-- `web/runtime24_bundle.js` passes `node --check`
-- `web/traffic24_runtime.js` passes `node --check`
-- Build 24 Godot scripts and scene passed delimiter/structure sanity checks
+- `data/west_ridge.json` parses as JSON
+- `data/missions.json` contains fourteen missions and parses as JSON
+- `web/game25.js` passes `node --check`
+- `web/runtime25_bundle.js` passes `node --check`
+- `web/sector25_runtime.js` passes `node --check`
+- Build 25 Godot scripts and scene passed delimiter/structure sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -78,7 +84,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–9 / 0 / - / = / ]** — select an unlocked mission
+- **1–9 / 0 / - / = / ] / [** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
