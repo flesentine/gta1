@@ -38,7 +38,11 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Safe adjacent-lane checks and lane-change cooldown
 - [x] Police signal behavior by pursuit level
 - [x] Turn lanes / dedicated turning pockets
-- [x] Block-aware police street-grid pursuit waypoints
+- [x] Forward-look turning arcs
+- [x] Intersection reservation / conflict holding
+- [x] Multi-waypoint police block routing
+- [ ] True per-movement intersection conflict matrix
+- [ ] Police predictive intercept / coordinated units
 
 ## Phase 3 — Crime loop
 
@@ -67,7 +71,10 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Branching mission choice with route-dependent payout/consequences
 - [x] Cross-sector checkpoint mission
 - [x] Optional bonus objective / secondary mission goal
-- [x] Multiple independent optional objectives in one mission
+- [x] Multiple optional objectives in one mission
+- [x] Long multi-part mission with vehicle swap and on-foot handoff
+- [ ] Mission fail/retry checkpoint inside a long job
+- [ ] Parallel objectives / choose-order mission
 
 ## Phase 5 — Full level slice
 
@@ -77,7 +84,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Level-completion / Downtown unlock flow
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
-- [x] Eight post-clear advanced missions
+- [x] Nine post-clear advanced missions
 - [x] Procedural audio pass
 - [x] HUD / mission-state presentation polish
 - [x] Broader vehicle variety
@@ -90,24 +97,28 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Harbor East mission content
 - [ ] Third authored district/sector
 
-## Build 21 — turn pockets + PERFECT LINE
+## Build 22 — reservations + HOT SWAP
 
-- AI detects upcoming left/right route turns and preselects a matching turning lane
-- visible intersection pocket guides in Godot and browser builds
-- lane-aware spacing, lane-change cooldowns, and traffic signals remain active
-- police choose road-grid pursuit waypoints when buildings block direct pursuit
-- close high-heat pursuits return to direct interception
-- PERFECT LINE adds job #11
-- four checkpoints and a 100-second timer
-- base reward 7,500 × multiplier
-- Signal Discipline bonus: +2,000 before multiplier
-- Untouched Courier bonus: +3,000 before multiplier
-- bonuses fail independently and never fail the base mission
-- mission terminal uses keys 1–9, 0, and -
+- approaching civilian traffic reserves green intersections before entering
+- conflicting cars hold outside the junction until the reservation expires
+- reservation braking stacks with lane spacing and signal logic
+- turn-pocket vehicles receive a forward-look corner target for smoother steering arcs
+- reserved intersections receive cyan visual feedback
+- police can follow multiple street-grid waypoints around blocked direct routes
+- police compare horizontal-first and vertical-first detours and penalize blocked segments
+- close high-heat pursuit still switches back to direct attack
+- HOT SWAP adds job #12
+- HOT SWAP has seven stages and a 150-second timer
+- first courier crosses two Harbor gates and parks in a handoff lot
+- player collects the package on foot and switches to a second escape vehicle
+- package pickup creates three wanted heads
+- after losing heat, the escape vehicle must return to a Downtown safehouse
+- base reward 9,500 × multiplier
+- mission terminal uses keys 1–9, 0, -, and =
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, target state, mixed-objective stage, and timers intentionally restart from the latest safe checkpoint.
+Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, target state, mixed-objective stage, vehicle-swap stage, and timers intentionally restart from the latest safe checkpoint.
 
 ## IP boundary
 
