@@ -103,8 +103,8 @@ showUnlock=function(){
   showUnlock25Base();
   const el=document.getElementById('build9-unlock');
   if(el)el.innerHTML=el.innerHTML
-    .replace('10 POST-CLEAR JOBS UNLOCKED','11 POST-CLEAR JOBS UNLOCKED')
-    .replace('HARBOR EAST + 10 POST-CLEAR JOBS UNLOCKED','WEST RIDGE + HARBOR EAST + 11 POST-CLEAR JOBS UNLOCKED');
+    .replace('HARBOR EAST + 10 POST-CLEAR JOBS UNLOCKED','WEST RIDGE + HARBOR EAST + 11 POST-CLEAR JOBS UNLOCKED')
+    .replace('10 POST-CLEAR JOBS UNLOCKED','11 POST-CLEAR JOBS UNLOCKED');
 };
 
 const openMissionMenu25Base=openMissionMenu;
