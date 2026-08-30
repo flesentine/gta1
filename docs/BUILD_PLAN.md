@@ -9,65 +9,45 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Godot project boots into a top-down scene
 - [x] On-foot movement
 - [x] Enter/exit vehicles
-- [x] Arcade acceleration, braking, reverse, and steering
-- [x] Building/world collision
-- [x] Speed-sensitive camera zoom
+- [x] Arcade acceleration, braking, reverse, steering, class feel, skid and impact feedback
+- [x] Building/world collision and speed-sensitive camera zoom
 - [x] Authored city roads/buildings loaded from data
-- [x] Vehicle feel differentiated by class
-- [x] Broader vehicle-definition variety
-- [x] Skid/impact feedback
 - [x] Persistent tire-damage handling penalties
 
 ## Phase 2 — Living city
 
-- [x] Traffic route graph
-- [x] Civilian traffic spawning and route following
-- [x] Pedestrian spawning and roaming
-- [x] Panic/flee response
-- [x] Vehicle health, smoke, fire/burnout state
-- [x] Civilian pedestrian behavior archetypes
+- [x] Traffic route graph, civilian traffic and pedestrian population
+- [x] Panic/flee response and pedestrian behavior archetypes
 - [x] Entity cleanup/despawn and replacement traffic
-- [x] Traffic spacing, signals, two-lane offsets, safe lane changes
-- [x] Turn pockets and forward-look turning arcs
+- [x] Traffic spacing, signals, two-lane offsets, safe lane changes and turn pockets
 - [x] Movement-aware intersection reservations
 - [x] Three-sector traffic and pedestrian population
 
 ## Phase 3 — Crime loop
 
 - [x] Weapon framework / pistol / ammo pickups
-- [x] Shotgun / shell pickups
-- [x] Weapon switching
-- [x] Multi-pellet / multi-target weapon behavior
-- [x] Wanted stages 0–4
-- [x] Police vehicle spawning and pursuit
-- [x] Arrest/death/respawn
-- [x] Police bribe pickup
-- [x] Respray garage
-- [x] Multi-waypoint police block routing
-- [x] Predictive police intercept point
-- [x] Coordinated CHASE / FLANK pursuit roles
-- [x] Temporary high-heat roadblocks
-- [x] Level-4 spike strips
-- [x] Level-4 BOX FRONT / LEFT / RIGHT / REAR pursuit behavior
+- [x] Shotgun archetype + shell pickups
+- [x] SMG three-round burst archetype + ammo pickups
+- [x] Wanted stages 0–4, police pursuit, arrest/death/respawn
+- [x] Police bribe pickup and respray garage
+- [x] Multi-waypoint and predictive police routing
+- [x] CHASE / FLANK roles, high-heat roadblocks, spike strips and BOX pursuit
+- [ ] Additional combat reactions / cover / armed hostile archetypes
 
 ## Phase 4 — Mission loop
 
-- [x] Data-driven MissionDirector
-- [x] Mission-selection terminal
+- [x] Data-driven MissionDirector and mission-selection terminal
 - [x] Steal/deliver, destruction, lose-wanted, timers and failure states
 - [x] Score + multiplier rewards and mission unlock/replay flow
-- [x] Multi-stage checkpoint chaining
-- [x] Mixed vehicle → on-foot → escape objective
+- [x] Chained checkpoints and mixed vehicle/on-foot objectives
 - [x] Character target/combat objective
 - [x] Branching route-dependent mission choice
-- [x] Cross-sector checkpoint mission
-- [x] Optional and multiple optional bonus objectives
-- [x] Long multi-part mission with vehicle swap and handoff
-- [x] Mission fail/retry checkpoint inside a long job
+- [x] Cross-sector, optional bonus, multi-stage swap and retry-checkpoint missions
 - [x] Parallel objectives / choose-order mission
-- [x] Three-sector delivery mission
-- [x] Level-4 tactical pursuit mission
-- [x] Multi-target combat sweep using weapon-specific gameplay
+- [x] Three-sector delivery and tactical level-4 pursuit missions
+- [x] Shotgun combat sweep mission
+- [x] Sequential three-sector combat campaign mission
+- [ ] Multi-mission campaign chapters with persistent narrative/state flags
 
 ## Phase 5 — Full level slice
 
@@ -75,38 +55,36 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Harbor East / Docklands second sector
 - [x] West Ridge / Airfield third sector
 - [x] Seamless ~10,800 × 3,400 world and minimap expansion
-- [x] District identities, parking lots, alleys, shortcuts and Airfield runway
+- [x] District identities, lots, alleys, shortcuts and Airfield runway
 - [x] Persistent campaign checkpoint, score, multiplier, best score and unlock state
 - [x] Browser front-end entry screen
-- [x] Thirteen post-clear advanced missions
+- [x] Fourteen post-clear advanced missions
 - [x] Procedural audio and HUD/mission-state polish
-- [x] Browser runtime layers execute in one ordered shared-scope bundle
-- [x] Explicit browser runtime manifest and stable-core boot boundary
-- [x] Broader weapon/combat depth
+- [x] Browser runtime manifest with explicit module order
+- [x] Flatten browser bootstrap to raw engine core + explicit runtime modules
+- [x] Flatten runtime guard blocks into a real shared lexical scope
+- [x] Broader weapon/combat depth with pistol, shotgun and SMG
 - [x] Additional West Ridge / Airfield mission content
-- [ ] Fully flatten legacy browser core chain into explicit production modules
-- [ ] Add additional weapon archetypes / combat reactions
-- [ ] Add higher-level campaign sequencing across all three sectors
+- [ ] Replace legacy `game8.js` raw engine core with named production modules (`world`, `entities`, `missions`, `ui`, `audio`, `progress`)
+- [ ] Add campaign chapter sequencing across mission groups
 
-## Build 27 — shotgun combat + RUNWAY RAID + manifest boot
+## Build 28 — flat core + SMG + THREE FRONTS
 
-- adds a shotgun with six-pellet spread, shorter range and slower firing cadence than the pistol
-- Q switches between pistol and shotgun
-- shotgun shell pickups are placed in West Ridge / Airfield
-- shotgun blasts can damage multiple pedestrians/targets in one shot and cap vehicle pellet damage per blast
-- RUNWAY RAID adds job #16
-- RUNWAY RAID sends the player to the Airfield armory, then spawns three tougher marked targets that can be cleared in any order
-- clearing all three targets forces wanted level 4 and requires a full escape
-- RUNWAY RAID timer is 150 seconds; base reward is 13,500 × multiplier
-- mission terminal adds `/` for job #16
-- Build 27 browser boot loads the stable Build 14 core directly instead of chaining through Builds 26/25/24
-- `runtime27_manifest.json` explicitly defines the ordered Build 14→27 runtime layer list
-- `runtime27_bundle.js` validates and evaluates that manifest list in shared scope
-- full legacy core flattening remains a future step
+- Build 28 browser no longer executes the nested Build 9–14 loader chain
+- `game28.js` loads `game8.js` directly and injects one Build 28 runtime bundle
+- authored city, Harbor East, West Ridge and mission data are preloaded before the runtime starts
+- `core28_data_runtime.js`, `core28_ui_runtime.js`, and `core28_missions_runtime.js` explicitly replace the old Build 9–13 string-patch responsibilities
+- `runtime28_bundle.js` strips known per-module guard blocks, joins the modules into one lexical source, syntax-checks it, and evaluates once
+- SMG fires three low-damage bullets per trigger with tight spread and 0.22-second cadence
+- Q cycles pistol / shotgun / SMG based on ownership
+- THREE FRONTS adds job #17 and moves the player Harbor East → Central → West Ridge under escalating heat
+- final stage forces wanted level 4 and requires a full escape
+- THREE FRONTS timer is 190 seconds; base reward is 15,000 × multiplier
+- mission terminal adds `.` for job #17
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, parallel-objective state, tire damage, weapon inventory, target state, mixed-objective stage, vehicle-swap stage, retry-checkpoint consumption, spike strips, roadblocks, and timers intentionally restart from the latest safe checkpoint.
+Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, parallel-objective state, weapon ammo/ownership, tire damage, target state, mixed-objective stage, vehicle-swap stage, retry-checkpoint consumption, spike strips, roadblocks, and timers intentionally restart from the latest safe checkpoint.
 
 ## IP boundary
 
