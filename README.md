@@ -4,49 +4,53 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 22 — intersection reservations + HOT SWAP
+## Build 23 — movement conflict matrix + predictive pursuit
 
-Build 22 keeps the complete two-sector Build 21 world, Harbor East / Docklands, traffic signals, two-lane traffic, turn pockets, police/wanted systems, vehicle classes, pedestrian archetypes, procedural audio, minimap/navigation, persistence, branching missions, optional bonuses, cleanup/repopulation, combat, bribes, and respray.
+Build 23 keeps the complete two-sector world, Harbor East / Docklands, traffic signals, two-lane traffic, turn pockets, smooth turn arcs, mission systems, police/wanted loop, vehicle classes, pedestrian archetypes, procedural audio, minimap/navigation, persistence, branching missions, optional bonuses, cleanup/repopulation, combat, bribes, respray, and all twelve jobs.
 
-### Intersection reservations + smoother turns
+### Per-movement intersection conflicts
 
-Civilian traffic now does more than obey lights and lane spacing:
+Build 22's one-car-per-junction reservation has been replaced by a movement-aware reservation layer.
 
-- cars approaching a green intersection request a short reservation before entering
-- conflicting cars hold outside the junction until the reservation clears
-- reservations expire automatically and do not replace red-light logic
-- turn-pocket cars receive a forward-look arc target as they approach a corner, so steering begins through the turn instead of snapping at the waypoint
-- active reservations are visible as cyan rings at nearby intersections
+- reservations identify approach direction plus straight / left / right movement
+- compatible movements can reserve the same intersection simultaneously
+- opposing straight-through movements are allowed together
+- compatible right-turn combinations can proceed together
+- conflicting movements still hold outside the junction
+- signal stopping and same-lane spacing remain active
+- nearby active movement reservations show cyan feedback in the browser
 
-### Multi-hop police pursuit
+### Predictive police interception
 
-Police routing now supports a short street-grid path instead of only one detour point.
+Police no longer route only toward the player's current coordinates.
 
-- when a building blocks direct pursuit, cruisers compare two Manhattan-style street routes
-- the lower-cost route can contain multiple waypoints
-- blocked route segments receive a large penalty
-- cruisers consume waypoints as they reach them
-- clear line of sight returns police to direct interception
-- close wanted-level 3–4 pursuit still drops the detour and attacks directly
-- Build 20 signal behavior remains: low-level police respect red lights, high-level emergency pursuit ignores them
+- cruisers estimate a short future intercept point from the player's motion
+- prediction lead increases during higher wanted levels
+- block routing targets the predicted intercept rather than the stale current position
+- multi-hop street-grid routing from Build 22 remains active
+- close wanted-level 3–4 pursuit still switches to aggressive direct interception
 
-### New mission — HOT SWAP
+### HOT SWAP recovery checkpoint
 
-HOT SWAP is post-clear job #12 and the first seven-stage mission chain:
+HOT SWAP remains the seven-stage job introduced in Build 22, but parking in the handoff lot now arms one late-run recovery checkpoint.
 
-1. steal the teal courier in Downtown
-2. clear two Harbor gates
-3. park in the Harbor East handoff lot below the speed limit
-4. get out and collect the package on foot
-5. steal the newly spawned black escape car
-6. survive three-head police heat and lose the cops
-7. return the escape car to the Downtown safehouse
+- checkpoint arms when the courier reaches the handoff/package stage
+- one late failure can restore the player to the package handoff instead of restarting the whole mission
+- recovery clears police heat, removes the failed escape car, and restores the package stage
+- recovery restarts the late run with at least **70 seconds** remaining
+- losing a life still causes the normal full mission failure
+- the HUD reports **RECOVERY READY** or **RECOVERY USED**
 
-Timer: **150 seconds**.
+### Browser runtime reliability
 
-Base reward: **9,500 × multiplier**.
+Build 23 also repairs a latent browser-module scope issue. Builds 14–22 loaded runtime layers through separate strict-mode `eval()` calls, which meant helper declarations were not guaranteed to be visible to later modules. Build 23 now:
 
-The active escape car replaces the first courier as the protected mission vehicle, so Build 16 cleanup cannot retire it during the handoff.
+1. boots from the stable Build 14 injector
+2. preloads Harbor East data
+3. fetches the Build 14→23 runtime modules in order
+4. evaluates the ordered module bundle once so their build-suffixed helpers share one runtime scope
+
+Pinned older builds remain unchanged.
 
 ## Current missions
 
@@ -61,17 +65,17 @@ The active escape car replaces the first courier as the protected mission vehicl
 9. **NIGHT SHIFT** — four-stop Docklands pressure run
 10. **GREEN WAVE** — signal-aware checkpoint run with optional clean bonus
 11. **PERFECT LINE** — courier run with two independent bonuses
-12. **HOT SWAP** — seven-stage courier / package / escape-car chain
+12. **HOT SWAP** — seven-stage courier / package / escape-car chain with one handoff recovery
 
 The first three form the core level path. Clearing the core level unlocks the nine advanced jobs.
 
 ## Validation
 
-- `data/missions.json` contains twelve missions
-- `web/game22.js` passes `node --check`
-- `web/traffic22_runtime.js` passes `node --check`
-- Build 22 loader anchor targets the committed Build 21 runtime chain
-- new Build 22 Godot scripts passed delimiter/structure sanity checks
+- `web/game23.js` passes `node --check`
+- `web/runtime23_bundle.js` passes `node --check`
+- `web/traffic23_runtime.js` passes `node --check`
+- Build 23 bootstrap explicitly replaces the Build 14 runtime injection with the ordered Build 23 bundle
+- new Build 23 Godot scripts passed delimiter/structure sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
