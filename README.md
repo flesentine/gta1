@@ -4,47 +4,49 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 21 — turn pockets, routed pursuit + multi-bonus missions
+## Build 22 — intersection reservations + HOT SWAP
 
-Build 21 keeps the complete two-sector Build 20 world, Harbor East / Docklands, traffic signals, two-lane civilian traffic, lane changes, living-city cleanup, vehicle classes, procedural audio, minimap/navigation, persistent progression, police/wanted loop, combat, bribes, respray, branching missions, and all ten previous jobs.
+Build 22 keeps the complete two-sector Build 21 world, Harbor East / Docklands, traffic signals, two-lane traffic, turn pockets, police/wanted systems, vehicle classes, pedestrian archetypes, procedural audio, minimap/navigation, persistence, branching missions, optional bonuses, cleanup/repopulation, combat, bribes, and respray.
 
-### Dedicated turning pockets
+### Intersection reservations + smoother turns
 
-Civilian traffic now commits to a turning lane as it approaches a route corner.
+Civilian traffic now does more than obey lights and lane spacing:
 
-- AI detects whether its next route segment turns left or right
-- the car moves into the matching lane before reaching the intersection
-- ordinary lane changes remain suppressed near intersections
-- visible turn-pocket guide marks make the new behavior readable in both builds
-- same-lane spacing and Build 19 traffic signals remain active
+- cars approaching a green intersection request a short reservation before entering
+- conflicting cars hold outside the junction until the reservation clears
+- reservations expire automatically and do not replace red-light logic
+- turn-pocket cars receive a forward-look arc target as they approach a corner, so steering begins through the turn instead of snapping at the waypoint
+- active reservations are visible as cyan rings at nearby intersections
 
-### Routed police pursuit
+### Multi-hop police pursuit
 
-Police now use street-grid waypoints when a building blocks a direct line to the player.
+Police routing now supports a short street-grid path instead of only one detour point.
 
-- clear line of sight keeps direct pursuit
-- blocked line of sight selects an intermediate road-grid waypoint
-- reaching the waypoint returns the cruiser to direct pursuit
-- wanted levels 1–2 still obey red signals
-- wanted levels 3–4 retain emergency signal priority
-- close high-heat pursuit drops the detour and attacks directly
+- when a building blocks direct pursuit, cruisers compare two Manhattan-style street routes
+- the lower-cost route can contain multiple waypoints
+- blocked route segments receive a large penalty
+- cruisers consume waypoints as they reach them
+- clear line of sight returns police to direct interception
+- close wanted-level 3–4 pursuit still drops the detour and attacks directly
+- Build 20 signal behavior remains: low-level police respect red lights, high-level emergency pursuit ignores them
 
-### New mission — PERFECT LINE
+### New mission — HOT SWAP
 
-PERFECT LINE is post-clear job #11 and introduces two independent optional objectives.
+HOT SWAP is post-clear job #12 and the first seven-stage mission chain:
 
-1. steal the marked pink courier in Harbor East
-2. hit four ordered checkpoints before the **100-second** timer expires
-3. the first checkpoints increase police heat
-4. **Signal Discipline:** +2,000 before multiplier if no high-speed red-light violation occurs
-5. **Untouched Courier:** +3,000 before multiplier if the courier takes no vehicle damage
-6. either bonus can be lost independently without failing the mission
+1. steal the teal courier in Downtown
+2. clear two Harbor gates
+3. park in the Harbor East handoff lot below the speed limit
+4. get out and collect the package on foot
+5. steal the newly spawned black escape car
+6. survive three-head police heat and lose the cops
+7. return the escape car to the Downtown safehouse
 
-Base reward: **7,500 × multiplier**.
+Timer: **150 seconds**.
 
-Maximum bonus: **+5,000 before multiplier**.
+Base reward: **9,500 × multiplier**.
 
-The mission terminal now supports **1–9, 0, and -** for job #11.
+The active escape car replaces the first courier as the protected mission vehicle, so Build 16 cleanup cannot retire it during the handoff.
 
 ## Current missions
 
@@ -58,17 +60,18 @@ The mission terminal now supports **1–9, 0, and -** for job #11.
 8. **EASTBOUND** — timed run into Harbor East / Docklands
 9. **NIGHT SHIFT** — four-stop Docklands pressure run
 10. **GREEN WAVE** — signal-aware checkpoint run with optional clean bonus
-11. **PERFECT LINE** — four-stop pressure run with two independent bonuses
+11. **PERFECT LINE** — courier run with two independent bonuses
+12. **HOT SWAP** — seven-stage courier / package / escape-car chain
 
-The first three form the core level path. Clearing the core level unlocks the eight advanced jobs.
+The first three form the core level path. Clearing the core level unlocks the nine advanced jobs.
 
 ## Validation
 
-- `data/missions.json` contains eleven missions
-- `web/game21.js` passes `node --check`
-- `web/traffic21_runtime.js` passes `node --check`
-- Build 21 loader anchor targets the committed Build 20 runtime chain
-- Build 21 Godot scripts and scene passed structural/delimiter sanity checks
+- `data/missions.json` contains twelve missions
+- `web/game22.js` passes `node --check`
+- `web/traffic22_runtime.js` passes `node --check`
+- Build 22 loader anchor targets the committed Build 21 runtime chain
+- new Build 22 Godot scripts passed delimiter/structure sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -82,7 +85,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–9 / 0 / -** — select an unlocked mission
+- **1–9 / 0 / - / =** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
@@ -92,5 +95,3 @@ Godot 4.x
 **https://raw.githack.com/flesentine/gta1/bootstrap/playable-slice/web/index.html**
 
 The browser build mirrors the clean-room gameplay prototype. The first visit may show raw.githack's one-time confirmation page.
-
-See `docs/BUILD_PLAN.md` for the implementation checklist.
