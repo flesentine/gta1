@@ -43,7 +43,8 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Multi-waypoint police block routing
 - [x] Per-movement intersection conflict matrix
 - [x] Police predictive intercept point
-- [ ] Coordinated multi-unit police interception / roadblocks
+- [x] Coordinated multi-unit police interception
+- [x] Temporary high-heat roadblocks
 
 ## Phase 3 — Crime loop
 
@@ -75,7 +76,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Multiple optional objectives in one mission
 - [x] Long multi-part mission with vehicle swap and on-foot handoff
 - [x] Mission fail/retry checkpoint inside a long job
-- [ ] Parallel objectives / choose-order mission
+- [x] Parallel objectives / choose-order mission
 
 ## Phase 5 — Full level slice
 
@@ -85,7 +86,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Level-completion / Downtown unlock flow
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
-- [x] Nine post-clear advanced missions
+- [x] Ten post-clear advanced missions
 - [x] Procedural audio pass
 - [x] HUD / mission-state presentation polish
 - [x] Broader vehicle variety
@@ -99,25 +100,24 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Browser runtime layers execute in one ordered shared-scope bundle
 - [ ] Third authored district/sector
 
-## Build 23 — conflict matrix + predictive pursuit + HOT SWAP recovery
+## Build 24 — coordinated pursuit + TWIN STRIKE
 
-- intersection reservations identify approach direction and straight / left / right movement
-- compatible movements can reserve the same junction simultaneously
-- opposing straight-through traffic and compatible right turns no longer block each other unnecessarily
-- incompatible movement combinations continue to hold outside the intersection
-- traffic lights, same-lane spacing, turn pockets, and smooth turn arcs remain active
-- police predict a short future player position from motion before choosing an intercept route
-- prediction lead increases during higher wanted levels
-- Build 22 multi-hop block routing now targets the predicted intercept point
-- HOT SWAP arms one recovery checkpoint when the first courier reaches the handoff/package stage
-- one late non-life-loss failure restores the package stage instead of restarting all seven stages
-- recovery clears heat, removes the failed escape car, and restores at least 70 seconds
-- HUD reports recovery availability/consumption
-- browser loader now boots from Build 14 and evaluates runtime modules 14→23 as one ordered bundle to avoid strict-eval helper isolation
+- police units rotate through CHASE / FLANK A / FLANK B intercept roles
+- flankers use lateral positions around the Build 23 predicted target path
+- wanted level 3+ can deploy a temporary two-car roadblock ahead of the player
+- roadblocks are physical blockers and automatically clear after their lifetime or when heat drops
+- TWIN STRIKE adds job #13
+- TWIN STRIKE uses one orange runner and two simultaneously active cache objectives
+- West Cache and Harbor Cache can be completed in either order
+- each cache increases heat; clearing both forces at least three wanted heads
+- after losing heat, the same runner must return to the Downtown safehouse
+- TWIN STRIKE timer is 140 seconds; base reward is 10,500 × multiplier
+- mission terminal uses keys 1–9, 0, -, =, and ]
+- Build 24 extends the ordered browser runtime bundle through traffic24_runtime.js
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, target state, mixed-objective stage, vehicle-swap stage, retry-checkpoint consumption, and timers intentionally restart from the latest safe checkpoint.
+Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, parallel-objective state, target state, mixed-objective stage, vehicle-swap stage, retry-checkpoint consumption, roadblocks, and timers intentionally restart from the latest safe checkpoint.
 
 ## IP boundary
 
