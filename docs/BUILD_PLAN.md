@@ -35,6 +35,9 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 ## Phase 3 — Crime loop
 
 - [x] Weapon framework / pistol / ammo pickups
+- [x] Shotgun / shell pickups
+- [x] Weapon switching
+- [x] Multi-pellet / multi-target weapon behavior
 - [x] Wanted stages 0–4
 - [x] Police vehicle spawning and pursuit
 - [x] Arrest/death/respawn
@@ -64,6 +67,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Parallel objectives / choose-order mission
 - [x] Three-sector delivery mission
 - [x] Level-4 tactical pursuit mission
+- [x] Multi-target combat sweep using weapon-specific gameplay
 
 ## Phase 5 — Full level slice
 
@@ -74,30 +78,35 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] District identities, parking lots, alleys, shortcuts and Airfield runway
 - [x] Persistent campaign checkpoint, score, multiplier, best score and unlock state
 - [x] Browser front-end entry screen
-- [x] Twelve post-clear advanced missions
+- [x] Thirteen post-clear advanced missions
 - [x] Procedural audio and HUD/mission-state polish
 - [x] Browser runtime layers execute in one ordered shared-scope bundle
-- [ ] Flatten browser bootstrap into explicit production modules
-- [ ] Broader weapon/combat depth
-- [ ] Additional West Ridge / Airfield mission content
+- [x] Explicit browser runtime manifest and stable-core boot boundary
+- [x] Broader weapon/combat depth
+- [x] Additional West Ridge / Airfield mission content
+- [ ] Fully flatten legacy browser core chain into explicit production modules
+- [ ] Add additional weapon archetypes / combat reactions
+- [ ] Add higher-level campaign sequencing across all three sectors
 
-## Build 26 — spike strips + LOCKDOWN
+## Build 27 — shotgun combat + RUNWAY RAID + manifest boot
 
-- wanted level 4 can deploy temporary spike strips ahead of the predicted player route
-- spike strips damage one or two tires depending on impact speed
-- tire damage progressively reduces speed, acceleration, braking and steering, with wobble after multiple punctures
-- tire condition is visible in the HUD
-- level-4 police replace CHASE / FLANK roles with BOX FRONT / LEFT / RIGHT / REAR targets around the player
-- Build 24 roadblocks remain active alongside the new spike-strip and box-in tactics
-- LOCKDOWN adds job #15 in West Ridge
-- LOCKDOWN starts at wanted 2, crosses three West Ridge / Airfield gates, escalates to wanted 4, then requires a full escape and Airfield return
-- LOCKDOWN timer is 165 seconds; base reward is 12,500 × multiplier
-- mission terminal uses keys 1–9, 0, -, =, ], [, and \\ 
-- Build 26 extends the ordered browser runtime bundle through `traffic26_runtime.js`
+- adds a shotgun with six-pellet spread, shorter range and slower firing cadence than the pistol
+- Q switches between pistol and shotgun
+- shotgun shell pickups are placed in West Ridge / Airfield
+- shotgun blasts can damage multiple pedestrians/targets in one shot and cap vehicle pellet damage per blast
+- RUNWAY RAID adds job #16
+- RUNWAY RAID sends the player to the Airfield armory, then spawns three tougher marked targets that can be cleared in any order
+- clearing all three targets forces wanted level 4 and requires a full escape
+- RUNWAY RAID timer is 150 seconds; base reward is 13,500 × multiplier
+- mission terminal adds `/` for job #16
+- Build 27 browser boot loads the stable Build 14 core directly instead of chaining through Builds 26/25/24
+- `runtime27_manifest.json` explicitly defines the ordered Build 14→27 runtime layer list
+- `runtime27_bundle.js` validates and evaluates that manifest list in shared scope
+- full legacy core flattening remains a future step
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, parallel-objective state, tire damage, target state, mixed-objective stage, vehicle-swap stage, retry-checkpoint consumption, spike strips, roadblocks, and timers intentionally restart from the latest safe checkpoint.
+Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, parallel-objective state, tire damage, weapon inventory, target state, mixed-objective stage, vehicle-swap stage, retry-checkpoint consumption, spike strips, roadblocks, and timers intentionally restart from the latest safe checkpoint.
 
 ## IP boundary
 

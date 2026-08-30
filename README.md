@@ -4,37 +4,38 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 26 — spike strips + level-4 box pursuit
+## Build 27 — shotgun combat + direct manifest boot
 
-Build 26 keeps the full three-sector Build 25 world: the original city, Harbor East / Docklands, and West Ridge / Airfield. Traffic signals, two-lane traffic, turn pockets, movement-aware intersection reservations, coordinated police, roadblocks, vehicle classes, pedestrian archetypes, procedural audio, minimap/navigation, persistence, branching missions, optional bonuses, mission recovery, cleanup/repopulation, combat, bribes, and respray are retained.
+Build 27 keeps the full three-sector world (original city, Harbor East / Docklands, and West Ridge / Airfield), Build 26 tire damage / spike strips / box pursuit, coordinated police, traffic simulation, mission recovery, branching objectives, vehicle classes, procedural audio, minimap/navigation, persistence, cleanup/repopulation, bribes, and respray.
 
-### Level-4 pursuit escalation
+### Shotgun combat
 
-Wanted level 4 now changes police tactics instead of only increasing pursuit pressure:
+The pistol is no longer the only weapon:
 
-- temporary spike strips deploy ahead of the player's predicted route
-- crossing a strip damages one or two tires depending on speed
-- tire damage persists on that vehicle and progressively reduces top speed, acceleration, braking, and steering authority
-- vehicles with multiple damaged tires develop high-speed steering wobble
-- the HUD shows tire damage from 0/4 to 4/4
-- level-4 police switch from CHASE / FLANK roles to **BOX FRONT / BOX LEFT / BOX RIGHT / BOX REAR**
-- box units tighten around a slower target and spread farther ahead around a faster target
-- Build 24 two-car roadblocks remain active, so level 4 can combine roadblocks, spike strips, predictive pursuit, and box-in units
+- **Q** switches between pistol and shotgun when both are owned
+- shotgun uses **6 pellets per blast**
+- short effective range with a wide spread
+- slower 0.72-second firing cadence
+- one blast can hit multiple targets
+- vehicle pellet damage is capped per blast
+- shotgun and shell pickups are placed around West Ridge / Airfield
+- nearby pedestrians react to the louder blast
+- weapon and shell count are shown in the HUD
 
-### New mission — LOCKDOWN
+### New mission — RUNWAY RAID
 
-LOCKDOWN is post-clear job #15 and is built around the new level-4 systems.
+RUNWAY RAID is post-clear job #16 and the first mission built specifically around the shotgun.
 
-1. steal the black West Ridge runner
-2. wanted level rises to two heads
-3. clear three West Ridge / Airfield gates while police pressure increases
-4. clearing the final gate forces wanted level 4
-5. survive spike strips, roadblocks, and box-in pursuit until the heat is gone
-6. return the same runner to the Airfield service lot
+1. reach the Airfield armory on foot
+2. acquire the shotgun and mission shells
+3. clear three marked West Ridge / Airfield targets in any order
+4. each target is tougher than a normal pedestrian
+5. clearing all three forces wanted level 4
+6. survive spike strips, roadblocks, predictive box units, and lose all heat
 
-Timer: **165 seconds**.
+Timer: **150 seconds**.
 
-Base reward: **12,500 × multiplier**.
+Base reward: **13,500 × multiplier**.
 
 ## Current missions
 
@@ -53,20 +54,32 @@ Base reward: **12,500 × multiplier**.
 13. **TWIN STRIKE** — two caches in either order, police escape, runner return
 14. **AIRMAIL** — full three-sector Harbor East → West Ridge airfield run
 15. **LOCKDOWN** — West Ridge level-4 pursuit with spike strips and box units
+16. **RUNWAY RAID** — shotgun armory, three combat targets, level-4 escape
 
-The first three form the core level path. Clearing the core level unlocks the twelve advanced jobs.
+The first three form the core level path. Clearing the core level unlocks the thirteen advanced jobs.
 
 ## Browser runtime
 
-Build 23 replaced the fragile separated runtime-eval chain with one ordered shared-scope runtime bundle. Build 26 extends that bundle through `traffic26_runtime.js`; pinned older builds remain unchanged.
+Build 27 begins the browser-bootstrap cleanup.
+
+Instead of loading Build 26 → Build 25 → Build 24 to discover the latest runtime, `game27.js` now:
+
+1. loads the stable Build 14 core bootstrap directly
+2. preloads Harbor East and West Ridge data
+3. loads `runtime27_manifest.json`
+4. replaces only the stable runtime injection point
+5. executes the manifest's ordered runtime list through `runtime27_bundle.js`
+
+This is **phase 1** of flattening, not a complete rewrite: the stable Build 14 core still contains the older core-resolution chain. New Build 27 runtime composition is now explicit and data-driven, making the next flattening step much safer.
 
 ## Validation
 
-- `data/missions.json` contains fifteen missions and parses as JSON
-- `web/game26.js` passes `node --check`
-- `web/runtime26_bundle.js` passes `node --check`
-- `web/traffic26_runtime.js` passes `node --check`
-- new Build 26 Godot scripts and scene passed delimiter/structure sanity checks
+- `data/missions.json` contains sixteen missions and parses as JSON
+- `web/runtime27_manifest.json` parses as JSON and lists the Build 14→27 runtime modules explicitly
+- `web/game27.js` passes `node --check`
+- `web/runtime27_bundle.js` passes `node --check`
+- `web/combat27_runtime.js` passes `node --check`
+- new Build 27 Godot scripts and scene passed delimiter/structure sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -77,10 +90,11 @@ Godot 4.x
 
 - **WASD / Arrow keys** — move on foot / drive
 - **E** — enter or exit a nearby vehicle
-- **Space / F** — fire pistol while on foot
+- **Space / F** — fire current weapon while on foot
+- **Q** — switch pistol / shotgun
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–9 / 0 / - / = / ] / [ / \\** — select an unlocked mission
+- **1–9 / 0 / - / = / ] / [ / \\ / /** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
