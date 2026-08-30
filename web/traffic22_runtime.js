@@ -50,6 +50,27 @@ if(typeof trafficFactor16==='function'){
   trafficFactor16=function(c){return Math.min(trafficFactor22Base(c),reservationFactor22(c));};
 }
 
+const updateAI22Base=updateAI;
+updateAI=function(c,dt){
+  let restorePoint=null,restoreIndex=-1;
+  if(c&&c.ai&&!c.destroyed&&c.turnPocket21&&c.route&&c.route.length>=3){
+    const index=((c.index||0)%c.route.length+c.route.length)%c.route.length;
+    const corner=c.route[index],next=c.route[(index+1)%c.route.length];
+    if(corner&&next){
+      const dx=corner[0]-c.x,dy=corner[1]-c.y,d=Math.hypot(dx,dy);
+      if(d<165){
+        const ox=next[0]-corner[0],oy=next[1]-corner[1],m=Math.hypot(ox,oy)||1;
+        const blend=Math.max(0,Math.min(1,(165-d)/115));
+        restorePoint=[corner[0],corner[1]];restoreIndex=index;
+        c.route[index]=[corner[0]+ox/m*72*blend,corner[1]+oy/m*72*blend];
+        c.turnArc22=true;
+      }
+    }
+  }
+  updateAI22Base(c,dt);
+  if(restorePoint&&restoreIndex>=0)c.route[restoreIndex]=restorePoint;
+};
+
 function segmentBlocked22(a,b){
   for(let i=1;i<14;i++){
     const t=i/14,x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t;
@@ -130,20 +151,6 @@ openMissionMenu=function(){
   menu.querySelectorAll('[data-mission]').forEach(x=>{const c=x.cloneNode(true);x.replaceWith(c);c.addEventListener('click',()=>selectMission(Number(c.dataset.mission)));});
 };
 addEventListener('keydown',e=>{if(missionMenuOpen&&(e.code==='Equal'||e.code==='NumpadAdd')&&!e.repeat){e.preventDefault();selectMission(11);}});
-
-const navInfo22Base=(typeof navInfo==='function'?navInfo:null);
-if(navInfo22Base){navInfo=function(){
-  if(mission().id==='hot_swap'){
-    if(missionState==='swap_steal'&&missionCar)return{label:'TEAL COURIER',x:missionCar.x,y:missionCar.y};
-    if(missionState==='swap_drive'&&chainPoints.length){const p=chainPoints[Math.min(chainIndex,chainPoints.length-1)];return{label:'HARBOR RUN',x:p[0],y:p[1]};}
-    if(missionState==='swap_handoff'){const r=mission().handoff;return{label:'HANDOFF LOT',x:r.x+r.w/2,y:r.y+r.h/2};}
-    if(missionState==='swap_package'){return{label:'PACKAGE',x:mission().package.x,y:mission().package.y};}
-    if(missionState==='swap_escape_steal'&&hotSwapEscape22)return{label:'ESCAPE CAR',x:hotSwapEscape22.x,y:hotSwapEscape22.y};
-    if(missionState==='swap_escape')return{label:'LOSE HEAT',x:RESPRAY.x+RESPRAY.w/2,y:RESPRAY.y+RESPRAY.h/2};
-    if(missionState==='swap_deliver'){const r=mission().finalDelivery;return{label:'SAFEHOUSE',x:r.x+r.w/2,y:r.y+r.h/2};}
-  }
-  return navInfo22Base();
-};}
 
 const draw22Base=draw;
 draw=function(){
