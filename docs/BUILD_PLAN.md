@@ -37,7 +37,8 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Lane-aware following distance
 - [x] Safe adjacent-lane checks and lane-change cooldown
 - [x] Police signal behavior by pursuit level
-- [ ] Turn lanes / dedicated turning pockets
+- [x] Turn lanes / dedicated turning pockets
+- [x] Block-aware police street-grid pursuit waypoints
 
 ## Phase 3 — Crime loop
 
@@ -66,7 +67,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Branching mission choice with route-dependent payout/consequences
 - [x] Cross-sector checkpoint mission
 - [x] Optional bonus objective / secondary mission goal
-- [ ] Multiple optional objectives in one mission
+- [x] Multiple independent optional objectives in one mission
 
 ## Phase 5 — Full level slice
 
@@ -76,7 +77,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Level-completion / Downtown unlock flow
 - [x] Minimap + navigation objective marker
 - [x] Browser front-end entry screen
-- [x] Seven post-clear advanced missions
+- [x] Eight post-clear advanced missions
 - [x] Procedural audio pass
 - [x] HUD / mission-state presentation polish
 - [x] Broader vehicle variety
@@ -89,20 +90,20 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Harbor East mission content
 - [ ] Third authored district/sector
 
-## Build 20 — lane intelligence + GREEN WAVE
+## Build 21 — turn pockets + PERFECT LINE
 
-- two civilian lane centers instead of shared centerline targets
-- lane-aware traffic following
-- blocked AI can change lanes when the adjacent lane is clear
-- lane changes are suppressed near intersections and rate-limited by cooldown
-- low-level police respect red lights
-- wanted level 3+ police use emergency signal priority
-- GREEN WAVE adds job #10
-- GREEN WAVE has four checkpoints and a 105-second timer
-- base reward 7,000 × multiplier
-- optional +2,500 clean-driving bonus before multiplier
-- red-light violation at speed removes the bonus but does not fail the mission
-- mission terminal uses keys 1–9 and 0
+- AI detects upcoming left/right route turns and preselects a matching turning lane
+- visible intersection pocket guides in Godot and browser builds
+- lane-aware spacing, lane-change cooldowns, and traffic signals remain active
+- police choose road-grid pursuit waypoints when buildings block direct pursuit
+- close high-heat pursuits return to direct interception
+- PERFECT LINE adds job #11
+- four checkpoints and a 100-second timer
+- base reward 7,500 × multiplier
+- Signal Discipline bonus: +2,000 before multiplier
+- Untouched Courier bonus: +3,000 before multiplier
+- bonuses fail independently and never fail the base mission
+- mission terminal uses keys 1–9, 0, and -
 
 ## Persistence rule
 
