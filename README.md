@@ -4,45 +4,47 @@ A from-scratch, top-down crime-sandbox prototype inspired by the gameplay struct
 
 This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 20 — lane intelligence + optional objectives
+## Build 21 — turn pockets, routed pursuit + multi-bonus missions
 
-Build 20 keeps the complete two-sector Build 19 world, traffic signals, Harbor East / Docklands, living-city cleanup, pedestrian archetypes, vehicle classes, procedural audio, minimap/navigation, persistent progression, police/wanted loop, combat, bribes, respray, branching missions, and all nine previous jobs.
+Build 21 keeps the complete two-sector Build 20 world, Harbor East / Docklands, traffic signals, two-lane civilian traffic, lane changes, living-city cleanup, vehicle classes, procedural audio, minimap/navigation, persistent progression, police/wanted loop, combat, bribes, respray, branching missions, and all ten previous jobs.
 
-### Two-lane civilian traffic
+### Dedicated turning pockets
 
-Civilian traffic now uses actual lane offsets instead of every car targeting the same road centerline.
+Civilian traffic now commits to a turning lane as it approaches a route corner.
 
-- AI cars alternate between two lane centers
-- car-following checks traffic in the same lane instead of braking for vehicles beside it
-- blocked traffic can request a lane change
-- a lane change only starts when adjacent space is clear
-- cars avoid starting lane changes close to intersections
-- lane changes use a cooldown to prevent constant weaving
-- Build 19 red-light behavior remains active at the same time
+- AI detects whether its next route segment turns left or right
+- the car moves into the matching lane before reaching the intersection
+- ordinary lane changes remain suppressed near intersections
+- visible turn-pocket guide marks make the new behavior readable in both builds
+- same-lane spacing and Build 19 traffic signals remain active
 
-### Police + traffic signals
+### Routed police pursuit
 
-Police now coordinate with the signal system.
+Police now use street-grid waypoints when a building blocks a direct line to the player.
 
-- at wanted levels **1–2**, police reduce speed for red lights
-- at wanted levels **3–4**, pursuit switches to emergency priority and ignores traffic signals
-- this keeps low-level pursuit more believable without making high-level chases too easy
+- clear line of sight keeps direct pursuit
+- blocked line of sight selects an intermediate road-grid waypoint
+- reaching the waypoint returns the cruiser to direct pursuit
+- wanted levels 1–2 still obey red signals
+- wanted levels 3–4 retain emergency signal priority
+- close high-heat pursuit drops the detour and attacks directly
 
-### New mission — GREEN WAVE
+### New mission — PERFECT LINE
 
-GREEN WAVE is post-clear job #10 and introduces the first optional mission bonus.
+PERFECT LINE is post-clear job #11 and introduces two independent optional objectives.
 
-1. steal the marked green courier in Harbor East
-2. hit four ordered checkpoints before the **105-second** timer expires
-3. the mission can always be completed normally
-4. the optional clean-driving bonus remains active as long as you do not blast through a red signal at speed
-5. a red-light violation permanently removes the bonus for that run
+1. steal the marked pink courier in Harbor East
+2. hit four ordered checkpoints before the **100-second** timer expires
+3. the first checkpoints increase police heat
+4. **Signal Discipline:** +2,000 before multiplier if no high-speed red-light violation occurs
+5. **Untouched Courier:** +3,000 before multiplier if the courier takes no vehicle damage
+6. either bonus can be lost independently without failing the mission
 
-Base reward: **7,000 × multiplier**.
+Base reward: **7,500 × multiplier**.
 
-Clean-driving bonus: **+2,500 before multiplier**.
+Maximum bonus: **+5,000 before multiplier**.
 
-The mission terminal now supports **1–9 and 0** for job #10.
+The mission terminal now supports **1–9, 0, and -** for job #11.
 
 ## Current missions
 
@@ -56,16 +58,17 @@ The mission terminal now supports **1–9 and 0** for job #10.
 8. **EASTBOUND** — timed run into Harbor East / Docklands
 9. **NIGHT SHIFT** — four-stop Docklands pressure run
 10. **GREEN WAVE** — signal-aware checkpoint run with optional clean bonus
+11. **PERFECT LINE** — four-stop pressure run with two independent bonuses
 
-The first three form the core level path. Clearing the core level unlocks the seven advanced jobs.
+The first three form the core level path. Clearing the core level unlocks the eight advanced jobs.
 
 ## Validation
 
-- `data/missions.json` parses cleanly with ten missions
-- `web/game20.js` passes `node --check`
-- `web/traffic20_runtime.js` passes `node --check`
-- Build 20 loader anchor targets the committed Build 19 runtime chain
-- Build 20 Godot scripts and scene pass structural/delimiter sanity checks
+- `data/missions.json` contains eleven missions
+- `web/game21.js` passes `node --check`
+- `web/traffic21_runtime.js` passes `node --check`
+- Build 21 loader anchor targets the committed Build 20 runtime chain
+- Build 21 Godot scripts and scene passed structural/delimiter sanity checks
 - Godot runtime was not executed in this environment because a Godot binary is not installed
 
 ## Engine
@@ -79,7 +82,7 @@ Godot 4.x
 - **Space / F** — fire pistol while on foot
 - **M** — toggle minimap
 - **Blue phone** — open mission terminal
-- **1–9 / 0** — select an unlocked mission
+- **1–9 / 0 / -** — select an unlocked mission
 - **Esc** — close mission terminal
 - **R** — reset the current world
 - **Shift+R** — browser only: clear saved progression
@@ -89,27 +92,5 @@ Godot 4.x
 **https://raw.githack.com/flesentine/gta1/bootstrap/playable-slice/web/index.html**
 
 The browser build mirrors the clean-room gameplay prototype. The first visit may show raw.githack's one-time confirmation page.
-
-## Development order
-
-1. Driving + camera + collisions
-2. Traffic + pedestrians
-3. Damage + weapons + pickups
-4. Wanted/police loop
-5. Arrest/death + escape tools
-6. Mission state machine
-7. Mini campaign, scoring, timer objectives
-8. Persistent progression and unlocks
-9. Authored city sector / content pipeline
-10. Navigation + mission selection
-11. Chained checkpoint objectives
-12. Mixed vehicle/on-foot mission flow
-13. Audio/HUD polish + vehicle and pedestrian variety
-14. Character-target/combat mission
-15. Population behavior + entity cleanup
-16. Branching mission logic
-17. Second authored sector / Harbor East expansion
-18. Intersection right-of-way + additional Harbor mission
-19. Lane intelligence, police signal behavior, optional mission objectives
 
 See `docs/BUILD_PLAN.md` for the implementation checklist.
