@@ -105,7 +105,6 @@ const update23Base=update;
 update=function(dt){
   update23Base(dt);
   if(mission().id==='hot_swap'&&missionState==='swap_package'&&!hotSwapRecoveryUsed23&&!hotSwapRecoveryArmed23){hotSwapRecoveryArmed23=true;statusMessage='HANDOFF CHECKPOINT ARMED — 1 RECOVERY';statusTimer=2.1;if(typeof banner15==='function')banner15('CHECKPOINT ARMED','1 LATE-RUN RECOVERY');}
-  routePolicePredictive23(dt);
   const bar=document.getElementById('build14-drive');if(bar){bar.textContent=bar.textContent.replace('BUILD 22','BUILD 23');if(!bar.textContent.includes('CONFLICT MATRIX'))bar.textContent+=' · CONFLICT MATRIX + INTERCEPT';}
 };
 const front23=document.getElementById('build11-front');if(front23){front23.innerHTML=front23.innerHTML.replace(/BUILD 22/g,'BUILD 23').replace('Reserved intersections + multi-hop pursuit online','Conflict matrix + predictive pursuit online');const bold=front23.querySelectorAll('b');if(bold.length>1)bold[1].textContent=`${unlockedMissionCount()}/${CAMPAIGN.length}`;}
