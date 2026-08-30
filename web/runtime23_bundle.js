@@ -15,7 +15,13 @@ Promise.all(modules.map(name => fetch(name).then(r => {
   if (!r.ok) throw new Error(`${name} (${r.status})`);
   return r.text();
 }))).then(codes => {
-  eval(codes.join('\n\n'));
+  const source = codes.join('\n\n');
+  try {
+    new Function(source);
+  } catch (err) {
+    throw new Error(`ordered runtime bundle syntax: ${err.message}`);
+  }
+  eval(source);
 }).catch(err => {
   console.error(err);
   const detail = document.getElementById('detail');
