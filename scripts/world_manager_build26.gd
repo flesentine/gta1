@@ -18,15 +18,35 @@ func _process(delta: float) -> void:
 func _route_police_around_blocks() -> void:
     if game == null or game.police.is_empty():
         return
-    if int(game.wanted_level) < 4:
-        super._route_police_around_blocks()
-        return
-
     var target: Node2D = game._player_target() if game.has_method("_player_target") else null
     if not is_instance_valid(target):
         return
     var intercept := _predict_target_position(target)
     var motion := _target_motion24(target)
+    if int(game.wanted_level) < 4:
+        var normal_side := Vector2(-motion.y, motion.x)
+        for i in range(game.police.size()):
+            var cop = game.police[i]
+            if not is_instance_valid(cop) or not cop.has_method("set_pursuit_path"):
+                continue
+            var role := i % 3
+            var aim := intercept
+            if role == 1:
+                aim += normal_side * 520.0
+                cop.set_meta("build24_role", "FLANK A")
+            elif role == 2:
+                aim -= normal_side * 520.0
+                cop.set_meta("build24_role", "FLANK B")
+            else:
+                cop.set_meta("build24_role", "CHASE")
+            aim.x = clamp(aim.x, WORLD26.position.x + 60.0, WORLD26.end.x - 60.0)
+            aim.y = clamp(aim.y, WORLD26.position.y + 60.0, WORLD26.end.y - 60.0)
+            if int(game.wanted_level) >= 3 and cop.global_position.distance_to(target.global_position) < 210.0:
+                cop.set_pursuit_path(PackedVector2Array())
+            else:
+                cop.set_pursuit_path(_route_to_point24(cop, aim, target))
+        return
+
     if motion.length_squared() < 0.001:
         motion = Vector2.RIGHT
     motion = motion.normalized()
