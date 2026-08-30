@@ -85,9 +85,6 @@ function hotSwapActive22(){return mission().id==='hot_swap'&&['swap_steal','swap
 
 try{const raw=localStorage.getItem(SAVE_KEY);if(raw){const s=JSON.parse(raw);if(levelComplete&&Number(s.campaignIndex)===11)campaignIndex=11;}}catch(e){console.warn('Build 22 saved mission restore failed',e);}
 
-const activeMission22Base=activeMission;
-activeMission=function(){return hotSwapActive22()||activeMission22Base();};
-
 const startMission22Base=startMission;
 startMission=function(){
   const m=mission();if(m.id!=='hot_swap')return startMission22Base();
@@ -166,6 +163,10 @@ draw=function(){
 const update22Base=update;
 update=function(dt){
   update22Base(dt);
+  if(hotSwapActive22()&&respawnTimer<=0&&missionTimer>0){
+    missionTimer=Math.max(0,missionTimer-dt);
+    if(missionTimer<=0){failMission('MISSION FAILED — TIME EXPIRED');return;}
+  }
   if(mission().id==='hot_swap'){
     const m=mission();
     if(missionState==='swap_steal'){
