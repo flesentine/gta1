@@ -9,6 +9,6 @@ if(bitmap30Ready()){
   bitmap30Patterns.clear();
   if(typeof banner15==='function')banner15('SLICED BITMAP ART ONLINE','BUILD 30');
   const detail=document.getElementById('detail');
-  if(detail&&detail.textContent.includes('LOADING'))detail.textContent='BITMAP ATLAS ONLINE';
+  if(detail)detail.textContent=`BITMAP ATLAS ONLINE · ${BITMAP30.width||BITMAP30.naturalWidth}×${BITMAP30.height||BITMAP30.naturalHeight}`;
 }
 }
