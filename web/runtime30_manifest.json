@@ -23,6 +23,7 @@
     "combat28_weapons_runtime.js",
     "combat28_mission_runtime.js",
     "combat29_runtime.js",
+    "bitmap30_sliced_assets.js",
     "bitmap30_runtime.js"
   ]
 }
