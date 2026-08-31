@@ -14,20 +14,7 @@ The difference is rendering: major browser-world graphics are no longer drawn pr
 
 Build 30 uses an original ImageGen-generated art sheet that was cropped into a compact runtime atlas and then quantized to a VGA-like palette for shipping.
 
-`web/assets/build30/bitmap_atlas.png` contains source regions for:
-
-- civilian vehicle sprites
-- police / tactical vehicle sprites
-- civilian pedestrians
-- armed-hostile pedestrians
-- explosions, smoke, sparks, blood and skid marks
-- traffic cones / barriers
-- pistol, shotgun and SMG pickup art
-- asphalt / intersection / crosswalk textures
-- sidewalk and concrete textures
-- rooftop textures
-- vegetation texture
-- helipad / airfield dressing
+`web/assets/build30/bitmap_atlas.png` contains source regions for civilian and police vehicles, pedestrians and armed hostiles, weapon pickups, road/sidewalk/rooftop textures, explosions, smoke, sparks, blood, skid marks, barricades and airfield dressing.
 
 `web/assets/build30/atlas.json` contains the exact source rectangles used by the browser renderer.
 
@@ -57,26 +44,7 @@ Build 30 specifically replaces **browser Canvas graphics**. The Godot gameplay i
 
 ## Current missions
 
-Build 28's base campaign contains 17 missions. Build 29/30 layer CROSSFIRE on top for **18 playable jobs**:
-
-1. HOT PROPERTY
-2. SHORT FUSE
-3. CLEAN BREAK
-4. CROSSTOWN
-5. DEAD DROP
-6. RED FLAG
-7. CROSSROADS
-8. EASTBOUND
-9. NIGHT SHIFT
-10. GREEN WAVE
-11. PERFECT LINE
-12. HOT SWAP
-13. TWIN STRIKE
-14. AIRMAIL
-15. LOCKDOWN
-16. RUNWAY RAID
-17. THREE FRONTS
-18. CROSSFIRE
+Build 28's base campaign contains 17 missions. Build 29/30 layer CROSSFIRE on top for **18 playable jobs**.
 
 Chapter One remains **AIRMAIL → LOCKDOWN → RUNWAY RAID → THREE FRONTS → CROSSFIRE**.
 
