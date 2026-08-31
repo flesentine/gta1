@@ -1,7 +1,5 @@
 (() => {
 'use strict';
-const loadImage30=src=>new Promise(resolve=>{const img=new Image();img.decoding='async';img.onload=()=>resolve(img);img.onerror=()=>resolve(null);img.src=src;});
-const jsonOrNull30=url=>fetch(url).then(r=>r.ok?r.json():null).catch(()=>null);
 Promise.all([
   fetch('game8.js').then(r=>{if(!r.ok)throw new Error(`Unable to load flat engine core (${r.status})`);return r.text();}),
   fetch('../data/city_sector.json').then(r=>{if(!r.ok)throw new Error(`Unable to load city sector (${r.status})`);return r.json();}),
@@ -9,12 +7,10 @@ Promise.all([
   fetch('../data/west_ridge.json').then(r=>{if(!r.ok)throw new Error(`Unable to load West Ridge (${r.status})`);return r.json();}),
   fetch('../data/missions.json').then(r=>{if(!r.ok)throw new Error(`Unable to load missions (${r.status})`);return r.json();}),
   fetch('../data/build29_campaign.json').then(r=>{if(!r.ok)throw new Error(`Unable to load Build 29 campaign (${r.status})`);return r.json();}),
-  fetch('runtime30_manifest.json').then(r=>{if(!r.ok)throw new Error(`Unable to load Build 30 manifest (${r.status})`);return r.json();}),
-  jsonOrNull30('assets/build30/atlas.json'),
-  loadImage30('assets/build30/bitmap_atlas.png')
-]).then(([core,city,harbor,west,missions,build29,manifest,atlasMap,atlasImage])=>{
+  fetch('runtime30_manifest.json').then(r=>{if(!r.ok)throw new Error(`Unable to load Build 30 manifest (${r.status})`);return r.json();})
+]).then(([core,city,harbor,west,missions,build29,manifest])=>{
   window.__city28Data=city;window.__harbor18Data=harbor;window.__west25Data=west;window.__missions28Data=missions;window.__build29Data=build29;
-  window.__runtime30Manifest=manifest;window.__bitmap30AtlasMap=atlasMap;window.__bitmap30AtlasImage=atlasImage;
+  window.__runtime30Manifest=manifest;
   const activeNeedle="const activeMission=()=>['steal','deliver','destroy','escape'].includes(missionState);";
   if(!core.includes(activeNeedle))throw new Error('Flat core active-mission marker missing');
   core=core.replace(activeNeedle,"const activeMission=()=>['steal','deliver','destroy','escape','chain_steal','chain_drive','mixed_steal','mixed_drive','mixed_package','mixed_escape'].includes(missionState);");
