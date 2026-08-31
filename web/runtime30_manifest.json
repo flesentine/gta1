@@ -24,6 +24,8 @@
     "combat28_mission_runtime.js",
     "combat29_runtime.js",
     "bitmap30_sliced_assets.js",
-    "bitmap30_runtime.js"
+    "bitmap30_decode_fix.js",
+    "bitmap30_runtime.js",
+    "bitmap30_ready_fix.js"
   ]
 }
