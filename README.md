@@ -16,14 +16,14 @@ Two original transparent ImageGen sheets were sliced, trimmed and repacked into 
 
 `web/bitmap30_sliced_assets.js` embeds the PNG plus the exact crop map. `web/bitmap30_runtime.js` replaces the browser draw functions while retaining the existing gameplay geometry and collision.
 
-### Decode fix
+### Bitmap activation fix
 
 The first Build 30 cut could remain on the procedural fallback because the renderer could initialize before the embedded PNG was reliably decoded. The current build fixes that path explicitly:
 
-- `bitmap30_decode_fix.js` converts the embedded PNG bytes to a Blob, decodes them with `createImageBitmap()`, and draws the result into an off-screen Canvas.
-- `runtime30_bundle.js` now waits for bitmap preparation before evaluating `bitmap30_runtime.js`.
-- `bitmap30_ready_fix.js` recognizes the prepared Canvas atlas as immediately ready.
-- if decode still fails on a browser, the old procedural renderer remains available as a safe fallback instead of producing a blank game.
+- `bitmap30_decode_fix.js` converts the embedded PNG bytes to a Blob, decodes them with `createImageBitmap()`, and copies the decoded bitmap into an off-screen Canvas.
+- `runtime30_bundle.js` waits for that preparation step before evaluating `bitmap30_runtime.js`.
+- `bitmap30_ready_fix.js` recognizes the prepared Canvas atlas as ready immediately and reports the active atlas dimensions in the HUD.
+- if bitmap preparation still fails on a browser, the procedural renderer remains available as a safe fallback instead of showing an empty game.
 
 Mission rings, traffic-light state, lane guides and other gameplay-aligned markers intentionally remain geometric overlays for readability.
 
@@ -61,7 +61,7 @@ Historical loaders remain only for older pinned builds.
 - `web/bitmap30_runtime.js` passed its prior `node --check`
 - embedded atlas is a transparent 383×176 palette PNG with 48 named regions
 - renderer retains the procedural fallback if bitmap preparation fails
-- a full browser navigation smoke test cannot be executed in this environment because the managed Chromium build blocks local/external navigation
+- the managed Chromium build in this environment blocks navigation, so a full browser gameplay smoke test still has to be confirmed in a normal browser
 - Godot runtime was not executed because a Godot binary is not installed
 
 ## Engine
