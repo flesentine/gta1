@@ -58,7 +58,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [ ] Chapter-specific rewards / completion unlocks
 - [ ] Additional campaign chapters
 
-## Phase 5 — Full level slice
+## Phase 5 — Full level slice / presentation
 
 - [x] Original authored 5,200 × 3,400 city sector
 - [x] Harbor East / Docklands second sector
@@ -73,31 +73,32 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Flatten browser bootstrap to raw engine core + explicit runtime modules
 - [x] Flatten runtime guard blocks into a real shared lexical scope
 - [x] Broader weapon/combat depth with pistol, shotgun and SMG
-- [x] Additional West Ridge / Airfield mission content
+- [x] ImageGen-generated browser bitmap atlas
+- [x] Browser bitmap world / vehicle / pedestrian / pickup / effects renderer
+- [x] Bitmap renderer fallback to procedural Canvas art
+- [x] Commit reproducible ImageGen prompt/art-direction document
+- [ ] Godot bitmap-art parity after browser art direction approval
 - [ ] Replace legacy `game8.js` raw engine core with named production modules (`world`, `entities`, `missions`, `ui`, `audio`, `progress`)
 - [ ] Real automated browser runtime smoke test
 - [ ] Real Godot CI/parser/runtime validation
 
-## Build 29 — armed hostiles + Chapter One
+## Build 30 — ImageGen bitmap renderer
 
-- adds CROSSFIRE as job #18 through `data/build29_campaign.json`
-- five armed hostiles use advance / fire / cover states
-- wounded hostiles prioritize authored cover points
-- hostile fire damages vehicle HP or the player's separate four-point combat armor buffer
-- CROSSFIRE gives SMG ammunition + armor, escalates to wanted level 4 after the hostile group is cleared, then requires a full escape
-- CROSSFIRE timer: 180 seconds
-- CROSSFIRE reward: 16,500 × multiplier
-- adds persistent Chapter One — COAST TO COAST
-- Chapter One sequence: AIRMAIL → LOCKDOWN → RUNWAY RAID → THREE FRONTS → CROSSFIRE
-- chapter stage is persisted separately and retained on mission failure
-- selecting a standalone mission suspends an active chapter
-- `;` selects CROSSFIRE and `,` starts/resumes Chapter One
-- browser flat manifest extends through `combat29_runtime.js`
+- preserves all Build 29 gameplay and Chapter One state
+- introduces `web/assets/build30/bitmap_atlas.png` and source-region `atlas.json`
+- atlas contains original generated vehicles, pedestrians/hostiles, effects, weapons, roads, sidewalks, rooftops and airfield art
+- shipped atlas is palette-quantized for a compact VGA-like bitmap feel
+- `bitmap30_runtime.js` replaces major procedural Canvas world/entity/effect draw functions with atlas `drawImage()` calls
+- mission/readability markers intentionally remain geometry overlays
+- generated atlas also skins the front-end entry screen
+- `game30.js` preloads the bitmap resources but treats them as optional; load failure falls back to Build 29 procedural rendering
+- reusable clean-room prompt is documented in `docs/BUILD30_IMAGEGEN_PROMPT.md`
+- Build 30 is browser-renderer focused; Godot gameplay remains on Build 29 presentation for this art-direction pass
 
 ## Persistence rule
 
-Stable base progression remains Build 9-compatible: score, multiplier, selected/next mission, best score, and unlock state. Build 29 adds a separate small chapter save containing only active/stage/pending chapter state. Active world entities, hostile health/positions, weapon inventory, armor, tire damage, route choices, optional-bonus state, timers, roadblocks and spike strips are intentionally transient.
+Stable base progression remains Build 9-compatible: score, multiplier, selected/next mission, best score, and unlock state. Build 29 adds a separate small chapter save containing only active/stage/pending chapter state. Active world entities, hostile health/positions, weapon inventory, armor, tire damage, route choices, optional-bonus state, timers, roadblocks and spike strips are intentionally transient. Build 30 adds no new persistence fields.
 
 ## IP boundary
 
-Do not commit extracted GTA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data. Use original maps, names, art, missions, dialogue, audio, and branding unless an appropriate license is obtained.
+Do not commit extracted GTA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data. Use original maps, names, art, missions, dialogue, audio, and branding unless an appropriate license is obtained. Build 30 generated art follows this same clean-room rule.

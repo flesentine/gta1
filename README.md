@@ -2,63 +2,62 @@
 
 A from-scratch, top-down crime-sandbox prototype inspired by the gameplay structure of the original 1997 Grand Theft Auto.
 
-This repository uses original placeholder code/art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
+This repository uses original clean-room code and original placeholder/generated art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Build 29 — armed hostiles + persistent Chapter One
+## Build 30 — ImageGen bitmap graphics
 
-Build 29 retains the complete three-sector world, flat Build 28 browser runtime, pistol / shotgun / SMG combat, level-4 police tactics, traffic simulation, mission recovery, branching objectives, vehicle classes, procedural audio, minimap/navigation, persistence, cleanup/repopulation, bribes, and respray.
+Build 30 is a browser visual-conversion build. All Build 29 gameplay remains: the complete three-sector world, 18 jobs, Chapter One, armed-hostile cover AI, pistol / shotgun / SMG combat, traffic simulation, level-4 police tactics, mission recovery, branching objectives, vehicle classes, procedural audio, persistence, minimap/navigation, cleanup/repopulation, bribes, and respray.
 
-### Armed hostile AI
+The difference is rendering: major browser-world graphics are no longer drawn primarily as flat procedural canvas rectangles and ellipses.
 
-Civilians are no longer the only on-foot NPC archetype.
+### Generated bitmap atlas
 
-Build 29 adds mission hostiles that:
+Build 30 uses an original ImageGen-generated art sheet that was cropped into a compact runtime atlas and then quantized to a VGA-like palette for shipping.
 
-- carry visible firearms
-- advance when the player is far away
-- stop and fire when they have line of sight
-- react to taking damage by breaking toward authored cover points
-- favor cover when wounded or when the player gets too close
-- damage the player's current vehicle if the player stays in a car
-- strip a separate four-point combat armor buffer while the player is on foot
-- visibly show a cover-state arc while relocating
+`web/assets/build30/bitmap_atlas.png` contains source regions for:
 
-### New mission — CROSSFIRE
+- civilian vehicle sprites
+- police / tactical vehicle sprites
+- civilian pedestrians
+- armed-hostile pedestrians
+- explosions, smoke, sparks, blood and skid marks
+- traffic cones / barriers
+- pistol, shotgun and SMG pickup art
+- asphalt / intersection / crosswalk textures
+- sidewalk and concrete textures
+- rooftop textures
+- vegetation texture
+- helipad / airfield dressing
 
-CROSSFIRE is advanced job #18.
+`web/assets/build30/atlas.json` contains the exact source rectangles used by the browser renderer.
 
-1. reach the Downtown staging point
-2. receive SMG ammunition and combat armor
-3. clear five armed hostiles positioned around Downtown blocks
-4. hostiles advance, fire, and retreat toward cover under pressure
-5. clearing the group forces wanted level 4
-6. survive the pursuit and lose all heat
+The reusable generation brief is committed at `docs/BUILD30_IMAGEGEN_PROMPT.md` so later art passes can regenerate a cleaner or larger atlas without changing gameplay code.
 
-Timer: **180 seconds**.
+### Bitmap renderer
 
-Base reward: **16,500 × multiplier**.
+`web/bitmap30_runtime.js` replaces the main browser draw functions after the Build 29 gameplay stack has loaded:
 
-Build 29 adds CROSSFIRE through `data/build29_campaign.json` instead of rewriting the Build 28 base mission file.
+- `drawWorld()` — bitmap road, sidewalk, lot, alley and rooftop surfaces
+- `drawCar()` — civilian vehicle sprites while retaining class-specific physics/HP
+- `drawCop()` — police/tactical vehicle sprites
+- `drawPed()` — civilian, target and hostile sprites
+- `drawPlayer()` — player bitmap sprite
+- `drawPickup()` — bitmap weapon pickups
+- `drawFx()` — bitmap smoke, impact sparks, explosions and skid feedback
 
-### Chapter One — COAST TO COAST
+Mission rings, traffic-light state and other gameplay-aligned markers intentionally remain geometric overlays so objective readability is not tied to an art asset.
 
-Build 29 introduces the first persistent multi-mission chapter above the individual job layer.
+### Safe fallback
 
-Chapter One sequence:
+The bitmap art layer is optional at runtime. `game30.js` attempts to preload the atlas and its JSON map. If either fails, Build 30 keeps running and the renderer calls the existing Build 29 procedural draw functions instead of presenting a blank world.
 
-1. **AIRMAIL**
-2. **LOCKDOWN**
-3. **RUNWAY RAID**
-4. **THREE FRONTS**
-5. **CROSSFIRE**
+### Scope
 
-Chapter progress is stored separately from the normal Build 9-compatible score/progression save. Completing a stage advances the chapter checkpoint. Failing a stage keeps that chapter checkpoint so the same stage can restart after the mission cooldown. Selecting a normal standalone job suspends the chapter run.
-
-The mission terminal includes a Chapter One control after the core level is cleared. In the browser, **`,`** starts or resumes Chapter One; **`;`** selects CROSSFIRE.
+Build 30 specifically replaces **browser Canvas graphics**. The Godot gameplay implementation remains functionally at the Build 29 system state for this pass; Godot bitmap-art parity can be done after the browser art direction is approved.
 
 ## Current missions
 
-Build 28's base campaign contains 17 missions. Build 29 layers CROSSFIRE on top for **18 playable jobs**:
+Build 28's base campaign contains 17 missions. Build 29/30 layer CROSSFIRE on top for **18 playable jobs**:
 
 1. HOT PROPERTY
 2. SHORT FUSE
@@ -79,32 +78,36 @@ Build 28's base campaign contains 17 missions. Build 29 layers CROSSFIRE on top 
 17. THREE FRONTS
 18. CROSSFIRE
 
+Chapter One remains **AIRMAIL → LOCKDOWN → RUNWAY RAID → THREE FRONTS → CROSSFIRE**.
+
 ## Browser runtime
 
-Build 29 preserves the Build 28 flat runtime architecture:
+Build 30 preserves the flat architecture introduced in Build 28:
 
 - raw `game8.js` engine core
 - authored city / sector / mission JSON
-- explicit Build 28 compatibility modules replacing the old Build 9–13 patch responsibilities
+- explicit Build 28 compatibility modules
 - one ordered shared-scope manifest through `combat29_runtime.js`
-- browser-time syntax validation before the flattened runtime executes
+- final `bitmap30_runtime.js` renderer layer
+- browser-time flattened-source syntax validation before execution
 
-Historical `game9.js` through `game27.js` files remain in the repository only so older pinned builds continue working.
+Historical loaders remain only for older pinned builds.
 
 ## Validation
 
-- `data/build29_campaign.json` parses as JSON
-- `web/runtime29_manifest.json` parses as JSON
-- `web/game29.js` passes `node --check`
-- `web/runtime29_bundle.js` passes `node --check`
-- `web/combat29_runtime.js` passes `node --check`
-- new Build 29 Godot scripts and `scenes/main.tscn` passed delimiter/structure sanity checks
+- `web/runtime30_manifest.json` parses as JSON
+- `web/assets/build30/atlas.json` parses as JSON
+- `web/game30.js` passes `node --check`
+- `web/runtime30_bundle.js` passes `node --check`
+- `web/bitmap30_runtime.js` passes `node --check`
+- shipped bitmap atlas is a palette-quantized PNG
+- Build 30 preserves explicit fallback to the Build 29 procedural renderer if bitmap loading fails
 - no real browser runtime smoke test was executed in this environment
 - Godot runtime was not executed because a Godot binary is not installed
 
 ## Engine
 
-Godot 4.x
+Godot 4.x + browser Canvas preview
 
 ## Controls
 
