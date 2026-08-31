@@ -23,16 +23,22 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Movement-aware intersection reservations
 - [x] Three-sector traffic and pedestrian population
 
-## Phase 3 — Crime loop
+## Phase 3 — Crime / combat loop
 
-- [x] Weapon framework / pistol / ammo pickups
-- [x] Shotgun archetype + shell pickups
-- [x] SMG three-round burst archetype + ammo pickups
-- [x] Wanted stages 0–4, police pursuit, arrest/death/respawn
-- [x] Police bribe pickup and respray garage
-- [x] Multi-waypoint and predictive police routing
-- [x] CHASE / FLANK roles, high-heat roadblocks, spike strips and BOX pursuit
-- [ ] Additional combat reactions / cover / armed hostile archetypes
+- [x] Pistol / ammo pickups
+- [x] Shotgun / shell pickups
+- [x] SMG / ammunition pickups
+- [x] Weapon cycling
+- [x] Multi-pellet shotgun behavior
+- [x] Three-round SMG burst behavior
+- [x] Armed hostile NPC archetype
+- [x] Hostile advance / fire / simple cover behavior
+- [x] On-foot combat armor buffer
+- [x] Wanted stages 0–4
+- [x] Police pursuit, predictive routing and coordinated roles
+- [x] Roadblocks, spike strips and level-4 box tactics
+- [ ] Additional hostile weapon archetypes
+- [ ] Hostile squad coordination / suppression / flanking
 
 ## Phase 4 — Mission loop
 
@@ -47,7 +53,10 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Three-sector delivery and tactical level-4 pursuit missions
 - [x] Shotgun combat sweep mission
 - [x] Sequential three-sector combat campaign mission
-- [ ] Multi-mission campaign chapters with persistent narrative/state flags
+- [x] Armed hostile / cover assault mission
+- [x] Persistent multi-mission Chapter One sequence
+- [ ] Chapter-specific rewards / completion unlocks
+- [ ] Additional campaign chapters
 
 ## Phase 5 — Full level slice
 
@@ -58,7 +67,7 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] District identities, lots, alleys, shortcuts and Airfield runway
 - [x] Persistent campaign checkpoint, score, multiplier, best score and unlock state
 - [x] Browser front-end entry screen
-- [x] Fourteen post-clear advanced missions
+- [x] Fifteen post-clear advanced jobs including Build 29 overlay content
 - [x] Procedural audio and HUD/mission-state polish
 - [x] Browser runtime manifest with explicit module order
 - [x] Flatten browser bootstrap to raw engine core + explicit runtime modules
@@ -66,25 +75,28 @@ Prove the core GTA 1 loop with original clean-room content, then expand systems 
 - [x] Broader weapon/combat depth with pistol, shotgun and SMG
 - [x] Additional West Ridge / Airfield mission content
 - [ ] Replace legacy `game8.js` raw engine core with named production modules (`world`, `entities`, `missions`, `ui`, `audio`, `progress`)
-- [ ] Add campaign chapter sequencing across mission groups
+- [ ] Real automated browser runtime smoke test
+- [ ] Real Godot CI/parser/runtime validation
 
-## Build 28 — flat core + SMG + THREE FRONTS
+## Build 29 — armed hostiles + Chapter One
 
-- Build 28 browser no longer executes the nested Build 9–14 loader chain
-- `game28.js` loads `game8.js` directly and injects one Build 28 runtime bundle
-- authored city, Harbor East, West Ridge and mission data are preloaded before the runtime starts
-- `core28_data_runtime.js`, `core28_ui_runtime.js`, and `core28_missions_runtime.js` explicitly replace the old Build 9–13 string-patch responsibilities
-- `runtime28_bundle.js` strips known per-module guard blocks, joins the modules into one lexical source, syntax-checks it, and evaluates once
-- SMG fires three low-damage bullets per trigger with tight spread and 0.22-second cadence
-- Q cycles pistol / shotgun / SMG based on ownership
-- THREE FRONTS adds job #17 and moves the player Harbor East → Central → West Ridge under escalating heat
-- final stage forces wanted level 4 and requires a full escape
-- THREE FRONTS timer is 190 seconds; base reward is 15,000 × multiplier
-- mission terminal adds `.` for job #17
+- adds CROSSFIRE as job #18 through `data/build29_campaign.json`
+- five armed hostiles use advance / fire / cover states
+- wounded hostiles prioritize authored cover points
+- hostile fire damages vehicle HP or the player's separate four-point combat armor buffer
+- CROSSFIRE gives SMG ammunition + armor, escalates to wanted level 4 after the hostile group is cleared, then requires a full escape
+- CROSSFIRE timer: 180 seconds
+- CROSSFIRE reward: 16,500 × multiplier
+- adds persistent Chapter One — COAST TO COAST
+- Chapter One sequence: AIRMAIL → LOCKDOWN → RUNWAY RAID → THREE FRONTS → CROSSFIRE
+- chapter stage is persisted separately and retained on mission failure
+- selecting a standalone mission suspends an active chapter
+- `;` selects CROSSFIRE and `,` starts/resumes Chapter One
+- browser flat manifest extends through `combat29_runtime.js`
 
 ## Persistence rule
 
-Only stable progression is saved: score, multiplier, selected/next mission, best score, and unlock state. Active mission entities, route choices, optional-bonus state, parallel-objective state, weapon ammo/ownership, tire damage, target state, mixed-objective stage, vehicle-swap stage, retry-checkpoint consumption, spike strips, roadblocks, and timers intentionally restart from the latest safe checkpoint.
+Stable base progression remains Build 9-compatible: score, multiplier, selected/next mission, best score, and unlock state. Build 29 adds a separate small chapter save containing only active/stage/pending chapter state. Active world entities, hostile health/positions, weapon inventory, armor, tire damage, route choices, optional-bonus state, timers, roadblocks and spike strips are intentionally transient.
 
 ## IP boundary
 
