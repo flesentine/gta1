@@ -15,6 +15,8 @@ window.__prepareBitmap30 = async function(){
   window.__bitmap30AtlasImage=canvas;
   window.__bitmap30AtlasReady=true;
   window.__bitmap30DecodeMode='blob-imagebitmap-canvas';
+  const detail=document.getElementById('detail');
+  if(detail)detail.textContent=`BITMAP ATLAS DECODED ${canvas.width}×${canvas.height}`;
   return canvas;
 };
 }
