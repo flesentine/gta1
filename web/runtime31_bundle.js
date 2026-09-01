@@ -3,7 +3,7 @@
 if(window.__gtaRuntime31Loaded)return;
 window.__gtaRuntime31Loaded=true;
 const manifest=window.__runtime31Manifest;
-if(!manifest||!Array.isArray(manifest.modules))throw new Error('Build 31A.1 runtime manifest unavailable');
+if(!manifest||!Array.isArray(manifest.modules))throw new Error('Build 31A.3 runtime manifest unavailable');
 function flatten31(name,source){
   let code=String(source||'').trim();
   const guard=code.match(/^if\s*\(\s*!window\.([A-Za-z_$][\w$]*)\s*\)\s*\{\s*/);
@@ -21,15 +21,15 @@ Promise.all(manifest.modules.map(name=>fetch(name).then(r=>{
   return r.text().then(source=>({name,source}));
 }))).then(parts=>{
   const source=`(()=>{\n${parts.map(p=>flatten31(p.name,p.source)).join('\n')}\n})();`;
-  try{new Function(source);}catch(err){throw new Error(`Build 31A.1 syntax check failed: ${err.message}`);}
+  try{new Function(source);}catch(err){throw new Error(`Build 31A.3 syntax check failed: ${err.message}`);}
   return eval(source);
 }).then(()=>{
   const title=document.querySelector('#hud .title span');
-  if(title)title.textContent='BUILD 31A.1';
+  if(title)title.textContent='BUILD 31A.3';
 }).catch(err=>{
   console.error(err);
   const d=document.getElementById('detail');
-  if(d)d.textContent=`BUILD 31A.1 RUNTIME ERROR\n${err.message}`;
+  if(d)d.textContent=`BUILD 31A.3 RUNTIME ERROR\n${err.message}`;
   throw err;
 });
 })();
