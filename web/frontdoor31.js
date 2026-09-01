@@ -12,7 +12,7 @@ function removeFrontDoor() {
   el.remove();
   const d = document.getElementById('detail');
   if (d && !d.textContent.includes('4-FRAME WALK')) {
-    d.textContent = '31A.3 · ANIMATED PLAYER TEST · F1 VECTOR / F2 ANIMATED';
+    d.textContent = '31A.4 · ANIMATED PLAYER TEST · F1 VECTOR / F2 ANIMATED';
   }
   return true;
 }
@@ -48,9 +48,10 @@ const observer = new MutationObserver(() => {
   while ((node = walker.nextNode())) {
     if (!node.nodeValue) continue;
     node.nodeValue = node.nodeValue
-      .replace(/BUILD 28/g, 'BUILD 31A.3')
-      .replace(/BUILD 29/g, 'BUILD 31A.3')
-      .replace(/BUILD 31A\.1/g, 'BUILD 31A.3');
+      .replace(/BUILD 28/g, 'BUILD 31A.4')
+      .replace(/BUILD 29/g, 'BUILD 31A.4')
+      .replace(/BUILD 31A\.1/g, 'BUILD 31A.4')
+      .replace(/BUILD 31A\.3/g, 'BUILD 31A.4');
   }
 });
 observer.observe(document.documentElement, { childList: true, subtree: true });
