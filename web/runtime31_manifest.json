@@ -1,5 +1,5 @@
 {
-  "build":"31A.3",
+  "build":"31A.4",
   "core":"game8.js",
   "mode":"flat-shared-scope",
   "modules":[
