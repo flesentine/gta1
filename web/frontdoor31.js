@@ -11,15 +11,12 @@ function removeFrontDoor() {
   if (!el) return false;
   el.remove();
   const d = document.getElementById('detail');
-  if (d && !d.textContent.includes('PLAYER PNG')) {
-    d.textContent = '31A.1 · PLAYER-ONLY TEST · F1 VECTOR / F2 BITMAP';
+  if (d && !d.textContent.includes('4-FRAME WALK')) {
+    d.textContent = '31A.3 · ANIMATED PLAYER TEST · F1 VECTOR / F2 ANIMATED';
   }
   return true;
 }
 
-// Capture phase is intentional. Build 29 rewrites the overlay with innerHTML,
-// which destroys the button listener originally attached by showFrontEnd().
-// This delegated handler lives on document and survives that rewrite.
 document.addEventListener('pointerdown', e => {
   const target = e.target instanceof Element ? e.target.closest('#enter-city') : null;
   if (!target) return;
@@ -43,7 +40,6 @@ document.addEventListener('keydown', e => {
   }
 }, true);
 
-// Keep the isolation build label honest without replacing innerHTML.
 const observer = new MutationObserver(() => {
   const el = front();
   if (!el) return;
@@ -52,8 +48,9 @@ const observer = new MutationObserver(() => {
   while ((node = walker.nextNode())) {
     if (!node.nodeValue) continue;
     node.nodeValue = node.nodeValue
-      .replace(/BUILD 28/g, 'BUILD 31A.1')
-      .replace(/BUILD 29/g, 'BUILD 31A.1');
+      .replace(/BUILD 28/g, 'BUILD 31A.3')
+      .replace(/BUILD 29/g, 'BUILD 31A.3')
+      .replace(/BUILD 31A\.1/g, 'BUILD 31A.3');
   }
 });
 observer.observe(document.documentElement, { childList: true, subtree: true });
