@@ -1,0 +1,108 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/main_build29.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/city_build26.gd" id="2_city"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="3_player"]
+[ext_resource type="Script" path="res://scripts/vehicle.gd" id="4_vehicle"]
+[ext_resource type="Script" path="res://scripts/respray_zone.gd" id="5_respray"]
+[ext_resource type="Script" path="res://scripts/mission_director_build29.gd" id="6_mission"]
+[ext_resource type="Script" path="res://scripts/mission_overlay_build29.gd" id="7_mission_overlay"]
+[ext_resource type="Script" path="res://scripts/sector_population_build25.gd" id="8_sector_population"]
+[ext_resource type="Script" path="res://scripts/mission_terminal_build29.gd" id="9_mission_terminal"]
+[ext_resource type="Script" path="res://scripts/minimap_build29.gd" id="10_minimap"]
+[ext_resource type="Script" path="res://scripts/polish_build29.gd" id="11_polish"]
+[ext_resource type="Script" path="res://scripts/world_manager_build26.gd" id="12_world_manager"]
+
+[sub_resource type="CircleShape2D" id="Circle_player"]
+radius = 14.0
+
+[sub_resource type="RectangleShape2D" id="Rectangle_car"]
+size = Vector2(34, 64)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="City" type="Node2D" parent="."]
+script = ExtResource("2_city")
+
+[node name="SectorPopulation" type="Node2D" parent="."]
+script = ExtResource("8_sector_population")
+
+[node name="WorldManager" type="Node" parent="."]
+script = ExtResource("12_world_manager")
+
+[node name="ResprayZone" type="Node2D" parent="."]
+position = Vector2(-900, -300)
+script = ExtResource("5_respray")
+
+[node name="MissionDirector" type="Node2D" parent="."]
+script = ExtResource("6_mission")
+
+[node name="MissionOverlay" type="Node2D" parent="MissionDirector"]
+script = ExtResource("7_mission_overlay")
+
+[node name="MissionTerminal" type="Node" parent="MissionDirector"]
+script = ExtResource("9_mission_terminal")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(60, 80)
+script = ExtResource("3_player")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Circle_player")
+
+[node name="Car" type="CharacterBody2D" parent="."]
+position = Vector2(0, 0)
+script = ExtResource("4_vehicle")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Car"]
+shape = SubResource("Rectangle_car")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(30, 40)
+position_smoothing_enabled = false
+zoom = Vector2(1, 1)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="ColorRect" parent="HUD"]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 530.0
+offset_bottom = 142.0
+color = Color(0.04, 0.04, 0.04, 0.82)
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="HUD/Panel"]
+offset_left = 14.0
+offset_top = 10.0
+offset_right = 500.0
+offset_bottom = 116.0
+theme_override_font_sizes/font_size = 18
+text = "GTA1 REMAKE PROTOTYPE — BUILD 29"
+
+[node name="Minimap" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("10_minimap")
+
+[node name="Polish" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_polish")
+
+[node name="Help" type="Label" parent="HUD"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = -52.0
+offset_right = 1240.0
+offset_bottom = -18.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.9)
+theme_override_font_sizes/font_size = 16
+text = "WASD / Arrows: move or drive   E: enter/exit   Space/F: fire   Q: cycle weapon   M: map   Blue phone: missions/chapter   ;: CROSSFIRE   ,: Chapter One   R: reset"
