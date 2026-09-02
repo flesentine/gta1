@@ -11,8 +11,8 @@ function removeFrontDoor() {
   if (!el) return false;
   el.remove();
   const d = document.getElementById('detail');
-  if (d && !d.textContent.includes('HARD PIXELS')) {
-    d.textContent = '31A.5 · HARDENED PLAYER TEST · F1 VECTOR / F2 BITMAP';
+  if (d && !d.textContent.includes('CARDINAL WALK')) {
+    d.textContent = '31A.6 · CARDINAL PLAYER TEST · F1 VECTOR / F2 BITMAP';
   }
   return true;
 }
@@ -48,11 +48,12 @@ const observer = new MutationObserver(() => {
   while ((node = walker.nextNode())) {
     if (!node.nodeValue) continue;
     node.nodeValue = node.nodeValue
-      .replace(/BUILD 28/g, 'BUILD 31A.5')
-      .replace(/BUILD 29/g, 'BUILD 31A.5')
-      .replace(/BUILD 31A\.1/g, 'BUILD 31A.5')
-      .replace(/BUILD 31A\.3/g, 'BUILD 31A.5')
-      .replace(/BUILD 31A\.4/g, 'BUILD 31A.5');
+      .replace(/BUILD 28/g, 'BUILD 31A.6')
+      .replace(/BUILD 29/g, 'BUILD 31A.6')
+      .replace(/BUILD 31A\.1/g, 'BUILD 31A.6')
+      .replace(/BUILD 31A\.3/g, 'BUILD 31A.6')
+      .replace(/BUILD 31A\.4/g, 'BUILD 31A.6')
+      .replace(/BUILD 31A\.5/g, 'BUILD 31A.6');
   }
 });
 observer.observe(document.documentElement, { childList: true, subtree: true });
