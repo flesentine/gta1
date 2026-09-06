@@ -6,11 +6,11 @@ addEventListener('keydown',e=>{
   if(e.code==='F1'){
     e.preventDefault();window.__player31BitmapEnabled=false;
     if(typeof window.__player31ResetGait==='function')window.__player31ResetGait();
-    const d=document.getElementById('detail');if(d)d.textContent='31A.9 · VECTOR PLAYER · F2 STEP-NEUTRAL PLAYER';
+    const d=document.getElementById('detail');if(d)d.textContent='31A.9 · VECTOR PLAYER · F2 ALTERNATING-WALK PLAYER';
   }else if(e.code==='F2'){
     e.preventDefault();window.__player31BitmapEnabled=true;
     if(typeof window.__player31ResetGait==='function')window.__player31ResetGait();
-    const d=document.getElementById('detail');if(d)d.textContent='31A.9 · STEP-NEUTRAL PLAYER ON · F1 VECTOR PLAYER';
+    const d=document.getElementById('detail');if(d)d.textContent='31A.9 · ALTERNATING-WALK PLAYER ON · F1 VECTOR PLAYER';
   }
 });
 const v=p=>`${p}${p.includes('?')?'&':'?'}v=${BUILD31_VERSION}`;
@@ -23,7 +23,7 @@ Promise.all([
  fetch(v('../data/build29_campaign.json')).then(r=>{if(!r.ok)throw new Error(`Unable to load campaign (${r.status})`);return r.json();}),
  fetch(v('runtime31a9_manifest.json')).then(r=>{if(!r.ok)throw new Error(`Unable to load Build 31A.9 manifest (${r.status})`);return r.json();})
 ]).then(([core,city,harbor,west,missions,build29,manifest])=>{
- window.__city28Data=city;window.__harbor18Data=harbor;window.__west25Data=west;window.__missions28Data=missions;window.__build29Data=build29;window.__runtime31A8Manifest=manifest;
+ window.__city28Data=city;window.__harbor18Data=harbor;window.__west25Data=west;window.__missions28Data=missions;window.__build29Data=build29;window.__runtime31A9Manifest=manifest;
  const activeNeedle="const activeMission=()=>['steal','deliver','destroy','escape'].includes(missionState);";
  if(!core.includes(activeNeedle))throw new Error('Flat core active-mission marker missing');
  core=core.replace(activeNeedle,"const activeMission=()=>['steal','deliver','destroy','escape','chain_steal','chain_drive','mixed_steal','mixed_drive','mixed_package','mixed_escape'].includes(missionState);");
