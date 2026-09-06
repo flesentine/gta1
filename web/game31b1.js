@@ -113,10 +113,10 @@ function drawPlayer(){
  const pedStart=core.indexOf("function drawPed(p){");
  const pedEnd=core.indexOf("\nfunction drawPickup",pedStart);
  if(pedStart<0||pedEnd<0)throw new Error('Build 31B.1 pedestrian draw marker missing');
- const pedPatch=\`const PED31_IDLE=new Image();
+ const pedPatch=`const PED31_IDLE=new Image();
 const PED31_STEP_A=new Image();
 const PED31_STEP_B=new Image();
-const PED31_PATHS=['assets/build31b1/ped_idle.png?v=\${BUILD31_VERSION}','assets/build31b1/ped_walk_a.png?v=\${BUILD31_VERSION}','assets/build31b1/ped_walk_b.png?v=\${BUILD31_VERSION}'];
+const PED31_PATHS=['assets/build31b1/ped_idle.png?v=${BUILD31_VERSION}','assets/build31b1/ped_walk_a.png?v=${BUILD31_VERSION}','assets/build31b1/ped_walk_b.png?v=${BUILD31_VERSION}'];
 let PED31_READY=0,PED31_HAVE_LAST=false,PED31_LAST_X=0,PED31_LAST_Y=0,PED31_ANIM_DIST=0,PED31_WAS_MOVING=false,PED31_LEAD_FOOT=1,PED31_FACE_X=0,PED31_FACE_Y=1;
 function ped31Load(img,path){
  img.decoding='async';
@@ -161,7 +161,7 @@ function drawPed(p){
  const frame=moving?(phase===0?first:phase===1?PED31_IDLE:phase===2?second:PED31_IDLE):PED31_IDLE;
  const ang=Math.atan2(PED31_FACE_Y,PED31_FACE_X)-Math.PI/2;
  ctx.save();ctx.translate(p.x,p.y);ctx.rotate(ang);ctx.imageSmoothingEnabled=false;ctx.drawImage(frame,-24,-24,48,48);ctx.restore();
-}\`;
+}`;
  core=core.slice(0,pedStart)+pedPatch+core.slice(pedEnd+1);
 
  const close=core.lastIndexOf('\n})();');if(close<0)throw new Error('Flat core closure marker missing');
