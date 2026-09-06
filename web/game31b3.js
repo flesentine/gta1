@@ -1,6 +1,6 @@
 (() => {
 'use strict';
-const BUILD31_VERSION='31b3fresh1';
+const BUILD31_VERSION='31b3fresh2';
 window.__player31BitmapEnabled=true;
 window.__ped31BitmapEnabled=true;
 addEventListener('keydown',e=>{
@@ -118,7 +118,7 @@ function drawPlayer(){
  {idle:new Image(),stepA:new Image(),stepB:new Image(),ready:0}
 ];
 const PED31_PATHS=[
- ['assets/build31b1/ped_idle.png?v=${BUILD31_VERSION}','assets/build31b1/ped_walk_a.png?v=${BUILD31_VERSION}','assets/build31b1/ped_walk_b.png?v=${BUILD31_VERSION}'],
+ ['assets/build31b1/ped_idle.png?v=${BUILD31_VERSION}','assets/build31b1/ped_walk_a.png?v=${BUILD31_VERSION}','assets/build31b3/ped1_walk_b.png?v=${BUILD31_VERSION}'],
  ['assets/build31b2/ped2_idle.png?v=${BUILD31_VERSION}','assets/build31b2/ped2_walk_a.png?v=${BUILD31_VERSION}','assets/build31b2/ped2_walk_b.png?v=${BUILD31_VERSION}']
 ];
 let PED31_STATES=new WeakMap();
