@@ -2,44 +2,86 @@
 
 A from-scratch, top-down crime-sandbox prototype inspired by the gameplay structure of the original 1997 Grand Theft Auto.
 
-This repository starts with a clean-room technical foundation. It does **not** include Rockstar/DMA game assets, maps, audio, mission text, or other extracted copyrighted content.
+This repository uses original clean-room code and original placeholder/generated art and does **not** include extracted Rockstar/DMA maps, sprites, audio, dialogue, mission text, logos, or other copyrighted game data.
 
-## Current goal
+## Build 30 — sliced ImageGen bitmap graphics
 
-Build a small playable vertical slice before attempting a full city:
+Build 30 is a browser visual-conversion build. All Build 29 gameplay remains: the complete three-sector world, 18 jobs, Chapter One, armed-hostile cover AI, pistol / shotgun / SMG combat, traffic simulation, level-4 police tactics, mission recovery, branching objectives, vehicle classes, procedural audio, persistence, minimap/navigation, cleanup/repopulation, bribes, and respray.
 
-- top-down player movement
-- enter/exit vehicles
-- arcade vehicle handling
-- speed-sensitive camera zoom
-- basic collision/world bounds
-- simple traffic-ready architecture
-- later: pedestrians, wanted system, pickups, and one complete mission
+The difference is rendering: major browser-world graphics are replaced by original generated bitmap art instead of the old flat procedural Canvas shapes.
+
+### Sliced runtime atlas
+
+Two original transparent ImageGen sheets were sliced, trimmed and repacked into a compact 383×176 transparent palette atlas with 48 named regions for vehicles, police/tactical units, pedestrians, hostiles, the player, weapons, roads, intersections, alleys, sidewalks, roofs, grass, Airfield surfaces, explosions, smoke, blood, sparks and skid marks.
+
+`web/bitmap30_sliced_assets.js` embeds the PNG plus the exact crop map. `web/bitmap30_runtime.js` replaces the browser draw functions while retaining the existing gameplay geometry and collision.
+
+### Bitmap activation fix
+
+The first Build 30 cut could remain on the procedural fallback because the renderer could initialize before the embedded PNG was reliably decoded. The current build fixes that path explicitly:
+
+- `bitmap30_decode_fix.js` converts the embedded PNG bytes to a Blob, decodes them with `createImageBitmap()`, and copies the decoded bitmap into an off-screen Canvas.
+- `runtime30_bundle.js` waits for that preparation step before evaluating `bitmap30_runtime.js`.
+- `bitmap30_ready_fix.js` recognizes the prepared Canvas atlas as ready immediately and reports the active atlas dimensions in the HUD.
+- if bitmap preparation still fails on a browser, the procedural renderer remains available as a safe fallback instead of showing an empty game.
+
+Mission rings, traffic-light state, lane guides and other gameplay-aligned markers intentionally remain geometric overlays for readability.
+
+### Scope
+
+Build 30 replaces **browser Canvas graphics**. Godot gameplay remains functionally at the Build 29 system state for this pass; Godot bitmap-art parity can follow after the browser art direction is approved.
+
+## Current missions
+
+Build 28's base campaign contains 17 missions. Build 29/30 layer CROSSFIRE on top for **18 playable jobs**.
+
+Chapter One remains **AIRMAIL → LOCKDOWN → RUNWAY RAID → THREE FRONTS → CROSSFIRE**.
+
+## Browser runtime
+
+Build 30 preserves the flat architecture introduced in Build 28:
+
+- raw `game8.js` engine core
+- authored city / sector / mission JSON
+- explicit Build 28 compatibility modules
+- one ordered shared-scope runtime stack through `combat29_runtime.js`
+- sliced bitmap asset module
+- explicit bitmap decode/preparation stage
+- final bitmap renderer layer
+- browser-time flattened-source syntax validation before execution
+
+Historical loaders remain only for older pinned builds.
+
+## Validation
+
+- `web/runtime30_manifest.json` parses as JSON
+- `web/runtime30_bundle.js` passes `node --check`
+- `web/bitmap30_decode_fix.js` passes `node --check`
+- `web/bitmap30_ready_fix.js` passes `node --check`
+- `web/bitmap30_runtime.js` passed its prior `node --check`
+- embedded atlas is a transparent 383×176 palette PNG with 48 named regions
+- renderer retains the procedural fallback if bitmap preparation fails
+- the managed Chromium build in this environment blocks navigation, so a full browser gameplay smoke test still has to be confirmed in a normal browser
+- Godot runtime was not executed because a Godot binary is not installed
 
 ## Engine
 
-Godot 4.x
-
-## Run
-
-1. Install Godot 4.x.
-2. Clone this repository.
-3. Open `project.godot` in Godot.
-4. Press **F6/F5** to run.
+Godot 4.x + browser Canvas preview
 
 ## Controls
 
 - **WASD / Arrow keys** — move on foot / drive
-- **E** — enter or exit the nearby vehicle
-- **R** — reset the prototype
+- **E** — enter or exit a nearby vehicle
+- **Space / F** — fire current weapon while on foot
+- **Q** — cycle owned weapons
+- **M** — toggle minimap
+- **Blue phone** — open mission terminal / Chapter One
+- **;** — select CROSSFIRE in the mission terminal
+- **,** — start/resume Chapter One in the mission terminal
+- **Esc** — close mission terminal
+- **R** — reset the current world
+- **Shift+R** — browser only: clear normal saved progression
 
-## Development order
+## Browser preview
 
-1. Driving + camera + collisions
-2. Traffic + pedestrians
-3. Damage + weapons + pickups
-4. Wanted/police loop
-5. Mission state machine
-6. First complete level slice
-
-See `docs/BUILD_PLAN.md` for the implementation checklist.
+https://raw.githack.com/flesentine/gta1/bootstrap/playable-slice/web/index.html

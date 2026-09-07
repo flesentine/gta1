@@ -1,0 +1,25 @@
+{
+  "mission": {
+    "id": "crossfire",
+    "title": "CROSSFIRE",
+    "type": "hostile_assault",
+    "time_limit": 180.0,
+    "base_reward": 16500,
+    "staging_position": [1800.0, 0.0],
+    "smg_ammo": 120,
+    "armor": 4,
+    "escape_wanted": 4,
+    "hostiles": [
+      {"spawn": [1500.0, -650.0], "health": 6, "cover": [[1390.0,-760.0],[1660.0,-760.0],[1390.0,-540.0]]},
+      {"spawn": [2100.0, -650.0], "health": 6, "cover": [[2010.0,-760.0],[2280.0,-760.0],[2280.0,-540.0]]},
+      {"spawn": [1500.0, 650.0], "health": 6, "cover": [[1390.0,540.0],[1660.0,540.0],[1390.0,760.0]]},
+      {"spawn": [2100.0, 650.0], "health": 6, "cover": [[2010.0,540.0],[2280.0,540.0],[2280.0,760.0]]},
+      {"spawn": [900.0, 0.0], "health": 7, "cover": [[790.0,-110.0],[790.0,110.0],[1010.0,110.0]]}
+    ]
+  },
+  "chapter": {
+    "id": "coast_to_coast",
+    "title": "CHAPTER ONE — COAST TO COAST",
+    "mission_ids": ["airmail", "lockdown", "runway_raid", "three_fronts", "crossfire"]
+  }
+}

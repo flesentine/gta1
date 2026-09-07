@@ -1,0 +1,10 @@
+{
+  "build": "31A",
+  "assets": {
+    "player": {"src":"assets/build31a/player.png","sourceW":32,"sourceH":48,"worldW":26,"worldH":46,"pivotX":16,"pivotY":24},
+    "ped_01": {"src":"assets/build31a/ped_01.png","sourceW":32,"sourceH":48,"worldW":22,"worldH":40,"pivotX":16,"pivotY":24},
+    "car_red": {"src":"assets/build31a/car_red.png","sourceW":48,"sourceH":88,"worldW":42,"worldH":78,"pivotX":24,"pivotY":44},
+    "car_blue": {"src":"assets/build31a/car_blue.png","sourceW":48,"sourceH":88,"worldW":42,"worldH":78,"pivotX":24,"pivotY":44},
+    "police_car": {"src":"assets/build31a/police_car.png","sourceW":48,"sourceH":88,"worldW":44,"worldH":80,"pivotX":24,"pivotY":44}
+  }
+}
