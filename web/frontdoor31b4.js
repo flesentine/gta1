@@ -46,7 +46,8 @@ const observer = new MutationObserver(() => {
       .replace(/BUILD 31A\.8/g, 'BUILD 31B.4')
       .replace(/BUILD 31A\.9/g, 'BUILD 31B.4')
       .replace(/BUILD 31B\.1a?/g, 'BUILD 31B.4')
-      .replace(/BUILD 31B\.2/g, 'BUILD 31B.4');
+      .replace(/BUILD 31B\.2/g, 'BUILD 31B.4')
+      .replace(/BUILD 31B\.3/g, 'BUILD 31B.4');
   }
 });
 observer.observe(document.documentElement, { childList: true, subtree: true });
