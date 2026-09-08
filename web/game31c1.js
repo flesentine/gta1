@@ -1,6 +1,6 @@
 (() => {
 'use strict';
-const BUILD31_VERSION='31c1fresh3';
+const BUILD31_VERSION='31c1fresh4';
 window.__player31BitmapEnabled=true;
 window.__ped31BitmapEnabled=true;
 window.__car31BitmapEnabled=true;
@@ -62,9 +62,9 @@ Promise.all([
  const carPatch=`const CAR31_SPRITE=new Image();
 let CAR31_READY=false;
 CAR31_SPRITE.decoding='async';
-CAR31_SPRITE.addEventListener('load',()=>{CAR31_READY=true;const d=document.getElementById('detail');if(d)d.textContent='31C.1 · PIXEL CAR_RED ONLINE · 5 VECTOR / 6 BITMAP';},{once:true});
+CAR31_SPRITE.addEventListener('load',()=>{CAR31_READY=true;const d=document.getElementById('detail');if(d)d.textContent='31C.1 · TRUE PIXEL CAR ONLINE · 5 VECTOR / 6 BITMAP';},{once:true});
 CAR31_SPRITE.addEventListener('error',()=>{CAR31_READY=false;const d=document.getElementById('detail');if(d)d.textContent='31C.1 · TEST SEDAN LOAD ERROR · VECTOR FALLBACK';},{once:true});
-CAR31_SPRITE.src='assets/build31a/car_red.png?v=${BUILD31_VERSION}';
+CAR31_SPRITE.src='assets/build31c1/car_red_pixel.png?v=${BUILD31_VERSION}';
 window.__car31RenderBitmap=function(c){
  if(!c||!c.bitmapVehicle31C1||window.__car31BitmapEnabled===false||!CAR31_READY)return false;
  const maxHp=Number(c.maxHp||4),hp=Number(c.hp==null?maxHp:c.hp);
