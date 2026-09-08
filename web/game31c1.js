@@ -1,6 +1,6 @@
 (() => {
 'use strict';
-const BUILD31_VERSION='31c1fresh2';
+const BUILD31_VERSION='31c1fresh3';
 window.__player31BitmapEnabled=true;
 window.__ped31BitmapEnabled=true;
 window.__car31BitmapEnabled=true;
@@ -59,18 +59,18 @@ Promise.all([
  const carEnd=core.indexOf("\nfunction drawCop",carStart);
  if(carStart<0||carEnd<0)throw new Error('Build 31C.1 vehicle draw marker missing');
  const carVector=core.slice(carStart,carEnd);
- const carPatch=`const CAR31_ATLAS=new Image();
+ const carPatch=`const CAR31_SPRITE=new Image();
 let CAR31_READY=false;
-CAR31_ATLAS.decoding='async';
-CAR31_ATLAS.addEventListener('load',()=>{CAR31_READY=true;const d=document.getElementById('detail');if(d)d.textContent='31C.1 · ATLAS RED SEDAN ONLINE · 5 VECTOR / 6 BITMAP';},{once:true});
-CAR31_ATLAS.addEventListener('error',()=>{CAR31_READY=false;const d=document.getElementById('detail');if(d)d.textContent='31C.1 · TEST SEDAN LOAD ERROR · VECTOR FALLBACK';},{once:true});
-CAR31_ATLAS.src='assets/build30/bitmap_atlas.png?v=${BUILD31_VERSION}';
+CAR31_SPRITE.decoding='async';
+CAR31_SPRITE.addEventListener('load',()=>{CAR31_READY=true;const d=document.getElementById('detail');if(d)d.textContent='31C.1 · PIXEL CAR_RED ONLINE · 5 VECTOR / 6 BITMAP';},{once:true});
+CAR31_SPRITE.addEventListener('error',()=>{CAR31_READY=false;const d=document.getElementById('detail');if(d)d.textContent='31C.1 · TEST SEDAN LOAD ERROR · VECTOR FALLBACK';},{once:true});
+CAR31_SPRITE.src='assets/build31a/car_red.png?v=${BUILD31_VERSION}';
 window.__car31RenderBitmap=function(c){
  if(!c||!c.bitmapVehicle31C1||window.__car31BitmapEnabled===false||!CAR31_READY)return false;
  const maxHp=Number(c.maxHp||4),hp=Number(c.hp==null?maxHp:c.hp);
  if(c.destroyed||c.flash>0||hp<=Math.ceil(maxHp/2)||(c.tireDamage26||0)>0)return false;
  ctx.save();ctx.translate(c.x,c.y);ctx.rotate(c.rot);ctx.imageSmoothingEnabled=false;
- ctx.drawImage(CAR31_ATLAS,8,8,50,87,-25,-43.5,50,87);
+ ctx.drawImage(CAR31_SPRITE,-24,-44,48,88);
  ctx.restore();return true;
 };
 ${carVector.replace("function drawCar(c){","function drawCar(c){if(window.__car31RenderBitmap(c))return;")}`;
