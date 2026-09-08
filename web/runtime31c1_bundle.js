@@ -16,7 +16,7 @@ function flatten31(name,source){
   code=code.slice(0,last).trimEnd();
   return `\n// ---- ${name} ----\nwindow.${flag}=true;\n${code}\n`;
 }
-Promise.all(manifest.modules.map(name=>fetch(`${name}?v=31c1fresh2`).then(r=>{
+Promise.all(manifest.modules.map(name=>fetch(`${name}?v=31c1fresh3`).then(r=>{
   if(!r.ok)throw new Error(`Unable to load ${name} (${r.status})`);
   return r.text().then(source=>({name,source}));
 }))).then(parts=>{
